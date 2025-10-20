@@ -623,8 +623,8 @@
                             borderColor: '#999',
                             backgroundColor: 'rgba(153, 153, 153, 0.1)',
                             borderWidth: 2,
-                            pointRadius: 4,
-                            pointBackgroundColor: '#999'
+                            pointRadius: 0,
+                            fill: true
                         },
                         {
                             label: '25/26 Position',
@@ -632,10 +632,8 @@
                             borderColor: '#DB0007',
                             backgroundColor: 'rgba(219, 0, 7, 0.1)',
                             borderWidth: 3,
-                            pointRadius: 5,
-                            pointBackgroundColor: '#DB0007',
-                            pointBorderColor: '#fff',
-                            pointBorderWidth: 2
+                            pointRadius: 0,
+                            fill: false
                         }
                     ]
                 },
@@ -677,11 +675,32 @@
                                 display: true,
                                 text: 'Matchweek'
                             }
+                           plugins: [{
+            afterDraw: function(chart) {
+                const ctx = chart.ctx;
+                const meta = chart.getDatasetMeta(1); // Index 1 pour le dataset 25/26
+                meta.data.forEach((point, index) => {
+                    const match = fixtures[index];
+                    if (match && match.result2526) {
+                        const logo = clubLogos[match.opponent];
+                        if (logo) {
+                            const image = new Image();
+                            image.src = logo;
+                            image.onload = function() {
+                                ctx.save();
+                                ctx.beginPath();
+                                ctx.arc(point.x, point.y, 15, 0, 2 * Math.PI);
+                                ctx.fillStyle = '#fff';
+                                ctx.fill();
+                                ctx.clip();
+                                ctx.drawImage(image, point.x - 15, point.y - 15, 30, 30);
+                                ctx.restore();
+                            };
                         }
                     }
-                }
-            });
-        }
+                });
+            }
+        }]
 
         function renderCumulativeChart(data, labels) {
             const ctx = document.getElementById('cumulativeChart').getContext('2d');
@@ -754,19 +773,27 @@
                 type: 'line',
                 data: {
                     labels: data.mw2526.map(mw => `MW${mw}`),
-                    datasets: [{
-                        label: 'Fixture Schedule',
-                        data: data.mw2526.map((mw, i) => ({ x: mw, y: data.mw2425[i] })),
-                        borderColor: '#DB0007',
-                        backgroundColor: 'rgba(219, 0, 7, 0.5)',
-                        borderWidth: 2,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#DB0007',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        showLine: true,
-                        tension: 0
-                    }]
+                    datasets: [
+                        {
+                            label: '24/25 Schedule',
+                            data: data.mw2526.map((mw, i) => ({ x: mw, y: data.mw2425[i] })),
+                            borderColor: '#999',
+                            backgroundColor: 'rgba(153, 153, 153, 0.1)',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: true,
+                            tension: 0.1
+                        },
+                        {
+                            label: '25/26 Schedule',
+                            data: data.mw2526.map((mw, i) => ({ x: mw, y: data.mw2425[i] })),
+                            borderColor: '#DB0007',
+                            backgroundColor: 'rgba(219, 0, 7, 0)',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -785,11 +812,32 @@
                                     return [
                                         '25/26: MW' + context.parsed.x,
                                         '24/25: MW' + context.parsed.y
-                                    ];
+                    plugins: [{
+                        afterDraw: function(chart) {
+                            const ctx = chart.ctx;
+                            chart.data.datasets[1].data.forEach((value, index) => {
+                                const match = fixtures[index];
+                                if (match && match.result2526) {
+                                    const point = chart.getDatasetMeta(1).data[index];
+                                    const logo = clubLogos[match.opponent];
+                                    if (logo) {
+                                        const image = new Image();
+                                        image.src = logo;
+                                        image.onload = function() {
+                                            ctx.save();
+                                            ctx.beginPath();
+                                            ctx.arc(point.x, point.y, 15, 0, 2 * Math.PI);
+                                            ctx.fillStyle = '#fff';
+                                            ctx.fill();
+                                            ctx.clip();
+                                            ctx.drawImage(image, point.x - 15, point.y - 15, 30, 30);
+                                            ctx.restore();
+                                        };
+                                    }
                                 }
-                            }
+                            });
                         }
-                    },
+                    }]
                     scales: {
                         y: {
                             suggestedMin: 1,

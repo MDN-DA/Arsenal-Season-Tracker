@@ -355,16 +355,22 @@
             <div class="left-panel">
                 <div class="table-container">
                     <table>
-                        <thead>
+                       <thead>
                             <tr>
-                                <th>MW</th>
-                                <th>League</th>
-                                <th>Opponent</th>
-                                <th>Venue</th>
-                                <th>24/25</th>
-                                <th>25/26</th>
-                                <th>+/-</th>
-                                <th>Agg</th>
+                                <th rowspan="2">MW</th>
+                                <th rowspan="2">League</th>
+                                <th rowspan="2">Opponent</th>
+                                <th rowspan="2">Venue</th>
+                                <th colspan="2" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">25/26</th>
+                                <th colspan="2" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">24/25</th>
+                                <th rowspan="2">+/-</th>
+                                <th rowspan="2">Agg</th>
+                            </tr>
+                            <tr>
+                                <th style="border-left: 3px solid #fff;">Result</th>
+                                <th style="border-right: 3px solid #fff;">Pts</th>
+                                <th style="border-left: 3px solid #fff;">Result</th>
+                                <th style="border-right: 3px solid #fff;">Pts</th>
                             </tr>
                         </thead>
                         <tbody id="fixturesTable">
@@ -519,7 +525,6 @@
 
             const playedMatches = fixtures.filter(m => m.result2526 !== null);
             const lastMatch = playedMatches[playedMatches.length - 1];
-            
             const pts2526 = lastMatch ? lastMatch.pts2526 : 0;
             const pts2425 = lastMatch ? lastMatch.pts2425 : 0;
             
@@ -591,8 +596,10 @@
                         </div>
                     </td>
                     <td>${match.venue}</td>
-                    <td>${getResultDot(match.result2425)}</td>
-                    <td>${getResultDot(match.result2526)}</td>
+                    <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2526)}</td>
+                    <td style="border-right: 2px solid #DB0007;">${match.pts2526 !== null ? match.pts2526 : '-'}</td>
+                    <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2425)}</td>
+                    <td style="border-right: 2px solid #DB0007;">${match.pts2425 !== null ? match.pts2425 : '-'}</td>
                     <td class="${matchDiffClass}">${matchDiffText}</td>
                     <td class="${aggClass}">${aggText}</td>
                 `;

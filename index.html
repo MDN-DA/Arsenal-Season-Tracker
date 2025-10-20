@@ -77,13 +77,7 @@
             gap: 20px;
         }
         
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .right-panel {
+        .left-panel, .right-panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -111,12 +105,41 @@
             color: #DB0007;
         }
         
+        .chart-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #DB0007;
+        }
+        
+        .chart-container.small {
+            min-height: 180px;
+        }
+        
+        .chart-container.medium {
+            min-height: 280px;
+        }
+        
+        .chart-container.large {
+            min-height: 350px;
+        }
+        
+        .chart-container h2 {
+            color: #DB0007;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
         .form-container {
             background: white;
             padding: 15px;
             border-radius: 8px;
             border: 2px solid #DB0007;
             text-align: center;
+            min-height: 100px;
         }
         
         .form-container h2 {
@@ -149,23 +172,6 @@
         .form-w { background: #00ff41; color: #000; }
         .form-d { background: #ff9800; }
         .form-l { background: #ff0000; }
-        
-        .chart-container {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid #DB0007;
-            flex: 1;
-        }
-        
-        .chart-container h2 {
-            color: #DB0007;
-            margin-bottom: 10px;
-            text-align: center;
-            font-size: 1em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
         
         .table-container {
             background: white;
@@ -202,13 +208,8 @@
             background: #f9f9f9;
         }
         
-        .home {
-            background: rgba(219, 0, 7, 0.05);
-        }
-        
-        .away {
-            background: white;
-        }
+        .home { background: rgba(219, 0, 7, 0.05); }
+        .away { background: white; }
         
         .result-dot {
             width: 24px;
@@ -244,13 +245,7 @@
             padding-left: 8px;
         }
         
-        .club-logo {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
-        }
-        
-        .league-logo {
+        .club-logo, .league-logo {
             width: 20px;
             height: 20px;
             object-fit: contain;
@@ -262,21 +257,17 @@
             font-style: italic;
         }
         
-        /* Responsive */
         @media (max-width: 1200px) {
             .main-layout {
                 grid-template-columns: 1fr;
             }
-            
             .stats-row {
                 grid-template-columns: 1fr;
             }
-            
             .logo {
                 width: 80px;
                 height: 80px;
             }
-            
             .header-text h1 {
                 font-size: 1.5em;
             }
@@ -286,49 +277,39 @@
             body {
                 padding: 10px;
             }
-            
             .container {
                 padding: 15px;
             }
-            
             .header {
                 flex-direction: column;
                 text-align: center;
             }
-            
             .logo {
                 width: 70px;
                 height: 70px;
             }
-            
             .header-text h1 {
                 font-size: 1.3em;
             }
-            
             .header-text .subtitle {
                 font-size: 0.9em;
             }
-            
             .stats-group {
                 grid-template-columns: 1fr;
             }
-            
             .form-dot {
                 width: 30px;
                 height: 30px;
                 font-size: 0.8em;
             }
-            
             th, td {
                 padding: 6px 4px;
                 font-size: 0.75em;
             }
-            
             .opponent-cell {
                 font-size: 0.8em;
                 gap: 5px;
             }
-            
             .club-logo, .league-logo {
                 width: 16px;
                 height: 16px;
@@ -392,15 +373,24 @@
             </div>
             
             <div class="right-panel">
-                <div class="form-container">
-                    <h2>Form (Last 5)</h2>
-                    <div class="form-display" id="formDisplay">
-                    </div>
+                <div class="chart-container medium">
+                    <h2>League Position MW by MW</h2>
+                    <canvas id="positionChart"></canvas>
                 </div>
                 
-                <div class="chart-container">
+                <div class="form-container">
+                    <h2>Form (Last 5)</h2>
+                    <div class="form-display" id="formDisplay"></div>
+                </div>
+                
+                <div class="chart-container medium">
                     <h2>Cumulative Difference</h2>
                     <canvas id="cumulativeChart"></canvas>
+                </div>
+                
+                <div class="chart-container large">
+                    <h2>Fixture Schedule Comparison</h2>
+                    <canvas id="zigzagChart"></canvas>
                 </div>
             </div>
         </div>
@@ -430,44 +420,44 @@
         };
 
         const fixtures = [
-            {mw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W"},
-            {mw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", correlated: "vs Leicester 24/25"},
-            {mw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L"},
-            {mw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W"},
-            {mw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D"},
-            {mw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W"},
-            {mw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W"},
-            {mw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W"},
-            {mw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null},
-            {mw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25"},
-            {mw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25"},
-            {mw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null},
-            {mw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null},
-            {mw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null},
-            {mw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null},
-            {mw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null},
-            {mw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null},
-            {mw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null},
-            {mw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null},
-            {mw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Leicester 24/25"},
-            {mw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25"},
-            {mw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null},
-            {mw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null},
-            {mw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null},
-            {mw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null},
-            {mw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null},
-            {mw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null},
-            {mw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null},
-            {mw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null},
-            {mw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25"},
-            {mw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null}
+            {mw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 28, pos2425: 2, pos2526: 6},
+            {mw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1},
+            {mw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", mw2425: 9, pos2425: 3, pos2526: 3},
+            {mw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", mw2425: 12, pos2425: 4, pos2526: 2},
+            {mw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", mw2425: 5, pos2425: 2, pos2526: 2},
+            {mw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", mw2425: 10, pos2425: 3, pos2526: 2},
+            {mw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", mw2425: 13, pos2425: 4, pos2526: 1},
+            {mw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 15, pos2425: 3, pos2526: 1},
+            {mw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 17, pos2425: 3, pos2526: null},
+            {mw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null},
+            {mw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null},
+            {mw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 21, pos2425: 2, pos2526: null},
+            {mw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 11, pos2425: 5, pos2526: null},
+            {mw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 32, pos2425: 2, pos2526: null},
+            {mw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 2, pos2425: 2, pos2526: null},
+            {mw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 1, pos2425: 2, pos2526: null},
+            {mw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 31, pos2425: 2, pos2526: null},
+            {mw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 3, pos2425: 3, pos2526: null},
+            {mw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 22, pos2425: 2, pos2526: null},
+            {mw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 8, pos2425: 3, pos2526: null},
+            {mw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 36, pos2425: 2, pos2526: null},
+            {mw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 27, pos2425: 2, pos2526: null},
+            {mw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 14, pos2425: 2, pos2526: null},
+            {mw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null},
+            {mw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null},
+            {mw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 19, pos2425: 2, pos2526: null},
+            {mw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 4, pos2425: 4, pos2526: null},
+            {mw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 29, pos2425: 2, pos2526: null},
+            {mw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 20, pos2425: 2, pos2526: null},
+            {mw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 16, pos2425: 3, pos2526: null},
+            {mw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 23, pos2425: 2, pos2526: null},
+            {mw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 35, pos2425: 2, pos2526: null},
+            {mw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 24, pos2425: 2, pos2526: null},
+            {mw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 37, pos2425: 2, pos2526: null},
+            {mw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 30, pos2425: 2, pos2526: null},
+            {mw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 26, pos2425: 2, pos2526: null},
+            {mw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pos2425: 2, pos2526: null},
+            {mw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 34, pos2425: 2, pos2526: null}
         ];
 
         function getPoints(result) {
@@ -492,6 +482,8 @@
             const cumulativeData = [];
             const labels = [];
             const form = [];
+            const positionsData = { labels: [], pos2425: [], pos2526: [] };
+            const zigzagData = { mw2526: [], mw2425: [] };
 
             fixtures.forEach(match => {
                 if (match.result2526) {
@@ -510,8 +502,14 @@
                     
                     cumulativeData.push(cumulativeDiff);
                     labels.push(`MW${match.mw}`);
-                    
                     form.push(match.result2526);
+                    
+                    positionsData.labels.push(`MW${match.mw}`);
+                    positionsData.pos2425.push(match.pos2425);
+                    positionsData.pos2526.push(match.pos2526);
+                    
+                    zigzagData.mw2526.push(match.mw);
+                    zigzagData.mw2425.push(match.mw2425);
                 } else {
                     match.matchDiff = null;
                     match.agg = null;
@@ -528,7 +526,7 @@
             
             document.getElementById('matchesPlayed').textContent = matchesPlayed;
 
-            return { cumulativeData, labels, form: form.slice(-5) };
+            return { cumulativeData, labels, form: form.slice(-5), positionsData, zigzagData };
         }
 
         function renderForm(form) {
@@ -596,7 +594,81 @@
             });
         }
 
-        function renderChart(data, labels) {
+        function renderPositionChart(data) {
+            const ctx = document.getElementById('positionChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: '24/25 Position',
+                            data: data.pos2425,
+                            borderColor: '#999',
+                            backgroundColor: 'rgba(153, 153, 153, 0.1)',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#999'
+                        },
+                        {
+                            label: '25/26 Position',
+                            data: data.pos2526,
+                            borderColor: '#DB0007',
+                            backgroundColor: 'rgba(219, 0, 7, 0.1)',
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#DB0007',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + getOrdinal(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            reverse: true,
+                            min: 1,
+                            max: 20,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value + getOrdinal(value);
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'League Position'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Matchweek'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderCumulativeChart(data, labels) {
             const ctx = document.getElementById('cumulativeChart').getContext('2d');
             
             new Chart(ctx, {
@@ -639,28 +711,20 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
                             ticks: {
-                                color: '#333',
-                                font: {
-                                    size: 10
-                                },
                                 callback: function(value) {
                                     return (value >= 0 ? '+' : '') + value;
                                 }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Points Difference'
                             }
                         },
                         x: {
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            },
-                            ticks: {
-                                color: '#333',
-                                font: {
-                                    size: 10
-                                }
+                            title: {
+                                display: true,
+                                text: 'Matchweek'
                             }
                         }
                     }
@@ -668,10 +732,89 @@
             });
         }
 
-        const { cumulativeData, labels, form } = calculateStats();
+        function renderZigzagChart(data) {
+            const ctx = document.getElementById('zigzagChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.mw2526.map(mw => `MW${mw}`),
+                    datasets: [{
+                        label: 'Fixture Schedule',
+                        data: data.mw2526.map((mw, i) => ({ x: mw, y: data.mw2425[i] })),
+                        borderColor: '#DB0007',
+                        backgroundColor: 'rgba(219, 0, 7, 0.5)',
+                        borderWidth: 2,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#DB0007',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        showLine: true,
+                        tension: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(219, 0, 7, 0.9)',
+                            callbacks: {
+                                title: function(context) {
+                                    return fixtures[context[0].dataIndex].opponent;
+                                },
+                                label: function(context) {
+                                    return [
+                                        '25/26: MW' + context.parsed.x,
+                                        '24/25: MW' + context.parsed.y
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 1,
+                            max: 38,
+                            ticks: {
+                                stepSize: 5
+                            },
+                            title: {
+                                display: true,
+                                text: 'MW 24/25'
+                            }
+                        },
+                        x: {
+                            min: 1,
+                            max: 38,
+                            ticks: {
+                                stepSize: 5
+                            },
+                            title: {
+                                display: true,
+                                text: 'MW 25/26'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getOrdinal(n) {
+            const s = ["th", "st", "nd", "rd"];
+            const v = n % 100;
+            return s[(v - 20) % 10] || s[v] || s[0];
+        }
+
+        const { cumulativeData, labels, form, positionsData, zigzagData } = calculateStats();
         renderForm(form);
         renderTable();
-        renderChart(cumulativeData, labels);
+        renderPositionChart(positionsData);
+        renderCumulativeChart(cumulativeData, labels);
+        renderZigzagChart(zigzagData);
     </script>
 </body>
 </html>

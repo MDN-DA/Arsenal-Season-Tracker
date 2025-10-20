@@ -58,6 +58,19 @@
             font-weight: 600;
         }
         
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -74,12 +87,6 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
         }
         
         .stat-card {
@@ -254,6 +261,79 @@
             color: #999;
             font-style: italic;
         }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .header-text h1 {
+                font-size: 1.5em;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .header-text h1 {
+                font-size: 1.3em;
+            }
+            
+            .header-text .subtitle {
+                font-size: 0.9em;
+            }
+            
+            .stats-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-dot {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8em;
+            }
+            
+            th, td {
+                padding: 6px 4px;
+                font-size: 0.75em;
+            }
+            
+            .opponent-cell {
+                font-size: 0.8em;
+                gap: 5px;
+            }
+            
+            .club-logo, .league-logo {
+                width: 16px;
+                height: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -266,27 +346,31 @@
             </div>
         </div>
         
+        <div class="stats-row">
+            <div class="stats-group">
+                <div class="stat-card">
+                    <h3>Points 25/26</h3>
+                    <div class="value" id="points2526">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Points 24/25</h3>
+                    <div class="value" id="points2425">-</div>
+                </div>
+            </div>
+            <div class="stats-group">
+                <div class="stat-card">
+                    <h3>Difference</h3>
+                    <div class="value" id="pointsDiff">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Matches</h3>
+                    <div class="value" id="matchesPlayed">-</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="main-layout">
             <div class="left-panel">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Points 25/26</h3>
-                        <div class="value" id="points2526">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Points 24/25</h3>
-                        <div class="value" id="points2425">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Difference</h3>
-                        <div class="value" id="pointsDiff">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Matches</h3>
-                        <div class="value" id="matchesPlayed">-</div>
-                    </div>
-                </div>
-                
                 <div class="table-container">
                     <table>
                         <thead>
@@ -333,7 +417,7 @@
             "West Ham United": "https://resources.premierleague.com/premierleague/badges/50/t21.png",
             "Fulham": "https://resources.premierleague.com/premierleague/badges/50/t54.png",
             "Crystal Palace": "https://resources.premierleague.com/premierleague/badges/50/t31.png",
-            "Burnley": "https://upload.wikimedia.org/wikipedia/en/6/62/Burnley_F.C._Logo.svg",
+            "Burnley": "https://upload.wikimedia.org/wikipedia/sco/0/02/Burnley_FC_badge.png",
             "Sunderland": "https://upload.wikimedia.org/wikipedia/en/7/77/Logo_Sunderland.svg",
             "Tottenham Hotspur": "https://resources.premierleague.com/premierleague/badges/50/t6.png",
             "Chelsea": "https://resources.premierleague.com/premierleague/badges/50/t8.png",
@@ -414,7 +498,6 @@
                     const pts2425 = getPoints(match.result2425);
                     const pts2526 = getPoints(match.result2526);
                     
-                    // Calcul MW par MW
                     points2425 += pts2425;
                     points2526 += pts2526;
                     matchesPlayed++;
@@ -428,7 +511,6 @@
                     cumulativeData.push(cumulativeDiff);
                     labels.push(`MW${match.mw}`);
                     
-                    // Form
                     form.push(match.result2526);
                 } else {
                     match.matchDiff = null;
@@ -471,7 +553,7 @@
             tbody.innerHTML = '';
 
             const plLogo = "https://images.seeklogo.com/logo-png/48/1/premier-league-logo-png_seeklogo-481554.png";
-            const chLogo = "https://upload.wikimedia.org/wikipedia/en/7/7c/EFL_Championship.svg";
+            const chLogo = "https://images.seeklogo.com/logo-png/29/1/sky-bet-championship-logo-png_seeklogo-292933.png";
 
             fixtures.forEach(match => {
                 const row = document.createElement('tr');

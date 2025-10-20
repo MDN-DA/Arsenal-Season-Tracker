@@ -767,6 +767,9 @@
         function renderCumulativeChart(data, labels) {
             const ctx = document.getElementById('cumulativeChart').getContext('2d');
             
+            const colors = data.map(value => value >= 0 ? 'rgba(0, 170, 0, 0.8)' : 'rgba(219, 0, 7, 0.8)');
+            const bgColors = data.map(value => value >= 0 ? 'rgba(0, 170, 0, 0.1)' : 'rgba(219, 0, 7, 0.1)');
+            
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -774,14 +777,29 @@
                     datasets: [{
                         label: 'Cumulative +/-',
                         data: data,
-                        borderColor: '#DB0007',
-                        backgroundColor: 'rgba(219, 0, 7, 0.1)',
+                        borderColor: function(context) {
+                            const value = context.parsed.y;
+                            return value >= 0 ? '#00aa00' : '#DB0007';
+                        },
+                        backgroundColor: function(context) {
+                            const value = context.parsed.y;
+                            return value >= 0 ? 'rgba(0, 170, 0, 0.1)' : 'rgba(219, 0, 7, 0.1)';
+                        },
+                        segment: {
+                            borderColor: function(ctx) {
+                                const curr = ctx.p1.parsed.y;
+                                return curr >= 0 ? '#00aa00' : '#DB0007';
+                            }
+                        },
                         borderWidth: 2,
                         fill: true,
                         tension: 0.4,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#DB0007',
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointBackgroundColor: function(context) {
+                            const value = context.parsed.y;
+                            return value >= 0 ? '#00aa00' : '#DB0007';
+                        },
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2
                     }]
@@ -794,12 +812,13 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(219, 0, 7, 0.9)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
                             titleColor: '#fff',
                             bodyColor: '#fff',
                             callbacks: {
                                 label: function(context) {
-                                    return (context.parsed.y >= 0 ? '+' : '') + context.parsed.y + ' pts';
+                                    const value = context.parsed.y;
+                                    return (value >= 0 ? '+' : '') + value + ' pts';
                                 }
                             }
                         }
@@ -891,17 +910,24 @@
                             backgroundColor: 'rgba(219, 0, 7, 0.9)',
                             callbacks: {
                                 title: function(context) {
-                                    return fixtures[context[0].dataIndex].opponent;
+                                    const index = context[0].dataIndex;
+                                    if (fixtures[index]) {
+                                        return fixtures[index].opponent;
+                                    }
+                                    return '';
                                 },
                                 label: function(context) {
-                                    return [
-                                        '25/26: MW' + context.parsed.x,
-                                        '24/25: MW' + context.parsed.y
-                                    ];
+                                    const index = context.dataIndex;
+                                    if (fixtures[index]) {
+                                        return [
+                                            '25/26: Matchweek ' + fixtures[index].mw,
+                                            '24/25: Matchweek ' + fixtures[index].mw2425
+                                        ];
+                                    }
+                                    return '';
                                 }
                             }
                         }
-                    },
                     scales: {
                         y: {
                             min: 0,
@@ -950,6 +976,7 @@
                 standingsDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Loading standings...</p>';
                 
                 const response = await fetch('https://api.football-data.org/v4/competitions/PL/standings', {
+                    method: 'GET',
                     headers: {
                         'X-Auth-Token': '8735f3b7f0cb4193a999d750f5a2b988'
                     }

@@ -389,6 +389,11 @@
                     <h2>Form (Last 5)</h2>
                     <div class="form-display" id="formDisplay"></div>
                 </div>
+
+                <div class="standings-container">
+                    <h2>Premier League Standings</h2>
+                    <div id="standingsTable"></div>
+                </div>
                 
                 <div class="chart-container medium">
                     <h2>Points vs Opponent Teams (24/25 vs 25/26)</h2>
@@ -613,7 +618,7 @@
             
             const logoPlugin = {
                 id: 'logoPlugin',
-                afterDatasetsDraw(chart) {
+                beforeDatasetsDraw(chart) {
                     const {ctx, chartArea, scales} = chart;
                     const dataset = chart.data.datasets[1];
                     

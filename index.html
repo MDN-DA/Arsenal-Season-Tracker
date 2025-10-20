@@ -604,12 +604,11 @@
         function renderPositionChart(data) {
             const ctx = document.getElementById('positionChart').getContext('2d');
             
-            // Plugin pour dessiner les logos
             const logoPlugin = {
                 id: 'logoPlugin',
                 afterDatasetsDraw(chart) {
                     const {ctx, chartArea, scales} = chart;
-                    const dataset = chart.data.datasets[1]; // 25/26 dataset
+                    const dataset = chart.data.datasets[1];
                     
                     dataset.data.forEach((value, index) => {
                         if (value !== null && value !== undefined) {
@@ -620,7 +619,6 @@
                                 const x = scales.x.getPixelForValue(index);
                                 const y = scales.y.getPixelForValue(value);
                                 
-                                // Vérifier que le point est dans la zone visible
                                 if (x >= chartArea.left && x <= chartArea.right && 
                                     y >= chartArea.top && y <= chartArea.bottom) {
                                     
@@ -628,7 +626,6 @@
                                     img.src = logo;
                                     const size = 20;
                                     
-                                    // S'assurer que le logo ne dépasse pas le haut du graphique
                                     const adjustedY = Math.max(y, chartArea.top + size/2);
                                     
                                     ctx.drawImage(img, x - size/2, adjustedY - size/2, size, size);
@@ -780,7 +777,6 @@
         function renderZigzagChart(data) {
             const ctx = document.getElementById('zigzagChart').getContext('2d');
             
-            // Create points for the chart
             const points = data.mw2526.map((mw, i) => ({ x: mw, y: data.mw2425[i] }));
             
             new Chart(ctx, {

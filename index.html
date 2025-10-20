@@ -228,6 +228,27 @@
         .loss { background: #ff0000; }
         .pending { background: #e0e0e0; color: #666; }
         
+        .score-cell {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .score-win {
+            background: #00ff41;
+            color: #000;
+        }
+        
+        .score-draw {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .score-loss {
+            background: #ff0000;
+            color: white;
+        }
+        
         .positive { color: #00aa00; font-weight: bold; }
         .negative { color: #ff0000; font-weight: bold; }
         .neutral { color: #666; }
@@ -361,15 +382,17 @@
                                 <th rowspan="2">League</th>
                                 <th rowspan="2">Opponent</th>
                                 <th rowspan="2">Venue</th>
-                                <th colspan="2" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">25/26</th>
-                                <th colspan="2" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">24/25</th>
+                                <th colspan="3" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">25/26</th>
+                                <th colspan="3" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">24/25</th>
                                 <th rowspan="2">+/-</th>
                                 <th rowspan="2">Agg</th>
                             </tr>
                             <tr>
                                 <th style="border-left: 3px solid #fff;">Result</th>
+                                <th>Score</th>
                                 <th style="border-right: 3px solid #fff;">Pts</th>
                                 <th style="border-left: 3px solid #fff;">Result</th>
+                                <th>Score</th>
                                 <th style="border-right: 3px solid #fff;">Pts</th>
                             </tr>
                         </thead>
@@ -390,8 +413,8 @@
                     <div class="form-display" id="formDisplay"></div>
                 </div>
 
-                <div class="standings-container">
-                    <h2>Premier League Standings</h2>
+                <div class="chart-container medium">
+                    <h2>Premier League Top 5</h2>
                     <div id="standingsTable"></div>
                 </div>
                 
@@ -432,44 +455,44 @@
         };
 
         const fixtures = [
-            {mw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 28, pos2425: 2, pos2526: 6, pts2425: 3, pts2526: 3},
-            {mw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1, pts2425: 6, pts2526: 6},
-            {mw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", mw2425: 9, pos2425: 3, pos2526: 3, pts2425: 7, pts2526: 6},
-            {mw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", mw2425: 12, pos2425: 4, pos2526: 2, pts2425: 10, pts2526: 9},
-            {mw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", mw2425: 5, pos2425: 2, pos2526: 2, pts2425: 11, pts2526: 10},
-            {mw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", mw2425: 10, pos2425: 3, pos2526: 2, pts2425: 14, pts2526: 13},
-            {mw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", mw2425: 13, pos2425: 4, pos2526: 1, pts2425: 17, pts2526: 16},
-            {mw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 15, pos2425: 3, pos2526: 1, pts2425: 17, pts2526: 19},
-            {mw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 17, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
-            {mw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
-            {mw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null, pts2425: 19, pts2526: null},
-            {mw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 21, pos2425: 2, pos2526: null, pts2425: 22, pts2526: null},
-            {mw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 11, pos2425: 5, pos2526: null, pts2425: 25, pts2526: null},
-            {mw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 32, pos2425: 2, pos2526: null, pts2425: 28, pts2526: null},
-            {mw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 2, pos2425: 2, pos2526: null, pts2425: 29, pts2526: null},
-            {mw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
-            {mw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
-            {mw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
-            {mw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
-            {mw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null},
-            {mw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 36, pos2425: 2, pos2526: null, pts2425: 43, pts2526: null},
-            {mw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 27, pos2425: 2, pos2526: null, pts2425: 44, pts2526: null},
-            {mw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
-            {mw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
-            {mw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
-            {mw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
-            {mw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 4, pos2425: 4, pos2526: null, pts2425: 54, pts2526: null},
-            {mw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 55, pts2526: null},
-            {mw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425: 58, pts2526: null},
-            {mw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 16, pos2425: 3, pos2526: null, pts2425: 61, pts2526: null},
-            {mw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 23, pos2425: 2, pos2526: null, pts2425: 62, pts2526: null},
-            {mw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 35, pos2425: 2, pos2526: null, pts2425: 63, pts2526: null},
-            {mw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 24, pos2425: 2, pos2526: null, pts2425: 66, pts2526: null},
-            {mw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 37, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
-            {mw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 30, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
-            {mw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 26, pos2425: 2, pos2526: null, pts2425: 68, pts2526: null},
-            {mw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pos2425: 2, pos2526: null, pts2425: 71, pts2526: null},
-            {mw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 74, pts2526: null}
+            {mw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "2-1", mw2425: 28, pos2425: 2, pos2526: 6, pts2425: 3, pts2526: 3},
+            {mw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", score2425: "3-1", score2526: "2-0", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1, pts2425: 6, pts2526: 6},
+            {mw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", score2425: "2-2", score2526: "1-3", mw2425: 9, pos2425: 3, pos2526: 3, pts2425: 7, pts2526: 6},
+            {mw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "3-0", score2526: "2-1", mw2425: 12, pos2425: 4, pos2526: 2, pts2425: 10, pts2526: 9},
+            {mw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", score2425: "1-0", score2526: "2-2", mw2425: 5, pos2425: 2, pos2526: 2, pts2425: 11, pts2526: 10},
+            {mw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", score2425: "0-1", score2526: "2-0", mw2425: 10, pos2425: 3, pos2526: 2, pts2425: 14, pts2526: 13},
+            {mw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", score2425: "1-2", score2526: "3-0", mw2425: 13, pos2425: 4, pos2526: 1, pts2425: 17, pts2526: 16},
+            {mw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "2-1", mw2425: 15, pos2425: 3, pos2526: 1, pts2425: 17, pts2526: 19},
+            {mw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 17, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {mw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, score2425: "2-0", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {mw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, score2425: "3-1", score2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null, pts2425: 19, pts2526: null},
+            {mw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 21, pos2425: 2, pos2526: null, pts2425: 22, pts2526: null},
+            {mw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 11, pos2425: 5, pos2526: null, pts2425: 25, pts2526: null},
+            {mw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 32, pos2425: 2, pos2526: null, pts2425: 28, pts2526: null},
+            {mw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 2, pos2425: 2, pos2526: null, pts2425: 29, pts2526: null},
+            {mw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
+            {mw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
+            {mw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
+            {mw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
+            {mw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "3-0", score2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null},
+            {mw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 36, pos2425: 2, pos2526: null, pts2425: 43, pts2526: null},
+            {mw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 27, pos2425: 2, pos2526: null, pts2425: 44, pts2526: null},
+            {mw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
+            {mw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, score2425: "4-2", score2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
+            {mw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, score2425: "3-0", score2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
+            {mw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "3-1", score2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
+            {mw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "3-2", score2526: null, mw2425: 4, pos2425: 4, pos2526: null, pts2425: 54, pts2526: null},
+            {mw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "5-0", score2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 55, pts2526: null},
+            {mw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "3-0", score2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425: 58, pts2526: null},
+            {mw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 16, pos2425: 3, pos2526: null, pts2425: 61, pts2526: null},
+            {mw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 23, pos2425: 2, pos2526: null, pts2425: 62, pts2526: null},
+            {mw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "3-0", score2526: null, mw2425: 35, pos2425: 2, pos2526: null, pts2425: 63, pts2526: null},
+            {mw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 24, pos2425: 2, pos2526: null, pts2425: 66, pts2526: null},
+            {mw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 37, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
+            {mw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 30, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
+            {mw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 26, pos2425: 2, pos2526: null, pts2425: 68, pts2526: null},
+            {mw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, score2425: "5-0", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pos2425: 2, pos2526: null, pts2425: 71, pts2526: null},
+            {mw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "3-1", score2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 74, pts2526: null}
         ];
 
         function getPoints(result) {
@@ -484,6 +507,16 @@
             if (result === 'D') return '<span class="result-dot draw">D</span>';
             if (result === 'L') return '<span class="result-dot loss">L</span>';
             return '<span class="result-dot pending">-</span>';
+        }
+
+        function getScoreDisplay(score, result) {
+            if (!score) return '-';
+            let cssClass = '';
+            if (result === 'W') cssClass = 'score-win';
+            else if (result === 'D') cssClass = 'score-draw';
+            else if (result === 'L') cssClass = 'score-loss';
+            
+            return `<span class="score-cell ${cssClass}">${score}</span>`;
         }
 
         function calculateStats() {
@@ -602,8 +635,10 @@
                     </td>
                     <td>${match.venue}</td>
                     <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2526)}</td>
+                    <td>${getScoreDisplay(match.score2526, match.result2526)}</td>
                     <td style="border-right: 2px solid #DB0007;">${match.pts2526 !== null ? match.pts2526 : '-'}</td>
                     <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2425)}</td>
+                    <td>${getScoreDisplay(match.score2425, match.result2425)}</td>
                     <td style="border-right: 2px solid #DB0007;">${match.pts2425 !== null ? match.pts2425 : '-'}</td>
                     <td class="${matchDiffClass}">${matchDiffText}</td>
                     <td class="${aggClass}">${aggText}</td>
@@ -659,8 +694,10 @@
                             borderColor: 'rgba(180, 180, 180, 0.4)',
                             backgroundColor: 'rgba(180, 180, 180, 0.05)',
                             borderWidth: 1.5,
-                            pointRadius: 0,
-                            pointBackgroundColor: 'rgba(180, 180, 180, 0.4)'
+                            pointRadius: 4,
+                            pointBackgroundColor: 'rgba(180, 180, 180, 0.4)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2
                         },
                         {
                             label: '25/26 Position',
@@ -870,12 +907,77 @@
             return s[(v - 20) % 10] || s[v] || s[0];
         }
 
+        async function fetchPremierLeagueStandings() {
+            const standingsDiv = document.getElementById('standingsTable');
+            
+            try {
+                standingsDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Loading standings...</p>';
+                
+                const response = await fetch('https://api.football-data.org/v4/competitions/PL/standings', {
+                    headers: {
+                        'X-Auth-Token': 'YOUR_API_KEY_HERE'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch standings');
+                }
+                
+                const data = await response.json();
+                const standings = data.standings[0].table.slice(0, 5);
+                
+                let html = '<table style="width: 100%; border-collapse: collapse;">';
+                html += '<thead style="background: #DB0007; color: white;"><tr>';
+                html += '<th style="padding: 8px; text-align: center;">Pos</th>';
+                html += '<th style="padding: 8px; text-align: left;">Team</th>';
+                html += '<th style="padding: 8px; text-align: center;">P</th>';
+                html += '<th style="padding: 8px; text-align: center;">W</th>';
+                html += '<th style="padding: 8px; text-align: center;">D</th>';
+                html += '<th style="padding: 8px; text-align: center;">L</th>';
+                html += '<th style="padding: 8px; text-align: center;">GD</th>';
+                html += '<th style="padding: 8px; text-align: center;">Pts</th>';
+                html += '</tr></thead><tbody>';
+                
+                standings.forEach((team, index) => {
+                    const isArsenal = team.team.name === 'Arsenal FC';
+                    const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
+                    html += `<tr style="${rowStyle}">`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
+                    html += `<td style="padding: 8px; text-align: left;">${team.team.name}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.playedGames}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>`;
+                    html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
+                    html += '</tr>';
+                });
+                
+                html += '</tbody></table>';
+                standingsDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error fetching standings:', error);
+                standingsDiv.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <p style="color: #DB0007; font-weight: bold; margin-bottom: 10px;">Live Standings Unavailable</p>
+                        <p style="color: #666; font-size: 0.9em;">To enable live Premier League standings:</p>
+                        <ol style="text-align: left; display: inline-block; margin-top: 10px; color: #666; font-size: 0.85em;">
+                            <li>Get a free API key from <a href="https://www.football-data.org/" target="_blank" style="color: #DB0007;">football-data.org</a></li>
+                            <li>Replace 'YOUR_API_KEY_HERE' in the code</li>
+                        </ol>
+                    </div>
+                `;
+            }
+        }
+
         const { cumulativeData, labels, form, positionsData, zigzagData } = calculateStats();
         renderForm(form);
         renderTable();
         renderPositionChart(positionsData);
         renderCumulativeChart(cumulativeData, labels);
         renderZigzagChart(zigzagData);
+        fetchPremierLeagueStandings();
     </script>
 </body>
 </html>

@@ -408,8 +408,13 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="chart-container medium">
+                    <h2>Points by Season Phase</h2>
+                    <canvas id="seasonPhaseChart"></canvas>
+                </div>
             </div>
-            
+
             <div class="right-panel">
                 <div class="chart-container medium">
                     <h2>League Position (MW by MW)</h2>
@@ -417,18 +422,23 @@
                 </div>
 
                 <div class="chart-container medium">
+                    <h2>Remaining Fixtures Difficulty</h2>
+                    <div id="fixtureDifficulty"></div>
+                </div>
+
+                <div class="chart-container medium">
                     <h2>Premier League Top 5</h2>
                     <div id="standingsTable"></div>
                 </div>
-                
+
+                <div class="chart-container medium">
+                    <h2>Results by Opponent (24/25 vs 25/26)</h2>
+                    <div id="resultsHeatmap"></div>
+                </div>
+
                 <div class="chart-container medium">
                     <h2>Points vs Opponent Teams (24/25 vs 25/26)</h2>
                     <canvas id="cumulativeChart"></canvas>
-                </div>
-                
-                <div class="chart-container large">
-                    <h2>Fixture Schedule Comparison (24/25 vs 25/26)</h2>
-                    <canvas id="zigzagChart"></canvas>
                 </div>
             </div>
         </div>
@@ -530,7 +540,6 @@
             const labels = [];
             const form = [];
             const positionsData = { labels: [], pos2425: [], pos2526: [] };
-            const zigzagData = { mw2526: [], mw2425: [] };
 
             fixtures.forEach(match => {
                 if (match.result2526) {
@@ -554,9 +563,6 @@
                     positionsData.labels.push(`MW${match.mw}`);
                     positionsData.pos2425.push(match.pos2425);
                     positionsData.pos2526.push(match.pos2526);
-                    
-                    zigzagData.mw2526.push(match.mw);
-                    zigzagData.mw2425.push(match.mw2425);
                 } else {
                     match.matchDiff = null;
                     match.agg = null;
@@ -578,7 +584,7 @@
             
             document.getElementById('matchesPlayed').textContent = matchesPlayed;
 
-            return { cumulativeData, labels, form: form.slice(-5), positionsData, zigzagData };
+            return { cumulativeData, labels, form: form.slice(-5), positionsData };
         }
 
         function renderForm(form) {
@@ -847,131 +853,292 @@
             });
         }
 
-        function renderZigzagChart(data) {
-            const ctx = document.getElementById('zigzagChart').getContext('2d');
-            
-            const points = data.mw2526.map((mw, i) => ({ x: mw, y: data.mw2425[i] }));
+        function getOrdinal(n) {
+            const s = ["th", "st", "nd", "rd"];
+            const v = n % 100;
+            return s[(v - 20) % 10] || s[v] || s[0];
+        }
 
-            const logoPluginZigzag = {
-                id: 'logoPluginZigzag',
-                afterDatasetsDraw(chart) {
-                    const {ctx, chartArea, scales} = chart;
-                    const dataset = chart.data.datasets[0];
-                    
-                    dataset.data.forEach((point, index) => {
-                        if (fixtures[index] && fixtures[index].result2526) {
-                            const match = fixtures[index];
-                            const logo = clubLogos[match.opponent];
-                            
-                            if (logo) {
-                                const x = scales.x.getPixelForValue(point.x);
-                                const y = scales.y.getPixelForValue(point.y);
-                                
-                                if (x >= chartArea.left && x <= chartArea.right && 
-                                    y >= chartArea.top && y <= chartArea.bottom) {
-                                    
-                                    const img = new Image();
-                                    img.src = logo;
-                                    const size = 24;
-                                    
-                                    ctx.drawImage(img, x - size/2, y - size/2, size, size);
-                                }
-                            }
-                        }
-                    });
-                }
+        function renderFixtureDifficulty() {
+            const difficultyDiv = document.getElementById('fixtureDifficulty');
+
+            // Get remaining PL fixtures
+            const remainingFixtures = fixtures.filter(m => !m.result2526 && m.league === 'PL');
+
+            if (remainingFixtures.length === 0) {
+                difficultyDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">All fixtures completed!</p>';
+                return;
+            }
+
+            // Define difficulty based on opponent's 24/25 final position
+            // We'll use a simplified model where lower position = harder match
+            const getDifficulty = (opponent) => {
+                // Map of teams to their approximate final 24/25 positions (simplified)
+                const teamPositions = {
+                    'Liverpool': 1,
+                    'Arsenal': 2,
+                    'Manchester City': 3,
+                    'Aston Villa': 4,
+                    'Tottenham Hotspur': 5,
+                    'Chelsea': 6,
+                    'Newcastle United': 7,
+                    'Manchester United': 8,
+                    'West Ham United': 9,
+                    'Brighton & Hove Albion': 10,
+                    'Brentford': 11,
+                    'Fulham': 12,
+                    'Crystal Palace': 13,
+                    'Bournemouth': 14,
+                    'Wolverhampton Wanderers': 15,
+                    'Everton': 16,
+                    'Nottingham Forest': 17,
+                    'Leeds United': 18,
+                    'Burnley': 19,
+                    'Sunderland': 20
+                };
+
+                const position = teamPositions[opponent] || 10;
+
+                if (position <= 6) return { level: 'Hard', color: '#ff0000', score: 3 };
+                if (position <= 12) return { level: 'Medium', color: '#ff9800', score: 2 };
+                return { level: 'Easy', color: '#00aa00', score: 1 };
             };
-            
+
+            // Take next 5-6 fixtures
+            const nextFixtures = remainingFixtures.slice(0, 6);
+
+            let html = '<div style="max-height: 280px; overflow-y: auto;">';
+            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">';
+            html += '<thead style="background: #DB0007; color: white; position: sticky; top: 0; z-index: 1;">';
+            html += '<tr>';
+            html += '<th style="padding: 6px 8px; text-align: center;">MW</th>';
+            html += '<th style="padding: 6px 8px; text-align: left;">Opponent</th>';
+            html += '<th style="padding: 6px 8px; text-align: center;">Venue</th>';
+            html += '<th style="padding: 6px 8px; text-align: center;">Difficulty</th>';
+            html += '</tr>';
+            html += '</thead><tbody>';
+
+            let totalDifficulty = 0;
+            nextFixtures.forEach(match => {
+                const difficulty = getDifficulty(match.opponent);
+                totalDifficulty += difficulty.score;
+
+                html += `<tr style="border-bottom: 1px solid #eee;">`;
+                html += `<td style="padding: 6px 8px; text-align: center; font-weight: bold;">${match.mw}</td>`;
+                html += `<td style="padding: 6px 8px; font-weight: 600;">${match.opponent}</td>`;
+                html += `<td style="padding: 6px 8px; text-align: center;">${match.venue}</td>`;
+                html += `<td style="padding: 6px 8px; text-align: center;">`;
+                html += `<span style="background: ${difficulty.color}; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em; font-weight: bold;">`;
+                html += `${difficulty.level}`;
+                html += `</span>`;
+                html += `</td>`;
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            html += '</div>';
+
+            // Calculate difficulty summary
+            const avgDifficulty = totalDifficulty / nextFixtures.length;
+            let summaryColor = '#00aa00';
+            let summaryText = 'Favorable';
+            if (avgDifficulty >= 2.5) {
+                summaryColor = '#ff0000';
+                summaryText = 'Challenging';
+            } else if (avgDifficulty >= 1.8) {
+                summaryColor = '#ff9800';
+                summaryText = 'Moderate';
+            }
+
+            html += '<div style="margin-top: 10px; padding: 8px; background: #f9f9f9; border-radius: 4px; text-align: center;">';
+            html += `<div style="font-size: 0.8em; color: #666; margin-bottom: 4px;">Next 6 Fixtures:</div>`;
+            html += `<div style="font-size: 1.1em; font-weight: bold; color: ${summaryColor};">${summaryText}</div>`;
+            html += '</div>';
+
+            difficultyDiv.innerHTML = html;
+        }
+
+        function renderSeasonPhaseChart() {
+            const ctx = document.getElementById('seasonPhaseChart').getContext('2d');
+
+            // Define season phases (only PL matches)
+            const phases = [
+                { name: 'Early Season (MW 1-13)', start: 1, end: 13 },
+                { name: 'Mid Season (MW 14-26)', start: 14, end: 26 },
+                { name: 'Late Season (MW 27-38)', start: 27, end: 38 }
+            ];
+
+            const phaseData2425 = [];
+            const phaseData2526 = [];
+            const phaseLabels = [];
+
+            phases.forEach(phase => {
+                // Filter PL matches in this phase
+                const phaseMatches = fixtures.filter(m =>
+                    m.league === 'PL' && m.mw >= phase.start && m.mw <= phase.end
+                );
+
+                // Calculate points for each season in this phase
+                let points2425 = 0;
+                let points2526 = 0;
+                let matchesPlayed2526 = 0;
+
+                phaseMatches.forEach(match => {
+                    points2425 += getPoints(match.result2425);
+                    if (match.result2526) {
+                        points2526 += getPoints(match.result2526);
+                        matchesPlayed2526++;
+                    }
+                });
+
+                phaseLabels.push(phase.name);
+                phaseData2425.push(points2425);
+                phaseData2526.push(points2526);
+            });
+
             new Chart(ctx, {
-                type: 'scatter',
+                type: 'bar',
                 data: {
-                    datasets: [{
-                        label: 'Fixture Schedule',
-                        data: points,
-                        borderColor: '#DB0007',
-                        backgroundColor: '#DB0007',
-                        pointRadius: 6,
-                        pointHoverRadius: 8,
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        showLine: true,
-                        tension: 0,
-                        borderWidth: 2
-                    }]
+                    labels: phaseLabels,
+                    datasets: [
+                        {
+                            label: '24/25 Season',
+                            data: phaseData2425,
+                            backgroundColor: 'rgba(180, 180, 180, 0.4)',
+                            borderColor: 'rgba(180, 180, 180, 0.7)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: '25/26 Season',
+                            data: phaseData2526,
+                            backgroundColor: 'rgba(219, 0, 7, 0.6)',
+                            borderColor: '#DB0007',
+                            borderWidth: 2
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
                     plugins: {
                         legend: {
-                            display: false
+                            display: true,
+                            position: 'top'
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(219, 0, 7, 0.9)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
                             callbacks: {
-                                title: function(context) {
-                                    const index = context[0].dataIndex;
-                                    if (fixtures[index]) {
-                                        return fixtures[index].opponent;
-                                    }
-                                    return '';
-                                },
-                                beforeLabel: function(context) {
-                                    const index = context.dataIndex;
-                                    if (fixtures[index]) {
-                                        return '25/26: Matchweek ' + fixtures[index].mw;
-                                    }
-                                    return '';
-                                },
                                 label: function(context) {
-                                    const index = context.dataIndex;
-                                    if (fixtures[index]) {
-                                        return '24/25: Matchweek ' + fixtures[index].mw2425;
-                                    }
-                                    return '';
-                                }
-                            }
-                        }
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 38,
-                            ticks: {
-                                stepSize: 5
-                            },
-                            title: {
-                                display: true,
-                                text: 'MW 24/25',
-                                font: {
-                                    weight: 'bold'
-                                }
-                            }
-                        },
-                        x: {
-                            min: 0,
-                            max: 38,
-                            ticks: {
-                                stepSize: 5
-                            },
-                            title: {
-                                display: true,
-                                text: 'MW 25/26',
-                                font: {
-                                    weight: 'bold'
+                                    return context.dataset.label + ': ' + context.parsed.y + ' pts';
                                 }
                             }
                         }
                     },
-                    plugins: [logoPluginZigzag] 
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 5
+                            },
+                            title: {
+                                display: true,
+                                text: 'Points'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Season Phase'
+                            }
+                        }
+                    }
                 }
             });
         }
 
-        function getOrdinal(n) {
-            const s = ["th", "st", "nd", "rd"];
-            const v = n % 100;
-            return s[(v - 20) % 10] || s[v] || s[0];
+        function renderResultsHeatmap() {
+            const heatmapDiv = document.getElementById('resultsHeatmap');
+
+            // Filter only PL matches that have been played in 25/26
+            const playedMatches = fixtures.filter(m => m.result2526 && m.league === 'PL');
+
+            if (playedMatches.length === 0) {
+                heatmapDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No matches played yet</p>';
+                return;
+            }
+
+            // Calculate result comparison for each match
+            const getResultValue = (result) => {
+                if (result === 'W') return 3;
+                if (result === 'D') return 1;
+                if (result === 'L') return 0;
+                return 0;
+            };
+
+            let html = '<div style="max-height: 280px; overflow-y: auto;">';
+            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">';
+            html += '<thead style="background: #DB0007; color: white; position: sticky; top: 0; z-index: 1;">';
+            html += '<tr>';
+            html += '<th style="padding: 6px 8px; text-align: left;">Opponent</th>';
+            html += '<th style="padding: 6px 8px; text-align: center;">24/25</th>';
+            html += '<th style="padding: 6px 8px; text-align: center;">25/26</th>';
+            html += '<th style="padding: 6px 8px; text-align: center;">Trend</th>';
+            html += '</tr>';
+            html += '</thead><tbody>';
+
+            playedMatches.forEach(match => {
+                const value2425 = getResultValue(match.result2425);
+                const value2526 = getResultValue(match.result2526);
+                const diff = value2526 - value2425;
+
+                // Determine trend color and icon
+                let trendColor, trendIcon, trendText;
+                if (diff > 0) {
+                    trendColor = '#00aa00';
+                    trendIcon = '▲';
+                    trendText = 'Better';
+                } else if (diff < 0) {
+                    trendColor = '#ff0000';
+                    trendIcon = '▼';
+                    trendText = 'Worse';
+                } else {
+                    trendColor = '#ff9800';
+                    trendIcon = '=';
+                    trendText = 'Same';
+                }
+
+                // Background color for the row based on trend
+                let rowBg = 'white';
+                if (diff > 0) rowBg = 'rgba(0, 170, 0, 0.05)';
+                else if (diff < 0) rowBg = 'rgba(255, 0, 0, 0.05)';
+
+                html += `<tr style="background: ${rowBg}; border-bottom: 1px solid #eee;">`;
+                html += `<td style="padding: 6px 8px; font-weight: 600;">${match.opponent}</td>`;
+                html += `<td style="padding: 6px 8px; text-align: center;">${getResultDot(match.result2425)}</td>`;
+                html += `<td style="padding: 6px 8px; text-align: center;">${getResultDot(match.result2526)}</td>`;
+                html += `<td style="padding: 6px 8px; text-align: center; color: ${trendColor}; font-weight: bold;">`;
+                html += `${trendIcon} ${diff > 0 ? '+' : ''}${diff}`;
+                html += `</td>`;
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            html += '</div>';
+
+            // Add summary stats
+            const improvements = playedMatches.filter(m => getResultValue(m.result2526) > getResultValue(m.result2425)).length;
+            const same = playedMatches.filter(m => getResultValue(m.result2526) === getResultValue(m.result2425)).length;
+            const worse = playedMatches.filter(m => getResultValue(m.result2526) < getResultValue(m.result2425)).length;
+
+            html += '<div style="display: flex; justify-content: space-around; margin-top: 10px; padding: 8px; background: #f9f9f9; border-radius: 4px; font-size: 0.8em;">';
+            html += `<div style="text-align: center;"><div style="color: #00aa00; font-weight: bold; font-size: 1.2em;">${improvements}</div><div style="color: #666;">Better</div></div>`;
+            html += `<div style="text-align: center;"><div style="color: #ff9800; font-weight: bold; font-size: 1.2em;">${same}</div><div style="color: #666;">Same</div></div>`;
+            html += `<div style="text-align: center;"><div style="color: #ff0000; font-weight: bold; font-size: 1.2em;">${worse}</div><div style="color: #666;">Worse</div></div>`;
+            html += '</div>';
+
+            heatmapDiv.innerHTML = html;
         }
+
 
         async function fetchPremierLeagueStandings() {
             const standingsDiv = document.getElementById('standingsTable');
@@ -1024,25 +1191,57 @@
                 
             } catch (error) {
                 console.error('Error fetching standings:', error);
-                standingsDiv.innerHTML = `
-                    <div style="text-align: center; padding: 20px;">
-                        <p style="color: #DB0007; font-weight: bold; margin-bottom: 10px;">Live Standings Unavailable</p>
-                        <p style="color: #666; font-size: 0.9em;">To enable live Premier League standings:</p>
-                        <ol style="text-align: left; display: inline-block; margin-top: 10px; color: #666; font-size: 0.85em;">
-                            <li>Get a free API key from <a href="https://www.football-data.org/" target="_blank" style="color: #DB0007;">football-data.org</a></li>
-                            <li>Replace 'YOUR_API_KEY_HERE' in the code</li>
-                        </ol>
-                    </div>
-                `;
+
+                // Fallback to manual standings data
+                const manualStandings = [
+                    { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, gd: 10, points: 19 },
+                    { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 2, lost: 1, gd: 12, points: 17 },
+                    { position: 3, name: 'Liverpool', played: 8, won: 5, draw: 2, lost: 1, gd: 9, points: 17 },
+                    { position: 4, name: 'Aston Villa', played: 8, won: 5, draw: 1, lost: 2, gd: 6, points: 16 },
+                    { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 3, lost: 1, gd: 7, points: 15 }
+                ];
+
+                let html = '<table style="width: 100%; border-collapse: collapse;">';
+                html += '<thead style="background: #DB0007; color: white;"><tr>';
+                html += '<th style="padding: 8px; text-align: center;">Pos</th>';
+                html += '<th style="padding: 8px; text-align: left;">Team</th>';
+                html += '<th style="padding: 8px; text-align: center;">P</th>';
+                html += '<th style="padding: 8px; text-align: center;">W</th>';
+                html += '<th style="padding: 8px; text-align: center;">D</th>';
+                html += '<th style="padding: 8px; text-align: center;">L</th>';
+                html += '<th style="padding: 8px; text-align: center;">GD</th>';
+                html += '<th style="padding: 8px; text-align: center;">Pts</th>';
+                html += '</tr></thead><tbody>';
+
+                manualStandings.forEach((team) => {
+                    const isArsenal = team.name === 'Arsenal';
+                    const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
+                    html += `<tr style="${rowStyle}">`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
+                    html += `<td style="padding: 8px; text-align: left;">${team.name}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.played}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.gd > 0 ? '+' : ''}${team.gd}</td>`;
+                    html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
+                    html += '</tr>';
+                });
+
+                html += '</tbody></table>';
+                html += '<p style="text-align: center; color: #999; font-size: 0.75em; margin-top: 10px; font-style: italic;">Using manual data - API unavailable</p>';
+                standingsDiv.innerHTML = html;
             }
         }
 
-        const { cumulativeData, labels, form, positionsData, zigzagData } = calculateStats();
+        const { cumulativeData, labels, form, positionsData } = calculateStats();
         renderForm(form);
         renderTable();
+        renderSeasonPhaseChart();
         renderPositionChart(positionsData);
+        renderFixtureDifficulty();
+        renderResultsHeatmap();
         renderCumulativeChart(cumulativeData, labels);
-        renderZigzagChart(zigzagData);
         fetchPremierLeagueStandings();
     </script>
 </body>

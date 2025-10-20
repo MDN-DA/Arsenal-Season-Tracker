@@ -356,17 +356,23 @@
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr>
-                                <th>MW</th>
-                                <th>League</th>
-                                <th>Opponent</th>
-                                <th>Venue</th>
-                                <th>24/25</th>
-                                <th>25/26</th>
-                                <th>+/-</th>
-                                <th>Agg</th>
-                            </tr>
-                        </thead>
+                        <tr>
+                            <th rowspan="2">MW</th>
+                            <th rowspan="2">League</th>
+                            <th rowspan="2">Opponent</th>
+                            <th rowspan="2">Venue</th>
+                            <th colspan="2" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">25/26</th>
+                            <th colspan="2" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">24/25</th>
+                            <th rowspan="2">+/-</th>
+                            <th rowspan="2">Agg</th>
+                        </tr>
+                        <tr>
+                            <th style="border-left: 3px solid #fff;">Result</th>
+                            <th style="border-right: 3px solid #fff;">Pts</th>
+                            <th style="border-left: 3px solid #fff;">Result</th>
+                            <th style="border-right: 3px solid #fff;">Pts</th>
+                        </tr>
+                    </thead>
                         <tbody id="fixturesTable">
                         </tbody>
                     </table>
@@ -421,44 +427,44 @@
         };
 
         const fixtures = [
-            {mw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 28, pos2425: 2, pos2526: 6},
-            {mw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1},
-            {mw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", mw2425: 9, pos2425: 3, pos2526: 3},
-            {mw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", mw2425: 12, pos2425: 4, pos2526: 2},
-            {mw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", mw2425: 5, pos2425: 2, pos2526: 2},
-            {mw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", mw2425: 10, pos2425: 3, pos2526: 2},
-            {mw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", mw2425: 13, pos2425: 4, pos2526: 1},
-            {mw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 15, pos2425: 3, pos2526: 1},
-            {mw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 17, pos2425: 3, pos2526: null},
-            {mw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null},
-            {mw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null},
-            {mw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 21, pos2425: 2, pos2526: null},
-            {mw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 11, pos2425: 5, pos2526: null},
-            {mw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 32, pos2425: 2, pos2526: null},
-            {mw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 2, pos2425: 2, pos2526: null},
-            {mw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 1, pos2425: 2, pos2526: null},
-            {mw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 31, pos2425: 2, pos2526: null},
-            {mw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 3, pos2425: 3, pos2526: null},
-            {mw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 22, pos2425: 2, pos2526: null},
-            {mw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 8, pos2425: 3, pos2526: null},
-            {mw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 36, pos2425: 2, pos2526: null},
-            {mw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 27, pos2425: 2, pos2526: null},
-            {mw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 14, pos2425: 2, pos2526: null},
-            {mw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null},
-            {mw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null},
-            {mw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 19, pos2425: 2, pos2526: null},
-            {mw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 4, pos2425: 4, pos2526: null},
-            {mw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 29, pos2425: 2, pos2526: null},
-            {mw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 20, pos2425: 2, pos2526: null},
-            {mw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 16, pos2425: 3, pos2526: null},
-            {mw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 23, pos2425: 2, pos2526: null},
-            {mw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 35, pos2425: 2, pos2526: null},
-            {mw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 24, pos2425: 2, pos2526: null},
-            {mw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 37, pos2425: 2, pos2526: null},
-            {mw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 30, pos2425: 2, pos2526: null},
-            {mw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 26, pos2425: 2, pos2526: null},
-            {mw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pos2425: 2, pos2526: null},
-            {mw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 34, pos2425: 2, pos2526: null}
+            {mw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 28, pos2425: 2, pos2526: 6, pts2425: 3, pts2526: 3},
+            {mw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1, pts2425: 6, pts2526: 6},
+            {mw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", mw2425: 9, pos2425: 3, pos2526: 3, pts2425: 7, pts2526: 6},
+            {mw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", mw2425: 12, pos2425: 4, pos2526: 2, pts2425: 10, pts2526: 9},
+            {mw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", mw2425: 5, pos2425: 2, pos2526: 2, pts2425: 11, pts2526: 10},
+            {mw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", mw2425: 10, pos2425: 3, pos2526: 2, pts2425: 14, pts2526: 13},
+            {mw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", mw2425: 13, pos2425: 4, pos2526: 1, pts2425: 17, pts2526: 16},
+            {mw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", mw2425: 15, pos2425: 3, pos2526: 1, pts2425: 17, pts2526: 19},
+            {mw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 17, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {mw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {mw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null, pts2425: 19, pts2526: null},
+            {mw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 21, pos2425: 2, pos2526: null, pts2425: 22, pts2526: null},
+            {mw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 11, pos2425: 5, pos2526: null, pts2425: 25, pts2526: null},
+            {mw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 32, pos2425: 2, pos2526: null, pts2425: 28, pts2526: null},
+            {mw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 2, pos2425: 2, pos2526: null, pts2425: 29, pts2526: null},
+            {mw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
+            {mw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
+            {mw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
+            {mw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
+            {mw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null},
+            {mw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 36, pos2425: 2, pos2526: null, pts2425: 43, pts2526: null},
+            {mw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 27, pos2425: 2, pos2526: null, pts2425: 44, pts2526: null},
+            {mw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
+            {mw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
+            {mw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
+            {mw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
+            {mw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 4, pos2425: 4, pos2526: null, pts2425: 54, pts2526: null},
+            {mw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 55, pts2526: null},
+            {mw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425: 58, pts2526: null},
+            {mw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 16, pos2425: 3, pos2526: null, pts2425: 61, pts2526: null},
+            {mw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 23, pos2425: 2, pos2526: null, pts2425: 62, pts2526: null},
+            {mw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 35, pos2425: 2, pos2526: null, pts2425: 63, pts2526: null},
+            {mw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, mw2425: 24, pos2425: 2, pos2526: null, pts2425: 66, pts2526: null},
+            {mw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null, mw2425: 37, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
+            {mw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null, mw2425: 30, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
+            {mw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 26, pos2425: 2, pos2526: null, pts2425: 68, pts2526: null},
+            {mw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pos2425: 2, pos2526: null, pts2425: 71, pts2526: null},
+            {mw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 74, pts2526: null}
         ];
 
         function getPoints(result) {
@@ -517,10 +523,16 @@
                 }
             });
 
-            document.getElementById('points2526').textContent = points2526;
-            document.getElementById('points2425').textContent = points2425;
+            const playedMatches = fixtures.filter(m => m.result2526 !== null);
+            const lastMatch = playedMatches[playedMatches.length - 1];
             
-            const totalDiff = points2526 - points2425;
+            const pts2526 = lastMatch ? lastMatch.pts2526 : 0;
+            const pts2425 = lastMatch ? lastMatch.pts2425 : 0;
+            
+            document.getElementById('points2526').textContent = pts2526;
+            document.getElementById('points2425').textContent = pts2425;
+            
+            const totalDiff = pts2526 - pts2425;
             const diffElement = document.getElementById('pointsDiff');
             diffElement.textContent = (totalDiff >= 0 ? '+' : '') + totalDiff;
             diffElement.style.color = totalDiff > 0 ? '#00aa00' : (totalDiff < 0 ? '#ff0000' : '#DB0007');
@@ -573,23 +585,25 @@
                     `<div class="correlated-info">${match.correlated}</div>` : '';
 
                 row.innerHTML = `
-                    <td class="mw">${match.mw}</td>
-                    <td><img src="${leagueLogo}" class="league-logo" alt="${match.league}"></td>
-                    <td>
-                        <div class="opponent-cell">
-                            ${clubLogo ? `<img src="${clubLogo}" class="club-logo" alt="${match.opponent}">` : ''}
-                            <div>
-                                <span>${match.opponent}</span>
-                                ${correlatedInfo}
-                            </div>
+                <td class="mw">${match.mw}</td>
+                <td><img src="${leagueLogo}" class="league-logo" alt="${match.league}"></td>
+                <td>
+                    <div class="opponent-cell">
+                        ${clubLogo ? `<img src="${clubLogo}" class="club-logo" alt="${match.opponent}">` : ''}
+                        <div>
+                            <span>${match.opponent}</span>
+                            ${correlatedInfo}
                         </div>
-                    </td>
-                    <td>${match.venue}</td>
-                    <td>${getResultDot(match.result2425)}</td>
-                    <td>${getResultDot(match.result2526)}</td>
-                    <td class="${matchDiffClass}">${matchDiffText}</td>
-                    <td class="${aggClass}">${aggText}</td>
-                `;
+                    </div>
+                </td>
+                <td>${match.venue}</td>
+                <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2526)}</td>
+                <td style="border-right: 2px solid #DB0007;">${match.pts2526 !== null ? match.pts2526 : '-'}</td>
+                <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2425)}</td>
+                <td style="border-right: 2px solid #DB0007;">${match.pts2425 !== null ? match.pts2425 : '-'}</td>
+                <td class="${matchDiffClass}">${matchDiffText}</td>
+                <td class="${aggClass}">${aggText}</td>
+            `;
                 
                 tbody.appendChild(row);
             });

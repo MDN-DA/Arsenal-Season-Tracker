@@ -374,6 +374,10 @@
         
         <div class="main-layout">
             <div class="left-panel">
+                <div class="chart-container medium">
+                    <h2>Premier League Top 5</h2>
+                    <div id="standingsTable"></div>
+                </div>
                 <div class="table-container">
                     <table>
                        <thead>
@@ -427,11 +431,6 @@
                 </div>
 
                 <div class="chart-container medium">
-                    <h2>Premier League Top 5</h2>
-                    <div id="standingsTable"></div>
-                </div>
-
-                <div class="chart-container medium">
                     <h2>Results by Opponent (24/25 vs 25/26)</h2>
                     <div id="resultsHeatmap"></div>
                 </div>
@@ -439,6 +438,11 @@
                 <div class="chart-container medium">
                     <h2>Points vs Opponent Teams (24/25 vs 25/26)</h2>
                     <canvas id="cumulativeChart"></canvas>
+                </div>
+
+                 <div class="chart-container medium">
+                    <h2>Points by Season Phase</h2>
+                    <canvas id="seasonPhaseChart"></canvas>
                 </div>
             </div>
         </div>

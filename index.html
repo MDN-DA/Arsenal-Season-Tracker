@@ -374,6 +374,10 @@
         
         <div class="main-layout">
             <div class="left-panel">
+                <div class="chart-container medium">
+                    <h2>Premier League Top 5</h2>
+                    <div id="standingsTable"></div>
+                </div>
                 <div class="table-container">
                     <table>
                        <thead>
@@ -409,12 +413,6 @@
                     </table>
                 </div>
 
-                <div class="chart-container medium">
-                    <h2>Points by Season Phase</h2>
-                    <canvas id="seasonPhaseChart"></canvas>
-                </div>
-            </div>
-
             <div class="right-panel">
                 <div class="chart-container medium">
                     <h2>League Position (MW by MW)</h2>
@@ -439,6 +437,11 @@
                 <div class="chart-container medium">
                     <h2>Points vs Opponent Teams (24/25 vs 25/26)</h2>
                     <canvas id="cumulativeChart"></canvas>
+                </div>
+
+                 <div class="chart-container medium">
+                    <h2>Points by Season Phase</h2>
+                    <canvas id="seasonPhaseChart"></canvas>
                 </div>
             </div>
         </div>
@@ -862,19 +865,14 @@
         function renderFixtureDifficulty() {
             const difficultyDiv = document.getElementById('fixtureDifficulty');
 
-            // Get remaining PL and CH fixtures
-            const remainingFixtures = fixtures.filter(m => !m.result2526);
+            const remainingFixtures = fixtures.filter(m => !m.result2526 && m.league === 'PL');
 
             if (remainingFixtures.length === 0) {
                 difficultyDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">All fixtures completed!</p>';
                 return;
             }
 
-            // Define difficulty based on opponent's 24/25 final position
-            // We'll use a simplified model where lower position = harder match
             const getDifficulty = (opponent) => {
-                // Map of teams to their approximate final 24/25 positions (simplified)
-                // Championship clubs mapped to their correlated relegated teams
                 const teamPositions = {
                     'Liverpool': 1,
                     'Arsenal': 2,
@@ -893,10 +891,9 @@
                     'Wolverhampton Wanderers': 15,
                     'Everton': 16,
                     'Nottingham Forest': 17,
-                    // Championship teams treated as relegated teams
-                    'Leeds United': 18,      // Replaces Leicester (relegated)
-                    'Burnley': 19,           // Replaces Ipswich (relegated)
-                    'Sunderland': 20         // Replaces Southampton (relegated)
+                    'Leeds United': 18,
+                    'Burnley': 19,
+                    'Sunderland': 20
                 };
 
                 const position = teamPositions[opponent] || 10;
@@ -963,7 +960,6 @@
         function renderSeasonPhaseChart() {
             const ctx = document.getElementById('seasonPhaseChart').getContext('2d');
 
-            // Define season phases (all matches including CH)
             const phases = [
                 { name: 'Early Season (MW 1-13)', start: 1, end: 13 },
                 { name: 'Mid Season (MW 14-26)', start: 14, end: 26 },
@@ -975,12 +971,10 @@
             const phaseLabels = [];
 
             phases.forEach(phase => {
-                // Filter all matches in this phase (PL and CH)
                 const phaseMatches = fixtures.filter(m =>
-                    m.mw >= phase.start && m.mw <= phase.end
+                    m.league === 'PL' && m.mw >= phase.start && m.mw <= phase.end
                 );
 
-                // Calculate points for each season in this phase
                 let points2425 = 0;
                 let points2526 = 0;
                 let matchesPlayed2526 = 0;
@@ -1185,24 +1179,24 @@
                     html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.+/-}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>`;
                     html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
                     html += '</tr>';
                 });
                 
-                html += '</tbody></table>';
+                html += '</tbody></table>'a;
                 standingsDiv.innerHTML = html;
                 
             } catch (error) {
                 console.error('Error fetching standings:', error);
 
-                // Fallback to manual standings data (Updated from FotMob)
                 const manualStandings = [
-                    { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, gd: 12, points: 19 },
-                    { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, gd: 11, points: 16 },
-                    { position: 3, name: 'AFC Bournemouth', played: 8, won: 4, draw: 3, lost: 1, gd: 3, points: 15 },
-                    { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, gd: 3, points: 15 },
-                    { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, gd: 7, points: 14 }
+                    { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, +/-:15-3, gd: 12, points: 19 },
+                    { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, +/-:17-6, gd: 11, points: 16 },
+                    { position: 3, name: 'Bournemouth', played: 8, won: 4, draw: 3, lost: 1, +/-:14-11, gd: 3, points: 15 },
+                    { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, +/-:14-11, gd: 3, points: 15 },
+                    { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, +/-:16-9, gd: 7, points: 14 }
                 ];
 
                 let html = '<table style="width: 100%; border-collapse: collapse;">';

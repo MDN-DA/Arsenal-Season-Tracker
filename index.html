@@ -116,7 +116,7 @@
         }
         
         th, td {
-            padding: 12px;
+            padding: 12px 8px;
             text-align: center;
             border-bottom: 1px solid #eee;
         }
@@ -172,16 +172,37 @@
         .opponent {
             font-weight: 600;
             color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.95em;
+        }
+        
+        .league-badge {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        
+        .league-badge svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .correlated-info {
+            font-size: 0.75em;
+            color: #999;
+            font-style: italic;
+            margin-top: 2px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="48" fill="#DB0007" stroke="white" stroke-width="2"/>
-                <path d="M 50 15 L 60 40 L 85 40 L 65 55 L 75 80 L 50 65 L 25 80 L 35 55 L 15 40 L 40 40 Z" fill="white"/>
-            </svg>
+            <img class="logo" src="https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg" alt="Arsenal Logo">
             <h1>Arsenal FC</h1>
             <div class="subtitle">2025/26 Season Tracker vs 2024/25</div>
         </div>
@@ -228,45 +249,49 @@
     </div>
 
     <script>
+        const championshipBadge = `<img src="https://upload.wikimedia.org/wikipedia/en/7/7c/EFL_Championship.svg" alt="Championship" style="width:100%; height:100%;">`;
+        
+        const plBadge = `<img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg" alt="Premier League" style="width:100%; height:100%;">`;
+
         const fixtures = [
-            {gw: 1, opponent: "Man United", venue: "Away", result2425: "D", result2526: "W"},
-            {gw: 2, opponent: "Leeds", venue: "Home", result2425: "W", result2526: "W"},
-            {gw: 3, opponent: "Liverpool", venue: "Away", result2425: "D", result2526: "L"},
-            {gw: 4, opponent: "Forest", venue: "Home", result2425: "W", result2526: "W"},
-            {gw: 5, opponent: "City", venue: "Home", result2425: "W", result2526: "D"},
-            {gw: 6, opponent: "Newcastle", venue: "Away", result2425: "L", result2526: "W"},
-            {gw: 7, opponent: "West Ham", venue: "Home", result2425: "L", result2526: "W"},
-            {gw: 8, opponent: "Fulham", venue: "Away", result2425: "D", result2526: "W"},
-            {gw: 9, opponent: "Palace", venue: "Home", result2425: "D", result2526: null},
-            {gw: 10, opponent: "Burnley", venue: "Away", result2425: "W", result2526: null},
-            {gw: 11, opponent: "Sunderland", venue: "Away", result2425: "W", result2526: null},
-            {gw: 12, opponent: "Spurs", venue: "Home", result2425: "W", result2526: null},
-            {gw: 13, opponent: "Chelsea", venue: "Away", result2425: "D", result2526: null},
-            {gw: 14, opponent: "Brentford", venue: "Home", result2425: "D", result2526: null},
-            {gw: 15, opponent: "Villa", venue: "Away", result2425: "W", result2526: null},
-            {gw: 16, opponent: "Wolves", venue: "Home", result2425: "W", result2526: null},
-            {gw: 17, opponent: "Everton", venue: "Away", result2425: "D", result2526: null},
-            {gw: 18, opponent: "Brighton", venue: "Home", result2425: "D", result2526: null},
-            {gw: 19, opponent: "Villa", venue: "Home", result2425: "D", result2526: null},
-            {gw: 20, opponent: "Bournemouth", venue: "Away", result2425: "W", result2526: null},
-            {gw: 21, opponent: "Liverpool", venue: "Home", result2425: "W", result2526: null},
-            {gw: 22, opponent: "Forest", venue: "Away", result2425: "D", result2526: null},
-            {gw: 23, opponent: "Man United", venue: "Home", result2425: "W", result2526: null},
-            {gw: 24, opponent: "Leeds", venue: "Away", result2425: "W", result2526: null},
-            {gw: 25, opponent: "Sunderland", venue: "Home", result2425: "W", result2526: null},
-            {gw: 26, opponent: "Brentford", venue: "Away", result2425: "W", result2526: null},
-            {gw: 27, opponent: "Spurs", venue: "Away", result2425: "W", result2526: null},
-            {gw: 28, opponent: "Chelsea", venue: "Home", result2425: "W", result2526: null},
-            {gw: 29, opponent: "Brighton", venue: "Away", result2425: "W", result2526: null},
-            {gw: 30, opponent: "Everton", venue: "Home", result2425: "W", result2526: null},
-            {gw: 31, opponent: "Wolves", venue: "Away", result2425: "W", result2526: null},
-            {gw: 32, opponent: "Bournemouth", venue: "Home", result2425: "W", result2526: null},
-            {gw: 33, opponent: "City", venue: "Away", result2425: "D", result2526: null},
-            {gw: 34, opponent: "Newcastle", venue: "Home", result2425: "W", result2526: null},
-            {gw: 35, opponent: "Fulham", venue: "Home", result2425: "D", result2526: null},
-            {gw: 36, opponent: "West Ham", venue: "Away", result2425: "W", result2526: null},
-            {gw: 37, opponent: "Burnley", venue: "Home", result2425: "W", result2526: null},
-            {gw: 38, opponent: "Palace", venue: "Away", result2425: "W", result2526: null}
+            {gw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", correlated: null},
+            {gw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", correlated: "vs Leicester 24/25"},
+            {gw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", correlated: null},
+            {gw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", correlated: null},
+            {gw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", correlated: null},
+            {gw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", correlated: null},
+            {gw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", correlated: null},
+            {gw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", correlated: null},
+            {gw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25"},
+            {gw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25"},
+            {gw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, correlated: "vs Leicester 24/25"},
+            {gw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Southampton 24/25"},
+            {gw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null, correlated: null},
+            {gw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null},
+            {gw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, correlated: "vs Ipswich 24/25"},
+            {gw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, correlated: null}
         ];
 
         function getPoints(result) {
@@ -336,6 +361,8 @@
                 const row = document.createElement('tr');
                 row.className = match.venue.toLowerCase();
                 
+                const badge = match.league === 'CH' ? championshipBadge : plBadge;
+                
                 const diffText = match.diff !== null ? 
                     (match.diff > 0 ? `+${match.diff}` : match.diff) : '-';
                 const diffClass = match.diff > 0 ? 'positive' : (match.diff < 0 ? 'negative' : 'neutral');
@@ -344,9 +371,20 @@
                     (match.agg > 0 ? `+${match.agg}` : match.agg) : '-';
                 const aggClass = match.agg > 0 ? 'positive' : (match.agg < 0 ? 'negative' : 'neutral');
 
+                const correlatedInfo = match.correlated ? 
+                    `<div class="correlated-info">${match.correlated}</div>` : '';
+
                 row.innerHTML = `
                     <td class="gw">${match.gw}</td>
-                    <td class="opponent">${match.opponent}</td>
+                    <td>
+                        <div class="opponent">
+                            <span class="league-badge">${badge}</span>
+                            <div>
+                                <span>${match.opponent}</span>
+                                ${correlatedInfo}
+                            </div>
+                        </div>
+                    </td>
                     <td>${match.venue}</td>
                     <td>${getResultDot(match.result2425)}</td>
                     <td>${getResultDot(match.result2526)}</td>

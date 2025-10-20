@@ -517,10 +517,16 @@
                 }
             });
 
-            document.getElementById('points2526').textContent = points2526;
-            document.getElementById('points2425').textContent = points2425;
+            const playedMatches = fixtures.filter(m => m.result2526 !== null);
+            const lastMatch = playedMatches[playedMatches.length - 1];
             
-            const totalDiff = points2526 - points2425;
+            const pts2526 = lastMatch ? lastMatch.pts2526 : 0;
+            const pts2425 = lastMatch ? lastMatch.pts2425 : 0;
+            
+            document.getElementById('points2526').textContent = pts2526;
+            document.getElementById('points2425').textContent = pts2425;
+            
+            const totalDiff = pts2526 - pts2425;
             const diffElement = document.getElementById('pointsDiff');
             diffElement.textContent = (totalDiff >= 0 ? '+' : '') + totalDiff;
             diffElement.style.color = totalDiff > 0 ? '#00aa00' : (totalDiff < 0 ? '#ff0000' : '#DB0007');

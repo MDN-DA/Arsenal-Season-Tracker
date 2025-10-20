@@ -378,6 +378,14 @@
                     <table>
                        <thead>
                             <tr>
+                                <th colspan="12" style="background: white; padding: 15px; border-bottom: 2px solid #DB0007;">
+                                    <div style="text-align: center;">
+                                        <h3 style="color: #DB0007; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase;">Form (Last 5)</h3>
+                                        <div id="formDisplay" style="display: flex; justify-content: center; gap: 8px;"></div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
                                 <th rowspan="2">MW</th>
                                 <th rowspan="2">League</th>
                                 <th rowspan="2">Opponent</th>
@@ -652,7 +660,7 @@
             
             const logoPlugin = {
                 id: 'logoPlugin',
-                beforeDatasetsDraw(chart) {
+                afterDatasetsDraw(chart) {
                     const {ctx, chartArea, scales} = chart;
                     const dataset = chart.data.datasets[1];
                     
@@ -837,21 +845,23 @@
                     const dataset = chart.data.datasets[0];
                     
                     dataset.data.forEach((point, index) => {
-                        const match = fixtures[index];
-                        const logo = clubLogos[match.opponent];
-                        
-                        if (logo) {
-                            const x = scales.x.getPixelForValue(point.x);
-                            const y = scales.y.getPixelForValue(point.y);
+                        if (fixtures[index] && fixtures[index].result2526) {
+                            const match = fixtures[index];
+                            const logo = clubLogos[match.opponent];
                             
-                            if (x >= chartArea.left && x <= chartArea.right && 
-                                y >= chartArea.top && y <= chartArea.bottom) {
+                            if (logo) {
+                                const x = scales.x.getPixelForValue(point.x);
+                                const y = scales.y.getPixelForValue(point.y);
                                 
-                                const img = new Image();
-                                img.src = logo;
-                                const size = 24;
-                                
-                                ctx.drawImage(img, x - size/2, y - size/2, size, size);
+                                if (x >= chartArea.left && x <= chartArea.right && 
+                                    y >= chartArea.top && y <= chartArea.bottom) {
+                                    
+                                    const img = new Image();
+                                    img.src = logo;
+                                    const size = 24;
+                                    
+                                    ctx.drawImage(img, x - size/2, y - size/2, size, size);
+                                }
                             }
                         }
                     });

@@ -860,7 +860,7 @@
         function renderFixtureDifficulty() {
             const difficultyDiv = document.getElementById('fixtureDifficulty');
 
-            const remainingFixtures = fixtures.filter(m => !m.result2526 && m.league === 'PL');
+            const remainingFixtures = fixtures.filter(m => !m.result2526);
 
             if (remainingFixtures.length === 0) {
                 difficultyDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">All fixtures completed!</p>';
@@ -872,20 +872,20 @@
                     'Liverpool': 1,
                     'Arsenal': 2,
                     'Manchester City': 3,
-                    'Aston Villa': 4,
-                    'Tottenham Hotspur': 5,
-                    'Chelsea': 6,
-                    'Newcastle United': 7,
-                    'Manchester United': 8,
-                    'West Ham United': 9,
-                    'Brighton & Hove Albion': 10,
-                    'Brentford': 11,
-                    'Fulham': 12,
-                    'Crystal Palace': 13,
-                    'Bournemouth': 14,
+                    'Bournemouth': 4,
+                    'Chelsea': 5,
+                    'Crystal Palace': 6,
+                    'Tottenham Hotspur': 7,
+                    'Newcastle United': 8,
+                    'Aston Villa': 9,
+                    'Manchester United': 10,
+                    'Brighton & Hove Albion': 11,
+                    'Brentford': 12,
+                    'Fulham': 13,
+                    'Everton': 14,
                     'Wolverhampton Wanderers': 15,
-                    'Everton': 16,
-                    'Nottingham Forest': 17,
+                    'Nottingham Forest': 16,
+                    'West Ham United': 17,
                     'Leeds United': 18,
                     'Burnley': 19,
                     'Sunderland': 20
@@ -898,7 +898,6 @@
                 return { level: 'Easy', color: '#00aa00', score: 1 };
             };
 
-            // Take next 5-6 fixtures
             const nextFixtures = remainingFixtures.slice(0, 6);
 
             let html = '<div style="max-height: 280px; overflow-y: auto;">';
@@ -975,10 +974,11 @@
                 let matchesPlayed2526 = 0;
 
                 phaseMatches.forEach(match => {
-                    points2425 += getPoints(match.result2425);
+                    if (match.league === 'PL') {
+                        points2425 += getPoints(match.result2425);
+                    }
                     if (match.result2526) {
                         points2526 += getPoints(match.result2526);
-                        matchesPlayed2526++;
                     }
                 });
 
@@ -1133,100 +1133,48 @@
 
         async function fetchPremierLeagueStandings() {
             const standingsDiv = document.getElementById('standingsTable');
-
-            try {
-                standingsDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Loading standings...</p>';
-
-                const response = await fetch('https://api.football-data.org/v4/competitions/PL/standings', {
-                    headers: {
-                        'X-Auth-Token': '8735f3b7f0cb4193a999d750f5a2b988'
-                    }
-                }).catch(() => {
-                    throw new Error('Network error');
-                });
-
-                if (!response || !response.ok) {
-                    throw new Error('Failed to fetch standings');
-                }
-
-                const data = await response.json();
-                const standings = data.standings[0].table.slice(0, 5);
-                
-                let html = '<table style="width: 100%; border-collapse: collapse;">';
-                html += '<thead style="background: #DB0007; color: white;"><tr>';
-                html += '<th style="padding: 8px; text-align: center;">Pos</th>';
-                html += '<th style="padding: 8px; text-align: left;">Team</th>';
-                html += '<th style="padding: 8px; text-align: center;">P</th>';
-                html += '<th style="padding: 8px; text-align: center;">W</th>';
-                html += '<th style="padding: 8px; text-align: center;">D</th>';
-                html += '<th style="padding: 8px; text-align: center;">L</th>';
-                html += '<th style="padding: 8px; text-align: center;">GF-GA</th>';
-                html += '<th style="padding: 8px; text-align: center;">GD</th>';
-                html += '<th style="padding: 8px; text-align: center;">Pts</th>';
-                html += '</tr></thead><tbody>';
-                
-                standings.forEach((team, index) => {
-                    const isArsenal = team.team.name === 'Arsenal FC';
-                    const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
-                    html += `<tr style="${rowStyle}">`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
-                    html += `<td style="padding: 8px; text-align: left;">${team.team.name}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.playedGames}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.goalsFor}-${team.goalsAgainst}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>`;
-                    html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
-                    html += '</tr>';
-                });
-                
-                html += '</tbody></table>';
-                standingsDiv.innerHTML = html;
-                
-            } catch (error) {
-                console.error('Error fetching standings:', error);
-
-                const manualStandings = [
-                    { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, gf: 15, ga: 3, gd: 12, points: 19 },
-                    { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, gf: 17, ga: 6, gd: 11, points: 16 },
-                    { position: 3, name: 'Bournemouth', played: 8, won: 4, draw: 3, lost: 1, gf: 14, ga: 11, gd: 3, points: 15 },
-                    { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, gf: 14, ga: 11, gd: 3, points: 15 },
-                    { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, gf: 16, ga: 9, gd: 7, points: 14 }
-                ];
-
-                let html = '<table style="width: 100%; border-collapse: collapse;">';
-                html += '<thead style="background: #DB0007; color: white;"><tr>';
-                html += '<th style="padding: 8px; text-align: center;">Pos</th>';
-                html += '<th style="padding: 8px; text-align: left;">Team</th>';
-                html += '<th style="padding: 8px; text-align: center;">P</th>';
-                html += '<th style="padding: 8px; text-align: center;">W</th>';
-                html += '<th style="padding: 8px; text-align: center;">D</th>';
-                html += '<th style="padding: 8px; text-align: center;">L</th>';
-                html += '<th style="padding: 8px; text-align: center;">GD</th>';
-                html += '<th style="padding: 8px; text-align: center;">Pts</th>';
-                html += '</tr></thead><tbody>';
-
-                manualStandings.forEach((team) => {
-                    const isArsenal = team.name === 'Arsenal';
-                    const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
-                    html += `<tr style="${rowStyle}">`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
-                    html += `<td style="padding: 8px; text-align: left;">${team.name}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.played}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.gf}-${team.ga}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.gd > 0 ? '+' : ''}${team.gd}</td>`;
-                    html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
-                    html += '</tr>';
-                });
-
-                html += '</tbody></table>';
-                html += '<p style="text-align: center; color: #999; font-size: 0.75em; margin-top: 10px; font-style: italic;">Using manual data - API unavailable</p>';
-                standingsDiv.innerHTML = html;
-            }
+        
+            const manualStandings = [
+                { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, gf: 15, ga: 3, gd: 12, points: 19 },
+                { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, gf: 17, ga: 6, gd: 11, points: 16 },
+                { position: 3, name: 'Bournemouth', played: 8, won: 4, draw: 3, lost: 1, gf: 14, ga: 11, gd: 3, points: 15 },
+                { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, gf: 14, ga: 11, gd: 3, points: 15 },
+                { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, gf: 16, ga: 9, gd: 7, points: 14 }
+            ];
+        
+            let html = '<table style="width: 100%; border-collapse: collapse;">';
+            html += '<thead style="background: #DB0007; color: white;"><tr>';
+            html += '<th style="padding: 8px; text-align: center;">Pos</th>';
+            html += '<th style="padding: 8px; text-align: left;">Team</th>';
+            html += '<th style="padding: 8px; text-align: center;">P</th>';
+            html += '<th style="padding: 8px; text-align: center;">W</th>';
+            html += '<th style="padding: 8px; text-align: center;">D</th>';
+            html += '<th style="padding: 8px; text-align: center;">L</th>';
+            html += '<th style="padding: 8px; text-align: center;">GF</th>';
+            html += '<th style="padding: 8px; text-align: center;">GA</th>';
+            html += '<th style="padding: 8px; text-align: center;">GD</th>';
+            html += '<th style="padding: 8px; text-align: center;">Pts</th>';
+            html += '</tr></thead><tbody>';
+        
+            manualStandings.forEach((team) => {
+                const isArsenal = team.name === 'Arsenal';
+                const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
+                html += `<tr style="${rowStyle}">`;
+                html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
+                html += `<td style="padding: 8px; text-align: left;">${team.name}</td>`;
+                html += `<td style="padding: 8px; text-align: center;">${team.played}</td>`;
+                html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
+                html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
+                html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
+                html += `<td style="padding: 8px; text-align: center;">${team.gf}</td>`;
+                html += `<td style="padding: 8px; text-align: center;">${team.ga}</td>`;
+                html += `<td style="padding: 8px; text-align: center;">${team.gd > 0 ? '+' : ''}${team.gd}</td>`;
+                html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
+                html += '</tr>';
+            });
+        
+            html += '</tbody></table>';
+            standingsDiv.innerHTML = html;
         }
 
         const { cumulativeData, labels, form, positionsData } = calculateStats();

@@ -1160,6 +1160,7 @@
                 html += '<th style="padding: 8px; text-align: center;">W</th>';
                 html += '<th style="padding: 8px; text-align: center;">D</th>';
                 html += '<th style="padding: 8px; text-align: center;">L</th>';
+                html += '<th style="padding: 8px; text-align: center;">GF-GA</th>';
                 html += '<th style="padding: 8px; text-align: center;">GD</th>';
                 html += '<th style="padding: 8px; text-align: center;">Pts</th>';
                 html += '</tr></thead><tbody>';
@@ -1174,24 +1175,24 @@
                     html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.+/-}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.goalsFor}-${team.goalsAgainst}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>`;
                     html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
                     html += '</tr>';
                 });
                 
-                html += '</tbody></table>'a;
+                html += '</tbody></table>';
                 standingsDiv.innerHTML = html;
                 
             } catch (error) {
                 console.error('Error fetching standings:', error);
 
                 const manualStandings = [
-                    { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, +/-:15-3, gd: 12, points: 19 },
-                    { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, +/-:17-6, gd: 11, points: 16 },
-                    { position: 3, name: 'Bournemouth', played: 8, won: 4, draw: 3, lost: 1, +/-:14-11, gd: 3, points: 15 },
-                    { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, +/-:14-11, gd: 3, points: 15 },
-                    { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, +/-:16-9, gd: 7, points: 14 }
+                    { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, gf: 15, ga: 3, gd: 12, points: 19 },
+                    { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, gf: 17, ga: 6, gd: 11, points: 16 },
+                    { position: 3, name: 'Bournemouth', played: 8, won: 4, draw: 3, lost: 1, gf: 14, ga: 11, gd: 3, points: 15 },
+                    { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, gf: 14, ga: 11, gd: 3, points: 15 },
+                    { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, gf: 16, ga: 9, gd: 7, points: 14 }
                 ];
 
                 let html = '<table style="width: 100%; border-collapse: collapse;">';
@@ -1216,6 +1217,7 @@
                     html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
+                    html += `<td style="padding: 8px; text-align: center;">${team.gf}-${team.ga}</td>`;
                     html += `<td style="padding: 8px; text-align: center;">${team.gd > 0 ? '+' : ''}${team.gd}</td>`;
                     html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
                     html += '</tr>';

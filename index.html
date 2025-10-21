@@ -374,10 +374,6 @@
         
         <div class="main-layout">
             <div class="left-panel">
-                <div class="chart-container medium">
-                    <h2>Premier League Top 5</h2>
-                    <div id="standingsTable"></div>
-                </div>
                 <div class="table-container">
                     <table>
                        <thead>
@@ -412,36 +408,36 @@
                         </tbody>
                     </table>
                 </div>
-
+            </div>
+            
             <div class="right-panel">
                 <div class="chart-container medium">
                     <h2>League Position (MW by MW)</h2>
                     <canvas id="positionChart"></canvas>
                 </div>
-
-                <div class="chart-container medium">
-                    <h2>Remaining Fixtures Difficulty</h2>
-                    <div id="fixtureDifficulty"></div>
-                </div>
-
-                <div class="chart-container medium">
-                    <h2>Results by Opponent</h2>
-                    <div id="resultsHeatmap"></div>
-                </div>
-
+                
                 <div class="chart-container medium">
                     <h2>Points vs Opponent Teams</h2>
                     <canvas id="cumulativeChart"></canvas>
                 </div>
-
-                 <div class="chart-container medium">
+                
+                <div class="chart-container medium">
                     <h2>Points by Season Phase</h2>
                     <canvas id="seasonPhaseChart"></canvas>
                 </div>
+                
+                <div class="chart-container medium">
+                    <h2>Remaining Fixtures Difficulty</h2>
+                    <div id="fixtureDifficulty"></div>
+                </div>
+                
+                <div class="chart-container medium">
+                    <h2>Results by Opponent</h2>
+                    <div id="resultsHeatmap"></div>
+                </div>
             </div>
         </div>
-    </div>
-
+        
     <script>
         const clubLogos = {
             "Manchester United": "https://resources.premierleague.com/premierleague/badges/50/t1.png",
@@ -974,9 +970,7 @@
                 let matchesPlayed2526 = 0;
 
                 phaseMatches.forEach(match => {
-                    if (match.league === 'PL') {
-                        points2425 += getPoints(match.result2425);
-                    }
+                    points2425 += getPoints(match.result2425);
                     if (match.result2526) {
                         points2526 += getPoints(match.result2526);
                     }
@@ -1130,53 +1124,6 @@
             heatmapDiv.innerHTML = html;
         }
 
-
-        async function fetchPremierLeagueStandings() {
-            const standingsDiv = document.getElementById('standingsTable');
-        
-            const manualStandings = [
-                { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, gf: 15, ga: 3, gd: 12, points: 19 },
-                { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, gf: 17, ga: 6, gd: 11, points: 16 },
-                { position: 3, name: 'Bournemouth', played: 8, won: 4, draw: 3, lost: 1, gf: 14, ga: 11, gd: 3, points: 15 },
-                { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, gf: 14, ga: 11, gd: 3, points: 15 },
-                { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, gf: 16, ga: 9, gd: 7, points: 14 }
-            ];
-        
-            let html = '<table style="width: 100%; border-collapse: collapse;">';
-            html += '<thead style="background: #DB0007; color: white;"><tr>';
-            html += '<th style="padding: 8px; text-align: center;">Pos</th>';
-            html += '<th style="padding: 8px; text-align: left;">Team</th>';
-            html += '<th style="padding: 8px; text-align: center;">P</th>';
-            html += '<th style="padding: 8px; text-align: center;">W</th>';
-            html += '<th style="padding: 8px; text-align: center;">D</th>';
-            html += '<th style="padding: 8px; text-align: center;">L</th>';
-            html += '<th style="padding: 8px; text-align: center;">GF</th>';
-            html += '<th style="padding: 8px; text-align: center;">GA</th>';
-            html += '<th style="padding: 8px; text-align: center;">GD</th>';
-            html += '<th style="padding: 8px; text-align: center;">Pts</th>';
-            html += '</tr></thead><tbody>';
-        
-            manualStandings.forEach((team) => {
-                const isArsenal = team.name === 'Arsenal';
-                const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
-                html += `<tr style="${rowStyle}">`;
-                html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
-                html += `<td style="padding: 8px; text-align: left;">${team.name}</td>`;
-                html += `<td style="padding: 8px; text-align: center;">${team.played}</td>`;
-                html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
-                html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
-                html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
-                html += `<td style="padding: 8px; text-align: center;">${team.gf}</td>`;
-                html += `<td style="padding: 8px; text-align: center;">${team.ga}</td>`;
-                html += `<td style="padding: 8px; text-align: center;">${team.gd > 0 ? '+' : ''}${team.gd}</td>`;
-                html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
-                html += '</tr>';
-            });
-        
-            html += '</tbody></table>';
-            standingsDiv.innerHTML = html;
-        }
-
         const { cumulativeData, labels, form, positionsData } = calculateStats();
         renderForm(form);
         renderTable();
@@ -1185,7 +1132,6 @@
         renderFixtureDifficulty();
         renderResultsHeatmap();
         renderCumulativeChart(cumulativeData, labels);
-        fetchPremierLeagueStandings();
     </script>
 </body>
 </html>

@@ -415,25 +415,25 @@
                     <h2>League Position (MW by MW)</h2>
                     <canvas id="positionChart"></canvas>
                 </div>
-                
-                <div class="chart-container medium">
-                    <h2>Points vs Opponent Teams</h2>
-                    <canvas id="cumulativeChart"></canvas>
-                </div>
-                
-                <div class="chart-container medium">
-                    <h2>Points by Season Phase</h2>
-                    <canvas id="seasonPhaseChart"></canvas>
-                </div>
-                
+
                 <div class="chart-container medium">
                     <h2>Remaining Fixtures Difficulty</h2>
                     <div id="fixtureDifficulty"></div>
                 </div>
                 
                 <div class="chart-container medium">
+                    <h2>Points vs Opponent Teams</h2>
+                    <canvas id="cumulativeChart"></canvas>
+                </div>
+
+                  <div class="chart-container medium">
                     <h2>Results by Opponent</h2>
                     <div id="resultsHeatmap"></div>
+                </div>
+                
+                <div class="chart-container medium">
+                    <h2>Points by Season Phase</h2>
+                    <canvas id="seasonPhaseChart"></canvas>
                 </div>
             </div>
         </div>
@@ -962,7 +962,7 @@
 
             phases.forEach(phase => {
                 const phaseMatches = fixtures.filter(m =>
-                    m.league === 'PL' && m.mw >= phase.start && m.mw <= phase.end
+                    m.mw >= phase.start && m.mw <= phase.end
                 );
 
                 let points2425 = 0;
@@ -1127,11 +1127,11 @@
         const { cumulativeData, labels, form, positionsData } = calculateStats();
         renderForm(form);
         renderTable();
-        renderSeasonPhaseChart();
         renderPositionChart(positionsData);
         renderFixtureDifficulty();
-        renderResultsHeatmap();
         renderCumulativeChart(cumulativeData, labels);
+        renderResultsHeatmap();
+        renderSeasonPhaseChart();
     </script>
 </body>
 </html>

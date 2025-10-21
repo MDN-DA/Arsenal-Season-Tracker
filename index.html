@@ -777,18 +777,16 @@
                     datasets: [{
                         label: 'Cumulative +/-',
                         data: data,
-                        borderColor: function(context) {
-                            const value = context.parsed.y;
-                            return value >= 0 ? '#00aa00' : '#DB0007';
+                        borderColor: '#DB0007',
                         },
-                        backgroundColor: function(context) {
-                            const value = context.parsed.y;
-                            return value >= 0 ? 'rgba(0, 170, 0, 0.1)' : 'rgba(219, 0, 7, 0.1)';
+                        backgroundColor: 'rgba(219, 0, 7, 0.1)',
                         },
                         segment: {
                             borderColor: function(ctx) {
-                                const curr = ctx.p1.parsed.y;
-                                return curr >= 0 ? '#00aa00' : '#DB0007';
+                                if (ctx.p1 && ctx.p1.parsed && ctx.p1.parsed.y !== undefined) {
+                                    return ctx.p1.parsed.y >= 0 ? '#00aa00' : '#DB0007';
+                                }
+                                return '#DB0007';
                             }
                         },
                         borderWidth: 2,
@@ -797,8 +795,11 @@
                         pointRadius: 5,
                         pointHoverRadius: 7,
                         pointBackgroundColor: function(context) {
-                            const value = context.parsed.y;
-                            return value >= 0 ? '#00aa00' : '#DB0007';
+                            const index = context.dataIndex;
+                            if (index !== undefined && data[index] !== undefined) {
+                                return data[index] >= 0 ? '#00aa00' : '#DB0007';
+                            }
+                            return '#DB0007';
                         },
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2

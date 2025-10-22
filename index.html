@@ -953,33 +953,39 @@
 
         function renderSeasonPhaseChart() {
             const ctx = document.getElementById('seasonPhaseChart').getContext('2d');
-
+            
             const phases = [
                 { name: 'Early Season (MW 1-13)', start: 1, end: 13 },
                 { name: 'Mid Season (MW 14-26)', start: 14, end: 26 },
                 { name: 'Late Season (MW 27-38)', start: 27, end: 38 }
             ];
-
-            const phaseData2425 = [];
+        
+            const phaseData2425 = [25, 28, 21];            
             const phaseData2526 = [];
             const phaseLabels = [];
-
+        
             phases.forEach(phase => {
-                const phaseMatches = fixtures.filter(m =>
+                const phaseMatches2526 = fixtures.filter(m =>
                     m.mw >= phase.start && m.mw <= phase.end
                 );
-
+        
+                const phaseMatches2425 = fixtures.filter(m =>
+                    m.mw2425 >= phase.start && m.mw2425 <= phase.end
+                );
+        
                 let points2425 = 0;
                 let points2526 = 0;
-                let matchesPlayed2526 = 0;
-
-                phaseMatches.forEach(match => {
+        
+                phaseMatches2425.forEach(match => {
                     points2425 += getPoints(match.result2425);
+                });
+        
+                phaseMatches2526.forEach(match => {
                     if (match.result2526) {
                         points2526 += getPoints(match.result2526);
                     }
                 });
-
+        
                 phaseLabels.push(phase.name);
                 phaseData2425.push(points2425);
                 phaseData2526.push(points2526);
@@ -1048,7 +1054,6 @@
         function renderResultsHeatmap() {
             const heatmapDiv = document.getElementById('resultsHeatmap');
 
-            // Filter only PL matches that have been played in 25/26
             const playedMatches = fixtures.filter(m => m.result2526 && m.league === 'PL');
 
             if (playedMatches.length === 0) {
@@ -1056,7 +1061,6 @@
                 return;
             }
 
-            // Calculate result comparison for each match
             const getResultValue = (result) => {
                 if (result === 'W') return 3;
                 if (result === 'D') return 1;
@@ -1080,7 +1084,6 @@
                 const value2526 = getResultValue(match.result2526);
                 const diff = value2526 - value2425;
 
-                // Determine trend color and icon
                 let trendColor, trendIcon, trendText;
                 if (diff > 0) {
                     trendColor = '#00aa00';
@@ -1096,7 +1099,6 @@
                     trendText = 'Same';
                 }
 
-                // Background color for the row based on trend
                 let rowBg = 'white';
                 if (diff > 0) rowBg = 'rgba(0, 170, 0, 0.05)';
                 else if (diff < 0) rowBg = 'rgba(255, 0, 0, 0.05)';
@@ -1114,7 +1116,6 @@
             html += '</tbody></table>';
             html += '</div>';
 
-            // Add summary stats
             const improvements = playedMatches.filter(m => getResultValue(m.result2526) > getResultValue(m.result2425)).length;
             const same = playedMatches.filter(m => getResultValue(m.result2526) === getResultValue(m.result2425)).length;
             const worse = playedMatches.filter(m => getResultValue(m.result2526) < getResultValue(m.result2425)).length;

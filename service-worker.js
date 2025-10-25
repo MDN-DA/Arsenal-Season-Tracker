@@ -4,7 +4,7 @@ const CACHE_NAME = 'arsenal-cache-v1';
 const FILES_TO_CACHE = [
   './',
   './index.html',
-  './AFC_STr.ico',
+  './favicon.ico',
 ];
 
 self.addEventListener('install', event => {

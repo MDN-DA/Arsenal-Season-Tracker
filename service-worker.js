@@ -1,40 +1,38 @@
-// service-worker.js
-
-const CACHE_NAME = 'arsenal-cache-v1';
-const FILES_TO_CACHE = [
-  './',
-  './index.html',
-  './favicon.ico',
+const CACHE_NAME = 'arsenal-tracker-v1';
+const urlsToCache = [
+  '/Arsenal-Season-Tracker/',
+  '/Arsenal-Season-Tracker/index.html',
+  '/Arsenal-Season-Tracker/manifest.json',
+  'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
+// Installation
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('Mise en cache des fichiers…');
-      return cache.addAll(FILES_TO_CACHE);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
   );
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
-});
-
+// Activation
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keyList => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        keyList.map(key => {
-          if (key !== CACHE_NAME) {
-            console.log('Suppression ancien cache:', key);
-            return caches.delete(key);
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
           }
         })
       );
     })
+  );
+});
+
+// Fetch
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
   );
 });

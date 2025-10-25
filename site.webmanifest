@@ -1,0 +1,12 @@
+{
+  "name": "Arsenal FC 2025/26 Season Tracker",
+  "short_name": "Gunners Stats",
+  "description": "Match tracking, graphics and performance Arsenal FC",
+  "start_url": "https://mdn-da.github.io/Arsenal-Season-Tracker/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#DB0007",
+  "icons": [
+    { "src": "/AFC_STr.ico", "sizes": "256x252", "type": "image/ico" },
+  ]
+}

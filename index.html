@@ -474,6 +474,7 @@
                                 </th>
                             </tr>
                             <tr>
+                                <th rowspan="2">No</th>
                                 <th rowspan="2">MW/Round</th>
                                 <th rowspan="2">Date</th>
                                 <th rowspan="2">League</th>
@@ -582,68 +583,78 @@
         const faLogo = competitionLogos["FA"];
 
         const fixtures = [
-            {mw: 1, round: "1", date: "17/08/25", opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 28, pos2425: 2, pos2526: 6, pts2425: 3, pts2526: 3},
-            {mw: 2, round: "2", date: "23/08/25", opponent: "Leeds United", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "4-2", score2526: "5-0", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1, pts2425: 6, pts2526: 6},
-            {mw: 3, round: "3", date: "31/08/25", opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", score2425: "2-2", score2526: "1-0", mw2425: 9, pos2425: 3, pos2526: 3, pts2425: 7, pts2526: 6},
-            {mw: 4, round: "4", date: "13/09/25", opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "3-0", score2526: "3-0", mw2425: 12, pos2425: 4, pos2526: 2, pts2425: 10, pts2526: 9},
-            {mw: 1, round: "1", date: "16/09/25", opponent: "Athletic Club", venue: "Away", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "0-2", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 5, round: "5", date: "21/09/25", opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", score2425: "5-1", score2526: "1-1", mw2425: 5, pos2425: 2, pos2526: 2, pts2425: 11, pts2526: 10},
-			{mw: 3, round: "R3", date: "24/09/25", opponent: "Port Vale", venue: "Away", league: "EFL", result2425: null, result2526: "W", score2425: null, score2526: "0-2", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 6, round: "6", date: "28/09/25", opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", score2425: "1-0", score2526: "1-2", mw2425: 10, pos2425: 3, pos2526: 2, pts2425: 14, pts2526: 13},
-            {mw: 2, round: "2", date: "01/10/25", opponent: "Olympiacos", venue: "Home", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "2-0", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 7, round: "7", date: "04/10/25", opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", score2425: "0-1", score2526: "2-0", mw2425: 13, pos2425: 4, pos2526: 1, pts2425: 17, pts2526: 16},
-            {mw: 8, round: "8", date: "18/10/25", opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 15, pos2425: 3, pos2526: 1, pts2425: 17, pts2526: 19},
-            {mw: 3, round: "3", date: "21/10/25", opponent: "Atlético Madrid", venue: "Home", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "4-0", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 9, round: "9", date: "26/10/25", opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 17, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
-            {mw: 4, round: "R4", date: "29/10/25", opponent: "Brighton & Hove Albion", venue: "Home", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 10, round: "10", date: "01/11/25", opponent: "Burnley", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-4", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
-            {mw: 4, round: "4", date: "04/11/25", opponent: "Slavia Praha", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 11, round: "11", date: "08/11/25", opponent: "Sunderland", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-2", score2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null, pts2425: 19, pts2526: null},
-            {mw: 12, round: "12", date: "23/11/25", opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 21, pos2425: 2, pos2526: null, pts2425: 22, pts2526: null},
-            {mw: 5, round: "5", date: "26/11/25", opponent: "Bayern Munich", venue: "Home", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 13, round: "13", date: "30/11/25", opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 11, pos2425: 5, pos2526: null, pts2425: 25, pts2526: null},
-            {mw: 14, round: "14", date: "03/12/25", opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 32, pos2425: 2, pos2526: null, pts2425: 28, pts2526: null},
-            {mw: 15, round: "15", date: "06/12/25", opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, mw2425: 2, pos2425: 2, pos2526: null, pts2425: 29, pts2526: null},
-            {mw: 6, round: "6", date: "10/12/25", opponent: "Club Brugge", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 16, round: "16", date: "13/12/25", opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
-            {mw: 5, round: "R5", date: "16-17/12/25", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 17, round: "17", date: "21/12/25", opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
-            {mw: 18, round: "18", date: "27/12/25", opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
-            {mw: 19, round: "19", date: "30/12/25", opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
-	        {mw: 20, round: "20", date: "03/01/26", opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "L", result2526: null, score2425: "2-0", score2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null}, 
-            {mw: 21, round: "21", date: "07/01/26", opponent: "Liverpool", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 36, pos2425: 2, pos2526: null, pts2425: 43, pts2526: null},
-            {mw: 3, round: "R3", date: "10-11/01/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: "SF1", round: "SF1", date: "13-14/01/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 22, round: "22", date: "17/01/26", opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 27, pos2425: 2, pos2526: null, pts2425: 44, pts2526: null},
-            {mw: 7, round: "7", date: "20/01/26", opponent: "Inter Milan", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: 23, round: "23", date: "24/01/26", opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
-            {mw: 8, round: "8", date: "28/01/26", opponent: "Kairat Almaty", venue: "Home", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-            {mw: "SF2", round: "SF2", date: "03-04/01/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 24, round: "24", date: "31/01/26", opponent: "Leeds United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
-            {mw: 25, round: "25", date: "07/02/26", opponent: "Sunderland", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "3-1", score2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
-            {mw: 26, round: "26", date: "11/02/26", opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-3", score2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
-            {mw: 4, round: "R4", date: "14-15/01/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 27, round: "27", date: "21/02/26", opponent: "Tottenham Hotspur", venue: "Away", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 4, pos2425: 4, pos2526: null, pts2425: 54, pts2526: null},
-            {mw: "🏆", round: "🏆", date: "22/02/26", opponent: "N/A", venue: "Wembley", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 28, round: "28", date: "28/02/26", opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 55, pts2526: null},
-            {mw: 29, round: "29", date: "04/03/26", opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425: 58, pts2526: null},
-            {mw: 5, round: "R5", date: "07-08/03/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 30, round: "30", date: "14/03/26", opponent: "Everton", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 16, pos2425: 3, pos2526: null, pts2425: 61, pts2526: null},
-            {mw: 31, round: "31", date: "21/03/26", opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 23, pos2425: 2, pos2526: null, pts2425: 62, pts2526: null},
-	        {mw: "QF", round: "QF", date: "04-05/04/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 32, round: "32", date: "11/04/26", opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "L", result2526: null, score2425: "1-2", score2526: null, mw2425: 35, pos2425: 2, pos2526: null, pts2425: 63, pts2526: null},     
-            {mw: 33, round: "33", date: "18/04/26", opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 24, pos2425: 2, pos2526: null, pts2425: 66, pts2526: null},
-            {mw: 34, round: "34", date: "25/04/26", opponent: "Newcastle United", venue: "Home", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 37, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
-	        {mw: "SF", round: "SF", date: "25-26/04/26", opponent: "N/A", venue: "Wembley", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 35, round: "35", date: "02/05/26", opponent: "Fulham", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 30, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},         
-            {mw: 36, round: "36", date: "09/05/26", opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-5", score2526: null, mw2425: 26, pos2425: 2, pos2526: null, pts2425: 68, pts2526: null},
-	        {mw: "🏆", round: "🏆", date: "16/05/26", opponent: "N/A", venue: "Wembley", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-			{mw: 37, round: "37", date: "17/05/26", opponent: "Burnley", venue: "Home", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "1-0", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pos2425: 2, pos2526: null, pts2425: 71, pts2526: null},
-            {mw: 38, round: "38", date: "24/05/26", opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-5", score2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 74, pts2526: null}
-        ];
-        function getPoints(result) {
-            if (result === 'W') return 3;
-            if (result === 'D') return 1;
+            {no: "1", mw: 1, round: "1", date: "17/08/25", opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 28, pos2425: 2, pos2526: 6, pts2425: 3, pts2526: 3},
+            {no: "2", mw: 2, round: "2", date: "23/08/25", opponent: "Leeds United", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "4-2", score2526: "5-0", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1, pts2425: 6, pts2526: 6},
+            {no: "3", mw: 3, round: "3", date: "31/08/25", opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", score2425: "2-2", score2526: "1-0", mw2425: 9, pos2425: 3, pos2526: 3, pts2425: 7, pts2526: 6},
+            {no: "4", mw: 4, round: "4", date: "13/09/25", opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "3-0", score2526: "3-0", mw2425: 12, pos2425: 4, pos2526: 2, pts2425: 10, pts2526: 9},
+            {no: "5", mw: 1, round: "1", date: "16/09/25", opponent: "Athletic Club", venue: "Away", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "0-2", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "6", mw: 5, round: "5", date: "21/09/25", opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", score2425: "5-1", score2526: "1-1", mw2425: 5, pos2425: 2, pos2526: 2, pts2425: 11, pts2526: 10},
+			{no: "7", mw: 3, round: "R3", date: "24/09/25", opponent: "Port Vale", venue: "Away", league: "EFL", result2425: null, result2526: "W", score2425: null, score2526: "0-2", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "8", mw: 6, round: "6", date: "28/09/25", opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", score2425: "1-0", score2526: "1-2", mw2425: 10, pos2425: 3, pos2526: 2, pts2425: 14, pts2526: 13},
+            {no: "9", mw: 2, round: "2", date: "01/10/25", opponent: "Olympiacos", venue: "Home", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "2-0", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "10", mw: 7, round: "7", date: "04/10/25", opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", score2425: "0-1", score2526: "2-0", mw2425: 13, pos2425: 4, pos2526: 1, pts2425: 17, pts2526: 16},
+            {no: "11", mw: 8, round: "8", date: "18/10/25", opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 15, pos2425: 3, pos2526: 1, pts2425: 17, pts2526: 19},
+            {no: "12", mw: 3, round: "3", date: "21/10/25", opponent: "Atlético Madrid", venue: "Home", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "4-0", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+			{no: "13", mw: 9, round: "9", date: "26/10/25", opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 17, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {no: "14", mw: 4, round: "R4", date: "29/10/25", opponent: "Brighton & Hove Albion", venue: "Home", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "15", mw: 10, round: "10", date: "01/11/25", opponent: "Burnley", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-4", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {no: "16", mw: 4, round: "4", date: "04/11/25", opponent: "Slavia Praha", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "17", mw: 11, round: "11", date: "08/11/25", opponent: "Sunderland", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-2", score2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null, pts2425: 19, pts2526: null},
+            {no: "18", mw: 12, round: "12", date: "23/11/25", opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 21, pos2425: 2, pos2526: null, pts2425: 22, pts2526: null},
+            {no: "19", mw: 5, round: "5", date: "26/11/25", opponent: "Bayern Munich", venue: "Home", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "20", mw: 13, round: "13", date: "30/11/25", opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 11, pos2425: 5, pos2526: null, pts2425: 25, pts2526: null},
+            {no: "21", mw: 14, round: "14", date: "03/12/25", opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 32, pos2425: 2, pos2526: null, pts2425: 28, pts2526: null},
+            {no: "22"," mw: 15, round: "15", date: "06/12/25", opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, mw2425: 2, pos2425: 2, pos2526: null, pts2425: 29, pts2526: null},
+            {no: "23", mw: 6, round: "6", date: "10/12/25", opponent: "Club Brugge", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "24", mw: 16, round: "16", date: "13/12/25", opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
+            {no: "25", mw: 5, round: "R5", date: "16-17/12/25", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "26", mw: 17, round: "17", date: "21/12/25", opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
+            {no: "27", mw: 18, round: "18", date: "27/12/25", opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
+            {no: "28", mw: 19, round: "19", date: "30/12/25", opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
+	        {no: "29", mw: 20, round: "20", date: "03/01/26", opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "L", result2526: null, score2425: "2-0", score2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null}, 
+            {no: "30", mw: 21, round: "21", date: "07/01/26", opponent: "Liverpool", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 36, pos2425: 2, pos2526: null, pts2425: 43, pts2526: null},
+            {no: "31", mw: 3, round: "R3", date: "10-11/01/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+			{no: "32", mw: "SF", round: "SF (1)", date: "13-14/01/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "33", mw: 22, round: "22", date: "17/01/26", opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 27, pos2425: 2, pos2526: null, pts2425: 44, pts2526: null},
+            {no: "34", mw: 7, round: "7", date: "20/01/26", opponent: "Inter Milan", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "35", mw: 23, round: "23", date: "24/01/26", opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
+            {no: "36", mw: 8, round: "8", date: "28/01/26", opponent: "Kairat Almaty", venue: "Home", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "37", mw: "SF", round: "SF (2)", date: "03-04/01/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+			{no: "38", mw: 24, round: "24", date: "31/01/26", opponent: "Leeds United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
+            {no: "39", mw: 25, round: "25", date: "07/02/26", opponent: "Sunderland", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "3-1", score2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
+            {no: "40", mw: 26, round: "26", date: "11/02/26", opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-3", score2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 53, pts2526:no: 1,  null},
+            {no: "41", mw: 4, round: "R4", date: "14-15/01/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2no: 1, 526: null},
+			{no: "42", mw: "KO", round: "K/0 (1)", date: "17-18/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nulno: 1, l, pts2526: null},
+			{no: "43", mw: 27, round: "27", date: "21/02/26", opponent: "Tottenham Hotspur", venue: "Away", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 4, pos2425: 4, pos2526: nulno: 1, l, pts2425: 54, pts2526: null},
+            {no: "44", mw: "🏆", round: "🏆", date: "22/02/26", opponent: "N/A", venue: "Wembley", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, no: 1, pts2526: null},
+			{no: "45", mw: "KO", round: "K/0 (2)", date: "24-25/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nulno: 1, l, pts2526: null},
+			{no: "46", mw: 28, round: "28", date: "28/02/26", opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 55, pts2526: nno: 1, ull},
+            {no: "47", mw: 29, round: "29", date: "04/03/26", opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425:no: 1,  58, pts2526: null},
+            {no: "48", mw: 5, round: "R5", date: "07-08/03/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2no: 1, 526: null},
+			{no: "49", mw: "R16", round: "R16 (1)", date: "10-11/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nuno: 1, ll, pts2526: null},
+			{no: "50", mw: 30, round: "30", date: "14/03/26", opponent: "Everton", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 16, pos2425: 3, pos2526: null, pts2425: 61, pts2526: no: 1, null},
+			{no: "51", mw: "R16", round: "R16 (2)", date: "17-18/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nuno: 1, ll, pts2526: null},
+			{no: "52", mw: 31, round: "31", date: "21/03/26", opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 23, pos2425: 2, pos2526: null, pts2425no: 1, : 62, pts2526: null},
+	        {no: "53", mw: "QF", round: "QF", date: "04-05/04/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, ptsno: 1, 2526: null},
+			{no: "54", mw: "QF", round: "QF (1)", date: "07-08/04/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},
+			{no: "55", mw: 32, round: "32", date: "11/04/26", opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "L", result2526: null, score2425: "1-2", score2526: null, mw2425: 35, pos2425: 2, pos2526: null, pts2425: 63, pts252no: 1, 6: null},     
+			{no: "56", mw: "QF", round: "QF (2)", date: "14-15/04/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},
+			{no: "57", mw: 33, round: "33", date: "18/04/26", opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 24, pos2425: 2, pos2526: null, pts2425: 66, ptno: 1, s2526: null},
+            {no: "58", mw: 34, round: "34", date: "25/04/26", opponent: "Newcastle United", venue: "Home", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 37, pos2425: 2, pos2526: nulno: 1, l, pts2425: 67, pts2526: null},
+	        {no: "59", mw: "SF", round: "SF", date: "25-26/04/26", opponent: "N/A", venue: "Wembley", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null,no: 1,  pts2526: null},
+			{no: "60", mw: "SF", round: "SF (1)", date: "28-29/04/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},
+			{no: "61", mw: 35, round: "35", date: "02/05/26", opponent: "Fulham", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 30, pos2425: 2, pos2526: null, pts2425: 67, pts2526: nuno: 1, ll},         
+	        {no: "62", mw: "SF", round: "SF (2)", date: "05-06/05/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},            
+			{no: "63", mw: 36, round: "36", date: "09/05/26", opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-5", score2526: null, mw2425: 26, pos2425: 2, pos2526: null, pts2425: 68, ptno: 1, s2526: null},
+	        {no: "64", mw: "🏆", round: "🏆", date: "16/05/26", opponent: "N/A", venue: "Wembley", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pno: 1, ts2526: null},
+			{no: "65", mw: 37, round: "37", date: "17/05/26", opponent: "Burnley", venue: "Home", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "1-0", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pno: 1, os2425: 2, pos2526: null, pts2425: 71, pts2526: null},
+            {no: "66", mw: 38, round: "38", date: "24/05/26", opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-5", score2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 74, ptsno: 1, 2526: null}
+			{no: "67", mw: "🏆", round: "🏆", date: "30/05/26", opponent: "N/A", venue: "Puskás Aréna", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nno: 1, ull, pts2526: no: 1, no: 1, no: 1, null},
+
+ 		];
+		function getPoints(result) {
+			if (result === 'W') return 3;
+			if (result === 'D') return 1;
             if (result === 'L') return 0;
             return 0;
         }
@@ -800,10 +811,10 @@
                     <td>${match.venue}</td>
                     <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2526)}</td>
                     <td>${getScoreDisplay(match.score2526, match.result2526)}</td>
-                    <td style="border-right: 2px solid #DB0007;">${match.pts2526 !== null && match.pts2526 !== undefined ? match.pts2526 : '-'}</td>
+                    <td style="border-right: 2px solid #DB0007;">${match.pts2526 !== null ? match.pts2526 : '-'}</td>
                     <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2425)}</td>
                     <td>${getScoreDisplay(match.score2425, match.result2425)}</td>
-                    <td style="border-right: 2px solid #DB0007;">${match.pts2425 !== null && match.pts2425 !== undefined ? match.pts2425 : '-'}</td>
+                    <td style="border-right: 2px solid #DB0007;">${match.pts2425 !== null ? match.pts2425 : '-'}</td>
                     <td class="${matchDiffClass}">${matchDiffText}</td>
                     <td class="${aggClass}">${aggText}</td>
                 `;
@@ -815,6 +826,7 @@
         function renderPositionChart(data) {
             const ctx = document.getElementById('positionChart').getContext('2d');
             
+            // Créer un mapping des MW PL vers les matchs
             const plMatches = {};
             fixtures.forEach(match => {
                 if (match.league === 'PL' && match.result2526) {
@@ -959,9 +971,9 @@
                             if (!chartArea) return 'rgba(219, 0, 7, 0.1)';
                             
                             const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                            gradient.addColorStop(0.1, 'rgba(219, 0, 7, 0.15)');
+                            gradient.addColorStop(0.1, 'rgba(219, 0, 7, 0.15)');    
                             gradient.addColorStop(0.12, 'rgba(255, 255, 255, 0)'); 
-                            gradient.addColorStop(0.14, 'rgba(0, 170, 0, 0.15)');  
+                            gradient.addColorStop(0.14, 'rgba(0, 170, 0, 0.15)');     
                             return gradient;
                         },
                         segment: {

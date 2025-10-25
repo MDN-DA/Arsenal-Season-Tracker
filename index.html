@@ -74,14 +74,14 @@
         
         .main-layout {
             display: grid;
-            grid-template-columns: 1fr 3fr;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
         
         .left-panel, .right-panel {
-            display: flex;
+            display: fixed;
             flex-direction: column;
-            gap: 10px;
+            gap: 40px;
         }
         
         .stat-card {
@@ -222,15 +222,15 @@
         }
         
         .form-dot {
-            width: 35px;
-            height: 35px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: white;
-            font-size: 0.9em;
+            font-size: 1.5em;
         }
         
         .form-w { background: #00ff41; color: #000; }
@@ -247,6 +247,12 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+            table td:nth-child(2) { font-size: 0.5em; }  /* MW/Round */
+            table td:nth-child(3) { font-size: 0.5em; }
+            table td:nth-child(6) { font-size: 0.5em; }
+            table td:nth-child(13) { font-size: 0.5em; }
+            table td:nth-child(14) { font-size: 0.5em; }
         }
         
         thead {
@@ -255,17 +261,19 @@
         }
         
         th, td {
-            padding: 8px 6px;
+            padding: 2px 0px;
             text-align: center;
-            border-bottom: 1px solid #eee;
-            font-size: 0.85em;
+            border-bottom: 0.5px solid #eee;
+            font-size: 0.5em;
         }
         
         th {
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 0.75em;
-            letter-spacing: 0.5px;
+            font-size: 0.65em; 
+            letter-spacing: 0px;  
+            padding: 2px 0px;  
+            line-height: 1;
         }
         
         tbody tr:hover {
@@ -297,16 +305,15 @@
 
         
         .result-dot {
-            width: 28px;
-            height: 28px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
-            display: inline-block;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            line-height: 28px;
             color: white;
-            font-size: 1.2em;
+            font-size: 1.5em;
         }
         
         .win { background: #00ff41; color: #000; }
@@ -316,9 +323,9 @@
         
         .score-cell {
             font-weight: bold;
-            padding: 6px 10px;
+            padding: 6px 5px;
             border-radius: 5px;
-            font-size: 1.2em;
+            font-size: 1.5em;
         }
         
         .score-win {
@@ -336,9 +343,9 @@
             color: white;
         }
         
-        .positive { color: #00aa00; font-weight: bold; }
-        .negative { color: #ff0000; font-weight: bold; }
-        .neutral { color: #666; }
+        .positive { color: #00aa00; font-weight: bold; font-size: 0.65em; }
+        .negative { color: #ff0000; font-weight: bold; font-size: 0.65em; }
+        .neutral { color: #666; font-size: 0.65em; }
         
         .mw {
             font-weight: bold;
@@ -349,19 +356,19 @@
             display: flex-start;
             align-items: center;
             justify-content: flex-start;
-            gap: 8px;
-            font-weight: 600;
+            gap: 5px;
+            font-weight: 400;
             padding-left: 0;
         }
         
         .club-logo, .league-logo {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             object-fit: contain;
         }
         
         .club-logo.unknown {
-            opacity: 0.3;
+            opacity: 0.2;
             filter: grayscale(100%);
         }
         
@@ -423,7 +430,7 @@
             .form-dot {
                 width: 25px;
                 height: 25px;
-                font-size: 0.7em;
+                font-size: 1em;
             }
             th, td {
                 padding: 4px 2px;
@@ -643,15 +650,15 @@
     {mw: 7, round: "7", date: "20/01/26", opponent: "Inter Milan", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
     {mw: 23, round: "23", date: "24/01/26", opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
     {mw: 8, round: "8", date: "28/01/26", opponent: "Kairat Almaty", venue: "Home", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-    {mw: "SF", round: "SF (2)", date: "03-04/01/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+    {mw: "SF", round: "SF (2)", date: "03-04/02/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
     {mw: 24, round: "24", date: "31/01/26", opponent: "Leeds United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
     {mw: 25, round: "25", date: "07/02/26", opponent: "Sunderland", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "3-1", score2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
     {mw: 26, round: "26", date: "11/02/26", opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-3", score2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 56, pts2526: null},
-    {mw: 4, round: "R4", date: "14-15/01/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-    {mw: "KO", round: "KO (1)", date: "17-18/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+    {mw: 4, round: "R4", date: "14-15/02/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+    {mw: "KO", round: "KO (1)", date: "17-18/02/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
     {mw: 27, round: "27", date: "21/02/26", opponent: "Tottenham Hotspur", venue: "Away", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 4, pos2425: 4, pos2526: null, pts2425: 57, pts2526: null},
     {mw: "F", round: "🏆", date: "22/02/26", opponent: "N/A", venue: "Wembley", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-    {mw: "KO", round: "KO (2)", date: "24-25/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+    {mw: "KO", round: "KO (2)", date: "24-25/02/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
     {mw: 28, round: "28", date: "28/02/26", opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 60, pts2526: null},
     {mw: 29, round: "29", date: "04/03/26", opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425: 61, pts2526: null},
     {mw: 5, round: "R5", date: "07-08/03/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
@@ -812,13 +819,15 @@
                    match.league === 'FA' ? faLogo : plLogo;
                 const clubLogo = clubLogos[match.opponent] || '';
                 
-                const matchDiffText = match.matchDiff !== null ? 
+                const matchDiffText = (match.matchDiff !== null && match.matchDiff !== undefined) ? 
                     (match.matchDiff > 0 ? `+${match.matchDiff}` : match.matchDiff) : '-';
-                const matchDiffClass = match.matchDiff > 0 ? 'positive' : (match.matchDiff < 0 ? 'negative' : 'neutral');
+                const matchDiffClass = (match.matchDiff !== null && match.matchDiff !== undefined) ?
+                    (match.matchDiff > 0 ? 'positive' : (match.matchDiff < 0 ? 'negative' : 'neutral')) : 'neutral';
                 
-                const aggText = match.agg !== null ? 
+                const aggText = (match.agg !== null && match.agg !== undefined) ? 
                     (match.agg > 0 ? `+${match.agg}` : match.agg) : '-';
-                const aggClass = match.agg > 0 ? 'positive' : (match.agg < 0 ? 'negative' : 'neutral');
+                const aggClass = (match.agg !== null && match.agg !== undefined) ?
+                    (match.agg > 0 ? 'positive' : (match.agg < 0 ? 'negative' : 'neutral')) : 'neutral';
 
                 let mwColor = '#9b4dca'; 
                 if (match.league === 'UCL') mwColor = '#0066cc'; 
@@ -833,7 +842,7 @@
                     <td class="mw" style="color: ${mwColor}; font-size: ${match.round && match.round.includes('🏆') ? '22px' : 'inherit'};">
                         ${match.round || match.mw}
                     </td>
-                    <td style="font-size: 0.9em; color: #666;">${match.date || '-'}</td>
+                    <td style="font-size: 0.65em; color: #666;">${match.date || '-'}</td>
                     <td><img src="${leagueLogo}" class="league-logo" alt="${match.league}"></td>
                     <td>
                         <div class="opponent-cell">
@@ -1118,12 +1127,12 @@
             const nextFixtures = remainingFixtures.slice(0, 5);
 
             let html = '<div style="max-height: none; overflow-y: auto;">';
-            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">';  // Ã‰tait 0.85em
+            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">'; 
             html += '<thead style="background: #DB0007; color: white; position: sticky; top: 0; z-index: 1;">';
             html += '<tr>';
-            html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">MW</th>';  // Ã‰tait 6px
+            html += '<th style="padding: 5px; text-align: center; font-size: 0.85em;">MW</th>';
             html += '<th style="padding: 8px; text-align: left; font-size: 0.85em;">Opponent</th>';
-            html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">Venue</th>';
+            html += '<th style="padding: 5px; text-align: center; font-size: 0.85em;">Venue</th>';
             html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">Difficulty</th>';
             html += '</tr>';
             html += '</thead><tbody>';
@@ -1426,13 +1435,13 @@
                     <div style="background: white; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
                         <div style="font-weight: bold; margin-bottom: 10px;">📊 Status: ${status}</div>
                         <div style="margin-bottom: 5px;">${advantage}</div>
-                        <div style="font-size: 0.85em; color: #666;">Matches remaining: ${matchesRemaining}</div>
+                        <div style="font-size: 0.75em; color: #666;">Matches remaining: ${matchesRemaining}</div>
                     </div>
                     
                     <div style="background: white; padding: 15px; border-radius: 5px;">
                         <div style="font-weight: bold; margin-bottom: 10px; color: #0066cc;">🏆 KNOCKOUT BRACKET</div>
-                        <div style="font-size: 0.9em; color: #666; line-height: 1.8;">
-                            <div>Round of 16: <strong>TBD</strong> (Feb 2026)</div>
+                        <div style="font-size: 0.75em; color: #666; line-height: 1.8;">
+                            <div>Round of 16: <strong>TBD</strong> (March 2026)</div>
                             <div>Quarter-finals: <strong>TBD</strong> (Apr 2026)</div>
                             <div>Semi-finals: <strong>TBD</strong> (May 2026)</div>
                             <div>Final: <strong>TBD</strong> (30 May 2026 – Budapest, Puskás Aréna)</div>

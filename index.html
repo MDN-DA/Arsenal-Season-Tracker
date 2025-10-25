@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arsenal 2025/26 Season Tracker</title>
-	<link rel="icon" href="/favicon.ico">	
-	<link rel="manifest" href="/site.webmanifest">
+	<link rel="icon" type="image/x-icon" href="./favicon.ico">
+	<link rel="apple-touch-icon" href="./web-app-manifest-192x192">
+	<link rel="manifest" href="./site.webmanifest">
 	<meta name="theme-color" content="#DB0007">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="Gunners Stats">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -1467,12 +1471,16 @@
         renderSeasonPhaseChart();
         renderUCLBracket();
     </script>
+
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-  .then(() => console.log('Service Worker enregistré'))
-  .catch(err => console.log('SW erreur', err));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.log('Erreur Service Worker:', err));
+  });
 }
-</script>			
+</script>
+		
 </body>
 </html>

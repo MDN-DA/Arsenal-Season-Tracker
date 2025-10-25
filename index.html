@@ -276,14 +276,16 @@
         .away { background: white; }
         
         .result-dot {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: inline-block;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
-            line-height: 24px;
+            line-height: 28px;
             color: white;
-            font-size: 0.7em;
+            font-size: 1.2em;
         }
         
         .win { background: #00ff41; color: #000; }
@@ -293,8 +295,9 @@
         
         .score-cell {
             font-weight: bold;
-            padding: 4px 8px;
+            padding: 6px 10px;
             border-radius: 4px;
+            font-size: 0.9em;
         }
         
         .score-win {
@@ -353,10 +356,13 @@
             background: #CFCFCF !important;
         }
         
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .main-layout {
                 grid-template-columns: 1fr;
             }
+        }
+        
+        @media (max-width: 1200px) {
             .stats-row {
                 grid-template-columns: 1fr;
             }
@@ -366,6 +372,9 @@
             }
             .header-text h1 {
                 font-size: 1.5em;
+            }
+            table {
+                font-size: 0.75em;
             }
         }
         
@@ -387,28 +396,25 @@
             .header-text h1 {
                 font-size: 1.3em;
             }
-            .header-text .subtitle {
-                font-size: 0.9em;
-            }
             .stats-group {
                 grid-template-columns: 1fr;
             }
             .form-dot {
-                width: 30px;
-                height: 30px;
-                font-size: 0.8em;
+                width: 25px;
+                height: 25px;
+                font-size: 0.7em;
             }
             th, td {
-                padding: 6px 4px;
-                font-size: 0.75em;
+                padding: 4px 2px;
+                font-size: 0.65em;
             }
             .opponent-cell {
-                font-size: 0.8em;
-                gap: 5px;
+                font-size: 0.7em;
+                gap: 3px;
             }
             .club-logo, .league-logo {
-                width: 30px;
-                height: 30px;
+                width: 14px;
+                height: 14px;
             }
         }
     </style>
@@ -500,9 +506,10 @@
             
             <div class="right-panel">
                 <div class="chart-container medium">
-                <h2>League Position (MW by MW)</h2>
-                <canvas id="positionChart"></canvas>
-            </div>
+                    <h2>League Position (MW by MW)</h2>
+                    <canvas id="positionChart"></canvas>
+                </div>
+                
                 <div class="chart-container medium">                                
                     <h2>Remaining Fixtures Difficulty</h2>
                     <div id="fixtureDifficulty"></div>
@@ -522,6 +529,11 @@
                     <h2>Points by Season Phase (PL)</h2>
                     <canvas id="seasonPhaseChart"></canvas>
                 </div>
+                <div class="chart-container large" id="uclBracket" style="display: none;">
+                    <h2>🏆 UEFA Champions League Bracket</h2>
+                    <div id="bracketDisplay"></div>
+                </div>
+                
             </div>
         </div>
         
@@ -716,19 +728,26 @@
             const formDisplay = document.getElementById('formDisplay');
             formDisplay.innerHTML = '';
             
-            if (form.length === 0) {
+            if (!form || form.length === 0) {
                 formDisplay.innerHTML = '<span style="color: #999;">No matches played yet</span>';
                 return;
             }
             
-            form.forEach(result => {
+            const validResults = form.filter(r => r !== null && r !== undefined);
+            const last5 = validResults.slice(-5);
+            
+            if (last5.length === 0) {
+                formDisplay.innerHTML = '<span style="color: #999;">No matches played yet</span>';
+                return;
+            }
+            
+            last5.forEach(result => {
                 const dot = document.createElement('div');
                 dot.className = `form-dot form-${result.toLowerCase()}`;
                 dot.textContent = result;
                 formDisplay.appendChild(dot);
             });
         }
-
         function renderTable() {
             const tbody = document.getElementById('fixturesTable');
             tbody.innerHTML = '';
@@ -936,7 +955,17 @@
                         label: 'Cumulative +/-',
                         data: data,
                         borderColor: '#DB0007',
-                        backgroundColor: 'rgba(219, 0, 7, 0.1)',
+                        backgroundColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+                            if (!chartArea) return 'rgba(219, 0, 7, 0.1)';
+                            
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                            gradient.addColorStop(0, 'rgba(219, 0, 7, 0.15)');    // Rouge en bas (négatif)
+                            gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0)'); // Transparent au centre (0)
+                            gradient.addColorStop(1, 'rgba(0, 170, 0, 0.15)');     // Vert en haut (positif)
+                            return gradient;
+                        },
                         segment: {
                             borderColor: function(ctx) {
                                 if (ctx.p1 && ctx.p1.parsed && ctx.p1.parsed.y !== undefined) {
@@ -1043,14 +1072,14 @@
 
             const nextFixtures = remainingFixtures.slice(0, 5);
 
-            let html = '<div style="max-height: 280px; overflow-y: auto;">';
-            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.5em;">';
+            let html = '<div style="max-height: none; overflow-y: auto;">';
+            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">';  // Était 0.85em
             html += '<thead style="background: #DB0007; color: white; position: sticky; top: 0; z-index: 1;">';
             html += '<tr>';
-            html += '<th style="padding: 6px 8px; text-align: center;">MW</th>';
-            html += '<th style="padding: 6px 8px; text-align: left;">Opponent</th>';
-            html += '<th style="padding: 6px 8px; text-align: center;">Venue</th>';
-            html += '<th style="padding: 6px 8px; text-align: center;">Difficulty</th>';
+            html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">MW</th>';  // Était 6px
+            html += '<th style="padding: 8px; text-align: left; font-size: 0.85em;">Opponent</th>';
+            html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">Venue</th>';
+            html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">Difficulty</th>';
             html += '</tr>';
             html += '</thead><tbody>';
 
@@ -1278,8 +1307,6 @@
                     row.style.display = 'none';
                 }
             });
-            
-            refreshCharts(filter);
         }
         
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1290,7 +1317,77 @@
             });
         });
 
+        function renderUCLBracket() {
+            const bracketDiv = document.getElementById('bracketDisplay');
+            
+            const uclMatches = fixtures.filter(m => m.league === 'UCL' && m.result2526);
+            let uclPoints = 0;
+            uclMatches.forEach(m => {
+                uclPoints += getPoints(m.result2526);
+            });
+            
+            const matchesPlayed = uclMatches.length;
+            const matchesRemaining = 8 - matchesPlayed;
+            
+            let estimatedPosition = "TBD";
+            let status = "⏳ En cours";
+            let advantage = "❓ À déterminer";
+            
+            if (matchesPlayed >= 3) {
+                if (uclPoints >= 7) {
+                    estimatedPosition = "Top 8";
+                    advantage = "✅ Avantage domicile (retour)";
+                    status = "🟢 Qualifié probable";
+                } else if (uclPoints >= 4) {
+                    estimatedPosition = "9-24";
+                    advantage = "⚠️ Pas d'avantage domicile";
+                    status = "🟠 Qualification en jeu";
+                } else {
+                    estimatedPosition = "25-36";
+                    status = "🔴 Élimination possible";
+                }
+            }
+            
+            let html = `
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">MATCHS JOUÉS</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #0066cc;">${matchesPlayed}/8</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">POINTS</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #0066cc;">${uclPoints}</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">POSITION EST.</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #0066cc;">${estimatedPosition}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 10px;">📊 Status: ${status}</div>
+                        <div style="margin-bottom: 5px;">${advantage}</div>
+                        <div style="font-size: 0.85em; color: #666;">Matchs restants: ${matchesRemaining}</div>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #0066cc;">🏆 KNOCKOUT BRACKET</div>
+                        <div style="font-size: 0.9em; color: #666; line-height: 1.8;">
+                            <div>Round of 16: <strong>TBD</strong> (Feb 2026)</div>
+                            <div>Quarter-Finals: <strong>TBD</strong> (Apr 2026)</div>
+                            <div>Semi-Finals: <strong>TBD</strong> (May 2026)</div>
+                            <div>Final: <strong>TBD</strong> (31 May 2026 - Munich)</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            bracketDiv.innerHTML = html;
+        }
+
         const { cumulativeData, labels, form, positionsData } = calculateStats();
+        renderForm(form);
         renderForm(form);
         renderTable();
         renderPositionChart(positionsData);
@@ -1298,6 +1395,7 @@
         renderCumulativeChart(cumulativeData, labels);
         renderResultsHeatmap();
         renderSeasonPhaseChart();
+        renderUCLBracket();
     </script>
 </body>
 </html>

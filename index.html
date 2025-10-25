@@ -14,7 +14,7 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Verdana', sans-serif;
             background: #f5f5f5;
             padding: 15px;
             color: #333;
@@ -93,7 +93,7 @@
         }
         
         .stat-card h3 {
-            font-size: 0.75em;
+            font-size: 1em;
             margin-bottom: 8px;
             color: #666;
             text-transform: uppercase;
@@ -101,7 +101,7 @@
         }
         
         .stat-card .value {
-            font-size: 2em;
+            font-size: 1.2em;
             font-weight: bold;
             color: #DB0007;
         }
@@ -132,6 +132,69 @@
             font-size: 1em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+        
+        .filter-btn {
+            padding: 1px 2px;
+            margin: 0 2px;
+            border: 2px solid #000000;
+            background: white;
+            color: #000000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .filter-btn.active {
+            color: white;
+        }
+        
+        /* Couleurs par compétition */
+        .filter-btn[data-filter="all"] {
+            border-color: #000000;
+            color: #;
+        }
+        .filter-btn[data-filter="all"].active {
+            background: #000000;
+        }
+        
+        .filter-btn[data-filter="PL"] {
+            border-color: #9b4dca;
+            color: #;
+        }
+        .filter-btn[data-filter="PL"].active {
+            background: #9b4dca;
+        }
+        
+        .filter-btn[data-filter="UCL"] {
+            border-color: #0066cc;
+            color: #;
+        }
+        .filter-btn[data-filter="UCL"].active {
+            background: #0066cc;
+        }
+        
+        .filter-btn[data-filter="EFL"] {
+            border-color: #22BA6C;
+            color: #;
+        }
+        .filter-btn[data-filter="EFL"].active {
+            background: #22BA6C;
+        }
+        
+        .filter-btn[data-filter="FA"] {
+            border-color: #ff0000;
+            color: #;
+        }
+        .filter-btn[data-filter="FA"].active {
+            background: #ff0000;
         }
         
         .form-container {
@@ -277,18 +340,23 @@
         }
         
         .opponent-cell {
-            display: flex;
+            display: flex-start;
             align-items: center;
             justify-content: flex-start;
             gap: 8px;
             font-weight: 600;
-            padding-left: 8px;
+            padding-left: 0;
         }
         
         .club-logo, .league-logo {
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             object-fit: contain;
+        }
+        
+        .club-logo.unknown {
+            opacity: 0.3;
+            filter: grayscale(100%);
         }
         
         .correlated-info {
@@ -393,12 +461,16 @@
             </div>
         </div>
         
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="PL">Premier League</button>
+            <button class="filter-btn" data-filter="UCL">Champions League</button>
+            <button class="filter-btn" data-filter="EFL">Carabao Cup</button>
+            <button class="filter-btn" data-filter="FA">FA Cup</button>
+        </div>
+        
         <div class="main-layout">
             <div class="left-panel">
-                <div class="chart-container medium">
-                    <h2>Premier League Top 5</h2>
-                    <div id="standingsTable"></div>
-                </div>
                 <div class="table-container">
                     <table>
                        <thead>
@@ -411,13 +483,15 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th rowspan="2">MW</th>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">MW/Round</th>
+                                <th rowspan="2">Date</th>
                                 <th rowspan="2">League</th>
                                 <th rowspan="2">Opponent</th>
                                 <th rowspan="2">Venue</th>
                                 <th colspan="3" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">25/26</th>
                                 <th colspan="3" style="border-left: 3px solid #fff; border-right: 3px solid #fff;">24/25</th>
-                                <th rowspan="2">+/-</th>
+								<th rowspan="2">+/-</th>
                                 <th rowspan="2">Agg</th>
                             </tr>
                             <tr>
@@ -455,17 +529,17 @@
                     <h2>🔮 Remaining Fixtures Difficulty</h2>
                     <div id="fixtureDifficulty"></div>
                 </div>
-
+                
                 <div class="chart-container medium">
-                    <h2>Premier League Top 5</h2>
-                    <div id="standingsTable"></div>
+                    <h2>Points vs Opponent Teams (PL)</h2>
+                    <canvas id="cumulativeChart"></canvas>
                 </div>
 
                 <div class="chart-container medium">
                     <h2>🔄 Head-to-Head Improvement</h2>
                     <div id="resultsHeatmap"></div>
                 </div>
-
+                
                 <div class="chart-container medium">
                     <h2>⚔️ Cumulative Point Difference</h2>
                     <canvas id="cumulativeChart"></canvas>
@@ -475,10 +549,14 @@
                     <h2>🏆 UEFA Champions League Bracket</h2>
                     <div id="bracketDisplay"></div>
                 </div>
+                <div class="chart-container large" id="uclBracket" style="display: none;">
+                    <h2>🏆 UEFA Champions League Bracket</h2>
+                    <div id="bracketDisplay"></div>
+                </div>
+                
             </div>
         </div>
-    </div>
-
+        
     <script>
         const clubLogos = {
             "Manchester United": "https://resources.premierleague.com/premierleague/badges/50/t1.png",
@@ -499,52 +577,103 @@
             "Wolverhampton Wanderers": "https://resources.premierleague.com/premierleague/badges/50/t39.png",
             "Everton": "https://resources.premierleague.com/premierleague/badges/50/t11.png",
             "Brighton & Hove Albion": "https://resources.premierleague.com/premierleague/badges/50/t36.png",
-            "Bournemouth": "https://resources.premierleague.com/premierleague/badges/50/t91.png"
+            "Bournemouth": "https://resources.premierleague.com/premierleague/badges/50/t91.png",
+            "Athletic Club": "https://upload.wikimedia.org/wikipedia/en/9/98/Club_Athletic_Bilbao_logo.svg",
+            "Olympiacos": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Olympiacos_FC_crest.svg/923px-Olympiacos_FC_crest.svg.png",
+            "Atlético Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Atletico_Madrid_Logo_2024.svg/935px-Atletico_Madrid_Logo_2024.svg.png",
+            "Slavia Praha": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52498.png",
+            "Bayern Munich": "https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg",
+            "Club Brugge": "https://img.uefa.com/imgml/TP/teams/logos/240x240/50043.png",
+            "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
+            "Kairat Almaty": "https://img.uefa.com/imgml/TP/teams/logos/240x240/79970.png",
+            "Port Vale": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Port_Vale_logo.svg/1052px-Port_Vale_logo.svg.png"
         };
+        
+        const competitionLogos = {
+            "PL": "https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg",
+            "UCL": "https://upload.wikimedia.org/wikipedia/en/b/bf/UEFA_Champions_League_logo_2.svg",
+            "EFL": "https://upload.wikimedia.org/wikipedia/en/a/a8/EFL_Cup.svg",
+            "FA": "https://upload.wikimedia.org/wikipedia/en/e/eb/FA_Cup.svg"
+        };
+        
+        const plLogo = competitionLogos["PL"];
+        const uclLogo = competitionLogos["UCL"];
+        const eflLogo = competitionLogos["EFL"];
+        const faLogo = competitionLogos["FA"];
 
         const fixtures = [
-            {mw: 1, opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 28, pos2425: 2, pos2526: 6, pts2425: 3, pts2526: 3},
-            {mw: 2, opponent: "Leeds United", venue: "Home", league: "CH", result2425: "W", result2526: "W", score2425: "4-2", score2526: "5-0", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1, pts2425: 6, pts2526: 6},
-            {mw: 3, opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", score2425: "2-2", score2526: "1-0", mw2425: 9, pos2425: 3, pos2526: 3, pts2425: 7, pts2526: 6},
-            {mw: 4, opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "3-0", score2526: "3-0", mw2425: 12, pos2425: 4, pos2526: 2, pts2425: 10, pts2526: 9},
-            {mw: 5, opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", score2425: "5-1", score2526: "1-1", mw2425: 5, pos2425: 2, pos2526: 2, pts2425: 11, pts2526: 10},
-            {mw: 6, opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", score2425: "1-0", score2526: "1-2", mw2425: 10, pos2425: 3, pos2526: 2, pts2425: 14, pts2526: 13},
-            {mw: 7, opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", score2425: "0-1", score2526: "2-0", mw2425: 13, pos2425: 4, pos2526: 1, pts2425: 17, pts2526: 16},
-            {mw: 8, opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 15, pos2425: 3, pos2526: 1, pts2425: 17, pts2526: 19},
-            {mw: 9, opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 17, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
-            {mw: 10, opponent: "Burnley", venue: "Away", league: "CH", result2425: "W", result2526: null, score2425: "0-4", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
-            {mw: 11, opponent: "Sunderland", venue: "Away", league: "CH", result2425: "W", result2526: null, score2425: "1-2", score2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null, pts2425: 19, pts2526: null},
-            {mw: 12, opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 21, pos2425: 2, pos2526: null, pts2425: 22, pts2526: null},
-            {mw: 13, opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 11, pos2425: 5, pos2526: null, pts2425: 25, pts2526: null},
-            {mw: 14, opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 32, pos2425: 2, pos2526: null, pts2425: 28, pts2526: null},
-            {mw: 15, opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, mw2425: 2, pos2425: 2, pos2526: null, pts2425: 29, pts2526: null},
-            {mw: 16, opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
-            {mw: 17, opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
-            {mw: 18, opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
-            {mw: 19, opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
-            {mw: 20, opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null},
-            {mw: 21, opponent: "Liverpool", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-2", score2526: null, mw2425: 36, pos2425: 2, pos2526: null, pts2425: 43, pts2526: null},
-            {mw: 22, opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 27, pos2425: 2, pos2526: null, pts2425: 44, pts2526: null},
-            {mw: 23, opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
-            {mw: 24, opponent: "Leeds United", venue: "Away", league: "CH", result2425: "W", result2526: null, score2425: "0-2", score2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
-            {mw: 25, opponent: "Sunderland", venue: "Home", league: "CH", result2425: "W", result2526: null, score2425: "3-1", score2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
-            {mw: 26, opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-3", score2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
-            {mw: 27, opponent: "Tottenham Hotspur", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 4, pos2425: 4, pos2526: null, pts2425: 54, pts2526: null},
-            {mw: 28, opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 55, pts2526: null},
-            {mw: 29, opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-1", score2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425: 58, pts2526: null},
-            {mw: 30, opponent: "Everton", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "0-0", score2526: null, mw2425: 16, pos2425: 3, pos2526: null, pts2425: 61, pts2526: null},
-            {mw: 31, opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 23, pos2425: 2, pos2526: null, pts2425: 62, pts2526: null},
-            {mw: 32, opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-2", score2526: null, mw2425: 35, pos2425: 2, pos2526: null, pts2425: 63, pts2526: null},
-            {mw: 33, opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 24, pos2425: 2, pos2526: null, pts2425: 66, pts2526: null},
-            {mw: 34, opponent: "Newcastle United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 37, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
-            {mw: 35, opponent: "Fulham", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-1", score2526: null, mw2425: 30, pos2425: 2, pos2526: null, pts2425: 67, pts2526: null},
-            {mw: 36, opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-5", score2526: null, mw2425: 26, pos2425: 2, pos2526: null, pts2425: 68, pts2526: null},
-            {mw: 37, opponent: "Burnley", venue: "Home", league: "CH", result2425: "W", result2526: null, score2425: "0-4", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pos2425: 2, pos2526: null, pts2425: 71, pts2526: null},
-            {mw: 38, opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-5", score2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 74, pts2526: null}
-        ];
-        function getPoints(result) {
-            if (result === 'W') return 3;
-            if (result === 'D') return 1;
+            {no: "1", mw: 1, round: "1", date: "17/08/25", opponent: "Manchester United", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 28, pos2425: 2, pos2526: 6, pts2425: 3, pts2526: 3},
+            {no: "2", mw: 2, round: "2", date: "23/08/25", opponent: "Leeds United", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "4-2", score2526: "5-0", correlated: "vs Leicester 24/25", mw2425: 6, pos2425: 4, pos2526: 1, pts2425: 6, pts2526: 6},
+            {no: "3", mw: 3, round: "3", date: "31/08/25", opponent: "Liverpool", venue: "Away", league: "PL", result2425: "D", result2526: "L", score2425: "2-2", score2526: "1-0", mw2425: 9, pos2425: 3, pos2526: 3, pts2425: 7, pts2526: 6},
+            {no: "4", mw: 4, round: "4", date: "13/09/25", opponent: "Nottingham Forest", venue: "Home", league: "PL", result2425: "W", result2526: "W", score2425: "3-0", score2526: "3-0", mw2425: 12, pos2425: 4, pos2526: 2, pts2425: 10, pts2526: 9},
+            {no: "5", mw: 1, round: "1", date: "16/09/25", opponent: "Athletic Club", venue: "Away", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "0-2", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "6", mw: 5, round: "5", date: "21/09/25", opponent: "Manchester City", venue: "Home", league: "PL", result2425: "W", result2526: "D", score2425: "5-1", score2526: "1-1", mw2425: 5, pos2425: 2, pos2526: 2, pts2425: 11, pts2526: 10},
+			{no: "7", mw: 3, round: "R3", date: "24/09/25", opponent: "Port Vale", venue: "Away", league: "EFL", result2425: null, result2526: "W", score2425: null, score2526: "0-2", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "8", mw: 6, round: "6", date: "28/09/25", opponent: "Newcastle United", venue: "Away", league: "PL", result2425: "L", result2526: "W", score2425: "1-0", score2526: "1-2", mw2425: 10, pos2425: 3, pos2526: 2, pts2425: 14, pts2526: 13},
+            {no: "9", mw: 2, round: "2", date: "01/10/25", opponent: "Olympiacos", venue: "Home", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "2-0", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "10", mw: 7, round: "7", date: "04/10/25", opponent: "West Ham United", venue: "Home", league: "PL", result2425: "L", result2526: "W", score2425: "0-1", score2526: "2-0", mw2425: 13, pos2425: 4, pos2526: 1, pts2425: 17, pts2526: 16},
+            {no: "11", mw: 8, round: "8", date: "18/10/25", opponent: "Fulham", venue: "Away", league: "PL", result2425: "D", result2526: "W", score2425: "1-1", score2526: "0-1", mw2425: 15, pos2425: 3, pos2526: 1, pts2425: 17, pts2526: 19},
+            {no: "12", mw: 3, round: "3", date: "21/10/25", opponent: "Atlético Madrid", venue: "Home", league: "UCL", result2425: null, result2526: "W", score2425: null, score2526: "4-0", mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+			{no: "13", mw: 9, round: "9", date: "26/10/25", opponent: "Crystal Palace", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 17, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {no: "14", mw: 4, round: "R4", date: "29/10/25", opponent: "Brighton & Hove Albion", venue: "Home", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "15", mw: 10, round: "10", date: "01/11/25", opponent: "Burnley", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-4", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 18, pos2425: 3, pos2526: null, pts2425: 18, pts2526: null},
+            {no: "16", mw: 4, round: "4", date: "04/11/25", opponent: "Slavia Praha", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "17", mw: 11, round: "11", date: "08/11/25", opponent: "Sunderland", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-2", score2526: null, correlated: "vs Southampton 24/25", mw2425: 7, pos2425: 3, pos2526: null, pts2425: 19, pts2526: null},
+            {no: "18", mw: 12, round: "12", date: "23/11/25", opponent: "Tottenham Hotspur", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 21, pos2425: 2, pos2526: null, pts2425: 22, pts2526: null},
+            {no: "19", mw: 5, round: "5", date: "26/11/25", opponent: "Bayern Munich", venue: "Home", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "20", mw: 13, round: "13", date: "30/11/25", opponent: "Chelsea", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 11, pos2425: 5, pos2526: null, pts2425: 25, pts2526: null},
+            {no: "21", mw: 14, round: "14", date: "03/12/25", opponent: "Brentford", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 32, pos2425: 2, pos2526: null, pts2425: 28, pts2526: null},
+            {no: "22"," mw: 15, round: "15", date: "06/12/25", opponent: "Aston Villa", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, mw2425: 2, pos2425: 2, pos2526: null, pts2425: 29, pts2526: null},
+            {no: "23", mw: 6, round: "6", date: "10/12/25", opponent: "Club Brugge", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "24", mw: 16, round: "16", date: "13/12/25", opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
+            {no: "25", mw: 5, round: "R5", date: "16-17/12/25", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "26", mw: 17, round: "17", date: "21/12/25", opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
+            {no: "27", mw: 18, round: "18", date: "27/12/25", opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
+            {no: "28", mw: 19, round: "19", date: "30/12/25", opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
+	        {no: "29", mw: 20, round: "20", date: "03/01/26", opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "L", result2526: null, score2425: "2-0", score2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null}, 
+            {no: "30", mw: 21, round: "21", date: "07/01/26", opponent: "Liverpool", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 36, pos2425: 2, pos2526: null, pts2425: 43, pts2526: null},
+            {no: "31", mw: 3, round: "R3", date: "10-11/01/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+			{no: "32", mw: "SF", round: "SF (1)", date: "13-14/01/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "33", mw: 22, round: "22", date: "17/01/26", opponent: "Nottingham Forest", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 27, pos2425: 2, pos2526: null, pts2425: 44, pts2526: null},
+            {no: "34", mw: 7, round: "7", date: "20/01/26", opponent: "Inter Milan", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "35", mw: 23, round: "23", date: "24/01/26", opponent: "Manchester United", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 14, pos2425: 2, pos2526: null, pts2425: 47, pts2526: null},
+            {no: "36", mw: 8, round: "8", date: "28/01/26", opponent: "Kairat Almaty", venue: "Home", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+            {no: "37", mw: "SF", round: "SF (2)", date: "03-04/01/26", opponent: "N/A", venue: "N/A", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+			{no: "38", mw: 24, round: "24", date: "31/01/26", opponent: "Leeds United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-2", score2526: null, correlated: "vs Leicester 24/25", mw2425: 25, pos2425: 2, pos2526: null, pts2425: 50, pts2526: null},
+            {no: "39", mw: 25, round: "25", date: "07/02/26", opponent: "Sunderland", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "3-1", score2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
+            {no: "40", mw: 26, round: "26", date: "11/02/26", opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-3", score2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 53, pts2526:no: 1,  null},
+            {no: "41", mw: 4, round: "R4", date: "14-15/01/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2no: 1, 526: null},
+			{no: "42", mw: "KO", round: "K/0 (1)", date: "17-18/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nulno: 1, l, pts2526: null},
+			{no: "43", mw: 27, round: "27", date: "21/02/26", opponent: "Tottenham Hotspur", venue: "Away", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 4, pos2425: 4, pos2526: nulno: 1, l, pts2425: 54, pts2526: null},
+            {no: "44", mw: "🏆", round: "🏆", date: "22/02/26", opponent: "N/A", venue: "Wembley", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, no: 1, pts2526: null},
+			{no: "45", mw: "KO", round: "K/0 (2)", date: "24-25/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nulno: 1, l, pts2526: null},
+			{no: "46", mw: 28, round: "28", date: "28/02/26", opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 55, pts2526: nno: 1, ull},
+            {no: "47", mw: 29, round: "29", date: "04/03/26", opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425:no: 1,  58, pts2526: null},
+            {no: "48", mw: 5, round: "R5", date: "07-08/03/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: "null", score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2no: 1, 526: null},
+			{no: "49", mw: "R16", round: "R16 (1)", date: "10-11/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nuno: 1, ll, pts2526: null},
+			{no: "50", mw: 30, round: "30", date: "14/03/26", opponent: "Everton", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "0-0", score2526: null, mw2425: 16, pos2425: 3, pos2526: null, pts2425: 61, pts2526: no: 1, null},
+			{no: "51", mw: "R16", round: "R16 (2)", date: "17-18/03/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nuno: 1, ll, pts2526: null},
+			{no: "52", mw: 31, round: "31", date: "21/03/26", opponent: "Wolverhampton Wanderers", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 23, pos2425: 2, pos2526: null, pts2425no: 1, : 62, pts2526: null},
+	        {no: "53", mw: "QF", round: "QF", date: "04-05/04/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, ptsno: 1, 2526: null},
+			{no: "54", mw: "QF", round: "QF (1)", date: "07-08/04/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},
+			{no: "55", mw: 32, round: "32", date: "11/04/26", opponent: "Bournemouth", venue: "Home", league: "PL", result2425: "L", result2526: null, score2425: "1-2", score2526: null, mw2425: 35, pos2425: 2, pos2526: null, pts2425: 63, pts252no: 1, 6: null},     
+			{no: "56", mw: "QF", round: "QF (2)", date: "14-15/04/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},
+			{no: "57", mw: 33, round: "33", date: "18/04/26", opponent: "Manchester City", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 24, pos2425: 2, pos2526: null, pts2425: 66, ptno: 1, s2526: null},
+            {no: "58", mw: 34, round: "34", date: "25/04/26", opponent: "Newcastle United", venue: "Home", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 37, pos2425: 2, pos2526: nulno: 1, l, pts2425: 67, pts2526: null},
+	        {no: "59", mw: "SF", round: "SF", date: "25-26/04/26", opponent: "N/A", venue: "Wembley", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null,no: 1,  pts2526: null},
+			{no: "60", mw: "SF", round: "SF (1)", date: "28-29/04/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},
+			{no: "61", mw: 35, round: "35", date: "02/05/26", opponent: "Fulham", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-1", score2526: null, mw2425: 30, pos2425: 2, pos2526: null, pts2425: 67, pts2526: nuno: 1, ll},         
+	        {no: "62", mw: "SF", round: "SF (2)", date: "05-06/05/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nullno: 1, , pts2526: null},            
+			{no: "63", mw: 36, round: "36", date: "09/05/26", opponent: "West Ham United", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "2-5", score2526: null, mw2425: 26, pos2425: 2, pos2526: null, pts2425: 68, ptno: 1, s2526: null},
+	        {no: "64", mw: "🏆", round: "🏆", date: "16/05/26", opponent: "N/A", venue: "Wembley", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pno: 1, ts2526: null},
+			{no: "65", mw: 37, round: "37", date: "17/05/26", opponent: "Burnley", venue: "Home", league: "PL", postponed: true, result2425: "W", result2526: null, score2425: "1-0", score2526: null, correlated: "vs Ipswich 24/25", mw2425: 33, pno: 1, os2425: 2, pos2526: null, pts2425: 71, pts2526: null},
+            {no: "66", mw: 38, round: "38", date: "24/05/26", opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-5", score2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 74, ptsno: 1, 2526: null}
+			{no: "67", mw: "🏆", round: "🏆", date: "30/05/26", opponent: "N/A", venue: "Puskás Aréna", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: nno: 1, ull, pts2526: no: 1, no: 1, no: 1, null},
+
+ 		];
+		function getPoints(result) {
+			if (result === 'W') return 3;
+			if (result === 'D') return 1;
             if (result === 'L') return 0;
             return 0;
         }
@@ -575,37 +704,40 @@
             const labels = [];
             const form = [];
             const positionsData = { labels: [], pos2425: [], pos2526: [] };
-
+        
             fixtures.forEach(match => {
                 if (match.result2526) {
-                    const pts2425 = getPoints(match.result2425);
-                    const pts2526 = getPoints(match.result2526);
-                    
-                    points2425 += pts2425;
-                    points2526 += pts2526;
-                    matchesPlayed++;
-                    
-                    const matchDiff = pts2526 - pts2425;
-                    cumulativeDiff += matchDiff;
-                    
-                    match.matchDiff = matchDiff;
-                    match.agg = cumulativeDiff;
-                    
-                    cumulativeData.push(cumulativeDiff);
-                    labels.push(`MW${match.mw}`);
                     form.push(match.result2526);
                     
-                    positionsData.labels.push(`MW${match.mw}`);
-                    positionsData.pos2425.push(match.pos2425);
-                    positionsData.pos2526.push(match.pos2526);
+                    if (match.league === 'PL') {
+                        const pts2425 = getPoints(match.result2425);
+                        const pts2526 = getPoints(match.result2526);
+                        
+                        points2425 += pts2425;
+                        points2526 += pts2526;
+                        matchesPlayed++;
+                        
+                        const matchDiff = pts2526 - pts2425;
+                        cumulativeDiff += matchDiff;
+                        
+                        match.matchDiff = matchDiff;
+                        match.agg = cumulativeDiff;
+                        
+                        cumulativeData.push(cumulativeDiff);
+                        labels.push(`MW${match.mw}`);
+                        
+                        positionsData.labels.push(`MW${match.mw}`);
+                        positionsData.pos2425.push(match.pos2425);
+                        positionsData.pos2526.push(match.pos2526);
+                    }
                 } else {
                     match.matchDiff = null;
                     match.agg = null;
                 }
             });
-
-            const playedMatches = fixtures.filter(m => m.result2526 !== null);
-            const lastMatch = playedMatches[playedMatches.length - 1];
+        
+            const playedPLMatches = fixtures.filter(m => m.result2526 !== null && m.league === 'PL');
+            const lastMatch = playedPLMatches[playedPLMatches.length - 1];
             const pts2526 = lastMatch ? lastMatch.pts2526 : 0;
             const pts2425 = lastMatch ? lastMatch.pts2425 : 0;
             
@@ -618,7 +750,7 @@
             diffElement.style.color = totalDiff > 0 ? '#00aa00' : (totalDiff < 0 ? '#ff0000' : '#DB0007');
             
             document.getElementById('matchesPlayed').textContent = matchesPlayed;
-
+        
             return { cumulativeData, labels, form: form.slice(-5), positionsData };
         }
 
@@ -647,13 +779,14 @@
                 formDisplay.appendChild(dot);
             });
         }
-
         function renderTable() {
             const tbody = document.getElementById('fixturesTable');
             tbody.innerHTML = '';
 
-            const plLogo = "https://images.seeklogo.com/logo-png/48/1/premier-league-logo-png_seeklogo-481554.png";
-            const chLogo = "https://images.seeklogo.com/logo-png/29/1/sky-bet-championship-logo-png_seeklogo-292933.png";
+            const plLogo = "https://images.seeklogo.com/logo-png/28/1/premier-league-new-logo-png_seeklogo-286461.png";
+            const uclLogo = "https://images.seeklogo.com/logo-png/14/1/uefa-champions-league-logo-png_seeklogo-144160.png";
+            const eflLogo = "https://images.seeklogo.com/logo-png/49/1/carabao-cup-efl-logo-png_seeklogo-491114.png";
+            const faLogo = "https://images.seeklogo.com/logo-png/47/1/emirates-fa-cup-logo-png_seeklogo-478798.png";
 
             fixtures.forEach(match => {
                 const row = document.createElement('tr');
@@ -683,11 +816,14 @@
                     `<div class="correlated-info">${match.correlated}</div>` : '';
 
                 row.innerHTML = `
-                    <td class="mw">${match.mw}</td>
+                    <td class="mw" style="color: ${mwColor}; font-size: ${match.round && match.round.includes('🏆') ? '22px' : 'inherit'};">
+                        ${match.round || match.mw}
+                    </td>
+                    <td style="font-size: 0.9em; color: #666;">${match.date || '-'}</td>
                     <td><img src="${leagueLogo}" class="league-logo" alt="${match.league}"></td>
                     <td>
                         <div class="opponent-cell">
-                            ${clubLogo ? `<img src="${clubLogo}" class="club-logo" alt="${match.opponent}">` : ''}
+                            ${clubLogo ? `<img src="${clubLogo}" class="club-logo ${!match.result2526 ? 'unknown' : ''}" alt="${match.opponent}">` : ''}
                             <div>
                                 <span>${match.opponent}</span>
                                 ${correlatedInfo}
@@ -712,6 +848,14 @@
         function renderPositionChart(data) {
             const ctx = document.getElementById('positionChart').getContext('2d');
             
+            // Créer un mapping des MW PL vers les matchs
+            const plMatches = {};
+            fixtures.forEach(match => {
+                if (match.league === 'PL' && match.result2526) {
+                    plMatches[match.mw] = match;
+                }
+            });
+            
             const logoPlugin = {
                 id: 'logoPlugin',
                 afterDatasetsDraw(chart) {
@@ -720,23 +864,27 @@
                     
                     dataset.data.forEach((value, index) => {
                         if (value !== null && value !== undefined) {
-                            const match = fixtures[index];
-                            const logo = clubLogos[match.opponent];
+                            const mw = parseInt(data.labels[index].replace('MW', ''));
+                            const match = plMatches[mw];
                             
-                            if (logo) {
-                                const x = scales.x.getPixelForValue(index);
-                                const y = scales.y.getPixelForValue(value);
+                            if (match) {
+                                const logo = clubLogos[match.opponent];
                                 
-                                if (x >= chartArea.left && x <= chartArea.right && 
-                                    y >= chartArea.top && y <= chartArea.bottom) {
+                                if (logo) {
+                                    const x = scales.x.getPixelForValue(index);
+                                    const y = scales.y.getPixelForValue(value);
                                     
-                                    const img = new Image();
-                                    img.src = logo;
-                                    const size = 20;
-                                    
-                                    const adjustedY = Math.max(y, chartArea.top + size/2);
-                                    
-                                    ctx.drawImage(img, x - size/2, adjustedY - size/2, size, size);
+                                    if (x >= chartArea.left && x <= chartArea.right && 
+                                        y >= chartArea.top && y <= chartArea.bottom) {
+                                        
+                                        const img = new Image();
+                                        img.src = logo;
+                                        const size = 30;
+                                        
+                                        const adjustedY = Math.max(y, chartArea.top + size/2);
+                                        
+                                        ctx.drawImage(img, x - size/2, adjustedY - size/2, size, size);
+                                    }
                                 }
                             }
                         }
@@ -787,7 +935,9 @@
                             callbacks: {
                                 title: function(context) {
                                     const index = context[0].dataIndex;
-                                    return fixtures[index].opponent;
+                                    const mw = parseInt(data.labels[index].replace('MW', ''));
+                                    const match = plMatches[mw];
+                                    return match ? match.opponent : '';
                                 },
                                 label: function(context) {
                                     return context.dataset.label + ': ' + context.parsed.y + getOrdinal(context.parsed.y);
@@ -836,10 +986,7 @@
                     datasets: [{
                         label: 'Cumulative +/-',
                         data: data,
-                        borderColor: function(context) {
-                            const value = context.parsed.y;
-                            return value >= 0 ? '#00aa00' : '#DB0007';
-                        },
+                        borderColor: '#DB0007',
                         backgroundColor: function(context) {
                             const chart = context.chart;
                             const {ctx, chartArea} = chart;
@@ -853,8 +1000,10 @@
                         },
                         segment: {
                             borderColor: function(ctx) {
-                                const curr = ctx.p1.parsed.y;
-                                return curr >= 0 ? '#00aa00' : '#DB0007';
+                                if (ctx.p1 && ctx.p1.parsed && ctx.p1.parsed.y !== undefined) {
+                                    return ctx.p1.parsed.y >= 0 ? '#00aa00' : '#DB0007';
+                                }
+                                return '#DB0007';
                             }
                         },
                         borderWidth: 2,
@@ -863,8 +1012,11 @@
                         pointRadius: 5,
                         pointHoverRadius: 7,
                         pointBackgroundColor: function(context) {
-                            const value = context.parsed.y;
-                            return value >= 0 ? '#00aa00' : '#DB0007';
+                            const index = context.dataIndex;
+                            if (index !== undefined && data[index] !== undefined) {
+                                return data[index] >= 0 ? '#00aa00' : '#DB0007';
+                            }
+                            return '#DB0007';
                         },
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2
@@ -922,46 +1074,35 @@
         function renderFixtureDifficulty() {
             const difficultyDiv = document.getElementById('fixtureDifficulty');
 
-            const remainingFixtures = fixtures.filter(m => !m.result2526 && m.league === 'PL');
+            const remainingFixtures = fixtures.filter(m => !m.result2526);
 
             if (remainingFixtures.length === 0) {
                 difficultyDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">All fixtures completed!</p>';
                 return;
             }
 
-            const getDifficulty = (opponent) => {
-                const teamPositions = {
-                    'Liverpool': 1,
-                    'Arsenal': 2,
-                    'Manchester City': 3,
-                    'Aston Villa': 4,
-                    'Tottenham Hotspur': 5,
-                    'Chelsea': 6,
-                    'Newcastle United': 7,
-                    'Manchester United': 8,
-                    'West Ham United': 9,
-                    'Brighton & Hove Albion': 10,
-                    'Brentford': 11,
-                    'Fulham': 12,
-                    'Crystal Palace': 13,
-                    'Bournemouth': 14,
-                    'Wolverhampton Wanderers': 15,
-                    'Everton': 16,
-                    'Nottingham Forest': 17,
-                    'Leeds United': 18,
-                    'Burnley': 19,
-                    'Sunderland': 20
-                };
-
-                const position = teamPositions[opponent] || 10;
-
-                if (position <= 6) return { level: 'Hard', color: '#ff0000', score: 3 };
-                if (position <= 12) return { level: 'Medium', color: '#ff9800', score: 2 };
-                return { level: 'Easy', color: '#00aa00', score: 1 };
+        const getDifficulty = (opponent) => {
+            const teamPositions = {
+                'Liverpool': 1, 'Arsenal': 2, 'Manchester City': 3, 'Aston Villa': 13,
+                'Tottenham Hotspur': 8, 'Chelsea': 4, 'Newcastle United': 7, 'Manchester United': 6,
+                'West Ham United': 9, 'Brighton & Hove Albion': 10, 'Brentford': 11, 'Fulham': 12,
+                'Crystal Palace': 5, 'Bournemouth': 14, 'Wolverhampton Wanderers': 15, 'Everton': 16,
+                'Nottingham Forest': 17, 'West Ham United': 18, 'Leeds United': 19, 'Burnley': 20,
+                'Sunderland': 21,
+                'Athletic Club': 6, 'Olympiacos': 10, 'Atlético Madrid': 4, 'Slavia Praha': 16,
+                'Bayern Munich': 2, 'Club Brugge': 14, 'Inter Milan': 3, 'Kairat Almaty': 20,
+                'Port Vale': 20
             };
+        
+            const position = teamPositions[opponent] || 10;
+            if (position <= 4) return { level: 'Very Hard', color: '#8b0000', score: 5 }; 
+            if (position <= 8) return { level: 'Hard', color: '#ff0000', score: 4 }; 
+            if (position <= 12) return { level: 'Medium', color: '#ff9800', score: 3 };
+            if (position <= 16) return { level: 'Easy', color: '#90ee90', score: 2 };
+            return { level: 'Very Easy', color: '#00aa00', score: 1 }; 
+        };
 
-            // Take next 5-6 fixtures
-            const nextFixtures = remainingFixtures.slice(0, 6);
+            const nextFixtures = remainingFixtures.slice(0, 5);
 
             let html = '<div style="max-height: 280px; overflow-y: auto;">';
             html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">';
@@ -984,7 +1125,7 @@
                 html += `<td style="padding: 6px 8px; font-weight: 600;">${match.opponent}</td>`;
                 html += `<td style="padding: 6px 8px; text-align: center;">${match.venue}</td>`;
                 html += `<td style="padding: 6px 8px; text-align: center;">`;
-                html += `<span style="background: ${difficulty.color}; color: white; padding: 3px 8px; border-radius: 3px; font-size: 0.8em; font-weight: bold;">`;
+                html += `<span style="background: ${difficulty.color}; color: white; padding: 3px 8px; border-radius: 3px; font-size: 1em; font-weight: bold;">`;
                 html += `${difficulty.level}`;
                 html += `</span>`;
                 html += `</td>`;
@@ -994,7 +1135,6 @@
             html += '</tbody></table>';
             html += '</div>';
 
-            // Calculate difficulty summary
             const avgDifficulty = totalDifficulty / nextFixtures.length;
             let summaryColor = '#00aa00';
             let summaryText = 'Favorable';
@@ -1007,7 +1147,7 @@
             }
 
             html += '<div style="margin-top: 10px; padding: 8px; background: #f9f9f9; border-radius: 4px; text-align: center;">';
-            html += `<div style="font-size: 0.8em; color: #666; margin-bottom: 4px;">Next 6 Fixtures:</div>`;
+            html += `<div style="font-size: 0.8em; color: #666; margin-bottom: 4px;">Next 5 Fixtures:</div>`;
             html += `<div style="font-size: 1.1em; font-weight: bold; color: ${summaryColor};">${summaryText}</div>`;
             html += '</div>';
 
@@ -1016,39 +1156,31 @@
 
         function renderSeasonPhaseChart() {
             const ctx = document.getElementById('seasonPhaseChart').getContext('2d');
-
+            
             const phases = [
-                { name: 'Early Season (MW 1-13)', start: 1, end: 13 },
-                { name: 'Mid Season (MW 14-26)', start: 14, end: 26 },
-                { name: 'Late Season (MW 27-38)', start: 27, end: 38 }
+                { name: 'MW 1-13', start: 1, end: 13 },
+                { name: 'MW 14-26', start: 14, end: 26 },
+                { name: 'MW 27-38', start: 27, end: 38 }
             ];
-
-            const phaseData2425 = [];
+            
+            const phaseData2425 = [25, 28, 21];
+            
             const phaseData2526 = [];
             const phaseLabels = [];
-
+            
             phases.forEach(phase => {
-                const phaseMatches = fixtures.filter(m =>
+                const phaseMatches = fixtures.filter(m => 
                     m.league === 'PL' && m.mw >= phase.start && m.mw <= phase.end
                 );
-
-                let points2425 = 0;
-                let points2526 = 0;
-                let matchesPlayed2526 = 0;
-
-                phaseMatches.forEach(match => {
-                    points2425 += getPoints(match.result2425);
-                    if (match.result2526) {
-                        points2526 += getPoints(match.result2526);
-                        matchesPlayed2526++;
-                    }
-                });
-
+                
+                const lastPlayedMatch = phaseMatches
+                    .filter(m => m.result2526 !== null)
+                    .sort((a, b) => b.mw - a.mw)[0];
+                
+                phaseData2526.push(lastPlayedMatch && lastPlayedMatch.pts2526 ? lastPlayedMatch.pts2526 : 0);
                 phaseLabels.push(phase.name);
-                phaseData2425.push(points2425);
-                phaseData2526.push(points2526);
             });
-
+        
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -1091,11 +1223,11 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                stepSize: 5
+                                stepSize: 10
                             },
                             title: {
                                 display: true,
-                                text: 'Points'
+                                text: 'Cumulative Points'
                             }
                         },
                         x: {
@@ -1112,7 +1244,6 @@
         function renderResultsHeatmap() {
             const heatmapDiv = document.getElementById('resultsHeatmap');
 
-            // Filter only PL matches that have been played in 25/26
             const playedMatches = fixtures.filter(m => m.result2526 && m.league === 'PL');
 
             if (playedMatches.length === 0) {
@@ -1120,7 +1251,6 @@
                 return;
             }
 
-            // Calculate result comparison for each match
             const getResultValue = (result) => {
                 if (result === 'W') return 3;
                 if (result === 'D') return 1;
@@ -1147,7 +1277,6 @@
                 const value2526 = getResultValue(match.result2526);
                 const diff = value2526 - value2425;
 
-                // Determine trend color and icon
                 let trendColor, trendIcon, trendText;
                 if (diff > 0) {
                     trendColor = '#00aa00';
@@ -1163,7 +1292,6 @@
                     trendText = 'Same';
                 }
 
-                // Background color for the row based on trend
                 let rowBg = 'white';
                 if (diff > 0) rowBg = 'rgba(0, 170, 0, 0.05)';
                 else if (diff < 0) rowBg = 'rgba(255, 0, 0, 0.05)';
@@ -1194,102 +1322,104 @@
 
             heatmapDiv.innerHTML = html;
         }
-
-
-        async function fetchPremierLeagueStandings() {
-            const standingsDiv = document.getElementById('standingsTable');
-
-            try {
-                standingsDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Loading standings...</p>';
-
-                const response = await fetch('https://api.football-data.org/v4/competitions/PL/standings', {
-                    headers: {
-                        'X-Auth-Token': '8735f3b7f0cb4193a999d750f5a2b988'
-                    }
-                }).catch(() => {
-                    throw new Error('Network error');
-                });
-
-                if (!response || !response.ok) {
-                    throw new Error('Failed to fetch standings');
-                }
-
-                const data = await response.json();
-                const standings = data.standings[0].table.slice(0, 5);
-                
-                let html = '<table style="width: 100%; border-collapse: collapse;">';
-                html += '<thead style="background: #DB0007; color: white;"><tr>';
-                html += '<th style="padding: 8px; text-align: center;">Pos</th>';
-                html += '<th style="padding: 8px; text-align: left;">Team</th>';
-                html += '<th style="padding: 8px; text-align: center;">P</th>';
-                html += '<th style="padding: 8px; text-align: center;">W</th>';
-                html += '<th style="padding: 8px; text-align: center;">D</th>';
-                html += '<th style="padding: 8px; text-align: center;">L</th>';
-                html += '<th style="padding: 8px; text-align: center;">GD</th>';
-                html += '<th style="padding: 8px; text-align: center;">Pts</th>';
-                html += '</tr></thead><tbody>';
-                
-                standings.forEach((team, index) => {
-                    const isArsenal = team.team.name === 'Arsenal FC';
-                    const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
-                    html += `<tr style="${rowStyle}">`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
-                    html += `<td style="padding: 8px; text-align: left;">${team.team.name}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.playedGames}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.+/-}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>`;
-                    html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
-                    html += '</tr>';
-                });
-                
-                html += '</tbody></table>'a;
-                standingsDiv.innerHTML = html;
-                
-            } catch (error) {
-                console.error('Error fetching standings:', error);
-
-                const manualStandings = [
-                    { position: 1, name: 'Arsenal', played: 8, won: 6, draw: 1, lost: 1, +/-:15-3, gd: 12, points: 19 },
-                    { position: 2, name: 'Manchester City', played: 8, won: 5, draw: 1, lost: 2, +/-:17-6, gd: 11, points: 16 },
-                    { position: 3, name: 'Bournemouth', played: 8, won: 4, draw: 3, lost: 1, +/-:14-11, gd: 3, points: 15 },
-                    { position: 4, name: 'Liverpool', played: 8, won: 5, draw: 0, lost: 3, +/-:14-11, gd: 3, points: 15 },
-                    { position: 5, name: 'Chelsea', played: 8, won: 4, draw: 2, lost: 2, +/-:16-9, gd: 7, points: 14 }
-                ];
-
-                let html = '<table style="width: 100%; border-collapse: collapse;">';
-                html += '<thead style="background: #DB0007; color: white;"><tr>';
-                html += '<th style="padding: 8px; text-align: center;">Pos</th>';
-                html += '<th style="padding: 8px; text-align: left;">Team</th>';
-                html += '<th style="padding: 8px; text-align: center;">P</th>';
-                html += '<th style="padding: 8px; text-align: center;">W</th>';
-                html += '<th style="padding: 8px; text-align: center;">D</th>';
-                html += '<th style="padding: 8px; text-align: center;">L</th>';
-                html += '<th style="padding: 8px; text-align: center;">GD</th>';
-                html += '<th style="padding: 8px; text-align: center;">Pts</th>';
-                html += '</tr></thead><tbody>';
-
-                manualStandings.forEach((team) => {
-                    const isArsenal = team.name === 'Arsenal';
-                    const rowStyle = isArsenal ? 'background: rgba(219, 0, 7, 0.1); font-weight: bold;' : '';
-                    html += `<tr style="${rowStyle}">`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.position}</td>`;
-                    html += `<td style="padding: 8px; text-align: left;">${team.name}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.played}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.won}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.draw}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.lost}</td>`;
-                    html += `<td style="padding: 8px; text-align: center;">${team.gd > 0 ? '+' : ''}${team.gd}</td>`;
-                    html += `<td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>`;
-                    html += '</tr>';
-                });
-
-                html += '</tbody></table>';
-                html += '<p style="text-align: center; color: #999; font-size: 0.75em; margin-top: 10px; font-style: italic;">Using manual data - API unavailable</p>';
-                standingsDiv.innerHTML = html;
+        
+        function filterFixtures(filter) {
+            const rows = document.querySelectorAll('#fixturesTable tr');
+            const leaguePosition = document.querySelector('.chart-container.medium');
+            
+            if (filter === 'all' || filter === 'PL') {
+                leaguePosition.style.display = 'block';
+            } else {
+                leaguePosition.style.display = 'none';
             }
+            
+            rows.forEach((row, index) => {
+                const match = fixtures[index];
+                if (!match) return;
+                
+                if (filter === 'all' || match.league === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterFixtures(this.dataset.filter);
+            });
+        });
+
+        function renderUCLBracket() {
+            const bracketDiv = document.getElementById('bracketDisplay');
+            
+            const uclMatches = fixtures.filter(m => m.league === 'UCL' && m.result2526);
+            let uclPoints = 0;
+            uclMatches.forEach(m => {
+                uclPoints += getPoints(m.result2526);
+            });
+            
+            const matchesPlayed = uclMatches.length;
+            const matchesRemaining = 8 - matchesPlayed;
+            
+            let estimatedPosition = "TBD";
+            let status = "⏳ En cours";
+            let advantage = "❓ À déterminer";
+            
+            if (matchesPlayed >= 3) {
+                if (uclPoints >= 7) {
+                    estimatedPosition = "Top 8";
+                    advantage = "✅ Avantage domicile (retour)";
+                    status = "🟢 Qualifié probable";
+                } else if (uclPoints >= 4) {
+                    estimatedPosition = "9-24";
+                    advantage = "⚠️ Pas d'avantage domicile";
+                    status = "🟠 Qualification en jeu";
+                } else {
+                    estimatedPosition = "25-36";
+                    status = "🔴 Élimination possible";
+                }
+            }
+            
+            let html = `
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">MATCHS JOUÉS</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #0066cc;">${matchesPlayed}/8</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">POINTS</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #0066cc;">${uclPoints}</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">POSITION EST.</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #0066cc;">${estimatedPosition}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 10px;">📊 Status: ${status}</div>
+                        <div style="margin-bottom: 5px;">${advantage}</div>
+                        <div style="font-size: 0.85em; color: #666;">Matchs restants: ${matchesRemaining}</div>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 5px;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #0066cc;">🏆 KNOCKOUT BRACKET</div>
+                        <div style="font-size: 0.9em; color: #666; line-height: 1.8;">
+                            <div>Round of 16: <strong>TBD</strong> (Feb 2026)</div>
+                            <div>Quarter-Finals: <strong>TBD</strong> (Apr 2026)</div>
+                            <div>Semi-Finals: <strong>TBD</strong> (May 2026)</div>
+                            <div>Final: <strong>TBD</strong> (31 May 2026 - Munich)</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            bracketDiv.innerHTML = html;
         }
 
         function renderUCLBracket() {
@@ -1365,11 +1495,10 @@
 
         const { cumulativeData, labels, form, positionsData } = calculateStats();
         renderForm(form);
+        renderForm(form);
         renderTable();
-        renderSeasonPhaseChart();
         renderPositionChart(positionsData);
         renderFixtureDifficulty();
-        renderResultsHeatmap();
         renderCumulativeChart(cumulativeData, labels);
         renderUCLBracket();
         fetchPremierLeagueStandings();

@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arsenal 2025/26 Season Tracker</title>
-    <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<link rel="icon" href="/AFC_STr.ico">	
+	<link rel="manifest" href="/site.webmanifest">
+	<meta name="theme-color" content="#DB0007">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -447,6 +449,13 @@
         }
     </style>
 </head>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+  .then(() => console.log('Service Worker enregistré'))
+  .catch(err => console.log('SW erreur', err));
+}
+</script>	
 <body>
     <div class="container">
         <div class="header">

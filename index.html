@@ -506,7 +506,7 @@
             
             <div class="right-panel">
                 <div class="chart-container medium">
-                    <h2>League Position (MW by MW)</h2>
+                    <h2>PL League Position</h2>
                     <canvas id="positionChart"></canvas>
                 </div>
                 
@@ -800,10 +800,10 @@
                     <td>${match.venue}</td>
                     <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2526)}</td>
                     <td>${getScoreDisplay(match.score2526, match.result2526)}</td>
-                    <td style="border-right: 2px solid #DB0007;">${match.pts2526 !== null ? match.pts2526 : '-'}</td>
+                    <td style="border-right: 2px solid #DB0007;">${match.pts2526 !== null && match.pts2526 !== undefined ? match.pts2526 : '-'}</td>
                     <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2425)}</td>
                     <td>${getScoreDisplay(match.score2425, match.result2425)}</td>
-                    <td style="border-right: 2px solid #DB0007;">${match.pts2425 !== null ? match.pts2425 : '-'}</td>
+                    <td style="border-right: 2px solid #DB0007;">${match.pts2425 !== null && match.pts2425 !== undefined ? match.pts2425 : '-'}</td>
                     <td class="${matchDiffClass}">${matchDiffText}</td>
                     <td class="${aggClass}">${aggText}</td>
                 `;
@@ -815,7 +815,6 @@
         function renderPositionChart(data) {
             const ctx = document.getElementById('positionChart').getContext('2d');
             
-            // Créer un mapping des MW PL vers les matchs
             const plMatches = {};
             fixtures.forEach(match => {
                 if (match.league === 'PL' && match.result2526) {
@@ -831,7 +830,6 @@
                     
                     dataset.data.forEach((value, index) => {
                         if (value !== null && value !== undefined) {
-                            // Extraire le MW du label
                             const mw = parseInt(data.labels[index].replace('MW', ''));
                             const match = plMatches[mw];
                             
@@ -961,9 +959,9 @@
                             if (!chartArea) return 'rgba(219, 0, 7, 0.1)';
                             
                             const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                            gradient.addColorStop(0, 'rgba(219, 0, 7, 0.15)');    // Rouge en bas (négatif)
-                            gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0)'); // Transparent au centre (0)
-                            gradient.addColorStop(1, 'rgba(0, 170, 0, 0.15)');     // Vert en haut (positif)
+                            gradient.addColorStop(0.1, 'rgba(219, 0, 7, 0.15)');
+                            gradient.addColorStop(0.12, 'rgba(255, 255, 255, 0)'); 
+                            gradient.addColorStop(0.14, 'rgba(0, 170, 0, 0.15)');  
                             return gradient;
                         },
                         segment: {

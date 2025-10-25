@@ -222,15 +222,15 @@
         }
         
         .form-dot {
-            width: 35px;
-            height: 35px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: white;
-            font-size: 0.9em;
+            font-size: 1.2em;
         }
         
         .form-w { background: #00ff41; color: #000; }
@@ -274,25 +274,40 @@
         
         .home { background: rgba(219, 0, 7, 0.05); }
         .away { background: white; }
+
+        /* Matchs reportés par compétition */
+        .postponed-efl {
+            background: rgba(0, 170, 0, 0.08) !important;
+            font-style: italic;
+        }
+
+        .postponed-fa {
+            background: rgba(255, 0, 0, 0.08) !important;
+            font-style: italic;
+        }
+
+        .postponed-ucl {
+            background: rgba(0, 102, 204, 0.08) !important;
+            font-style: italic;
+        }
         
         .result-dot {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            display: inline-block;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            line-height: 28px;
             color: white;
-            font-size: 1.2em;
+            font-size: 0.9em;
         }
-        
+
         .win { background: #00ff41; color: #000; }
         .draw { background: #ff9800; }
         .loss { background: #ff0000; }
         .pending { background: #e0e0e0; color: #666; }
-        
+
         .score-cell {
             font-weight: bold;
             padding: 6px 10px;
@@ -349,19 +364,13 @@
             color: #999;
             font-style: italic;
         }
-        
-        .postponed-match {
-            font-style: italic;
-            opacity: 0.7;
-            background: #CFCFCF !important;
-        }
-        
+
         @media (max-width: 1400px) {
             .main-layout {
                 grid-template-columns: 1fr;
             }
         }
-        
+
         @media (max-width: 1200px) {
             .stats-row {
                 grid-template-columns: 1fr;
@@ -377,7 +386,7 @@
                 font-size: 0.75em;
             }
         }
-        
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -468,7 +477,7 @@
                             <tr>
                                 <th colspan="12" style="background: white; padding: 15px; border-bottom: 2px solid #DB0007;">
                                     <div style="text-align: center;">
-                                        <h3 style="color: #DB0007; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase;">Form (Last 5)</h3>
+                                        <h3 style="color: #DB0007; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase;">📊 Form (Last 5)</h3>
                                         <div id="formDisplay" style="display: flex; justify-content: center; gap: 8px;"></div>
                                     </div>
                                 </th>
@@ -498,39 +507,36 @@
                         </tbody>
                     </table>
                 </div>
-				<style>
-                    .table-container table tr > *:nth-child(10) {
-                    border-left: 2px solid #DB0007;
-                    }
-                </style>
+
             </div>
-            
+
             <div class="right-panel">
                 <div class="chart-container medium">
-                    <h2>PL League Position</h2>
+                    <h2>📈 PL League Position</h2>
                     <canvas id="positionChart"></canvas>
                 </div>
-                
-                <div class="chart-container medium">                                
-                    <h2>Remaining Fixtures Difficulty</h2>
+
+                <div class="chart-container medium">
+                    <h2>🔮 Remaining Fixtures Difficulty</h2>
                     <div id="fixtureDifficulty"></div>
                 </div>
                 
                 <div class="chart-container medium">
-                    <h2>Points vs Opponent Teams (PL)</h2>
+                    <h2>⚔️ Cumulative Point Difference</h2>
                     <canvas id="cumulativeChart"></canvas>
                 </div>
 
                 <div class="chart-container medium">
-                    <h2>Results by Opponent (PL)</h2>
+                    <h2>🔄 Head-to-Head Improvement</h2>
                     <div id="resultsHeatmap"></div>
                 </div>
                 
                 <div class="chart-container medium">
-                    <h2>Points by Season Phase (PL)</h2>
+                    <h2>⏱️ Season Phases Performance</h2>
                     <canvas id="seasonPhaseChart"></canvas>
                 </div>
-                <div class="chart-container large" id="uclBracket" style="display: none;">
+
+                <div class="chart-container large" id="uclBracket">
                     <h2>🏆 UEFA Champions League Bracket</h2>
                     <div id="bracketDisplay"></div>
                 </div>
@@ -738,20 +744,21 @@
         function renderForm(form) {
             const formDisplay = document.getElementById('formDisplay');
             formDisplay.innerHTML = '';
-            
+
             if (!form || form.length === 0) {
                 formDisplay.innerHTML = '<span style="color: #999;">No matches played yet</span>';
                 return;
             }
-            
+
+            // Filtrer les null et prendre les 5 derniers
             const validResults = form.filter(r => r !== null && r !== undefined);
             const last5 = validResults.slice(-5);
-            
+
             if (last5.length === 0) {
                 formDisplay.innerHTML = '<span style="color: #999;">No matches played yet</span>';
                 return;
             }
-            
+
             last5.forEach(result => {
                 const dot = document.createElement('div');
                 dot.className = `form-dot form-${result.toLowerCase()}`;
@@ -770,30 +777,33 @@
 
             fixtures.forEach(match => {
                 const row = document.createElement('tr');
-                row.className = `${match.venue.toLowerCase()} ${match.postponed ? 'postponed-match' : ''}`;                
-                const leagueLogo = match.league === 'PL' ? plLogo :
-                   match.league === 'UCL' ? uclLogo :
-                   match.league === 'EFL' ? eflLogo :
-                   match.league === 'FA' ? faLogo : plLogo;
+                let rowClass = match.venue.toLowerCase();
+
+                // Ajouter classe postponed avec couleur selon compétition
+                if (match.postponed) {
+                    if (match.league === 'EFL') rowClass += ' postponed-efl';
+                    else if (match.league === 'FA') rowClass += ' postponed-fa';
+                    else if (match.league === 'UCL') rowClass += ' postponed-ucl';
+                }
+
+                row.className = rowClass;
+
+                const leagueLogo = match.league === 'CH' ? chLogo : plLogo;
                 const clubLogo = clubLogos[match.opponent] || '';
-                
-                const matchDiffText = match.matchDiff !== null ? 
+
+                const matchDiffText = match.matchDiff !== null && match.matchDiff !== undefined && !isNaN(match.matchDiff) ?
                     (match.matchDiff > 0 ? `+${match.matchDiff}` : match.matchDiff) : '-';
                 const matchDiffClass = match.matchDiff > 0 ? 'positive' : (match.matchDiff < 0 ? 'negative' : 'neutral');
-                
-                const aggText = match.agg !== null ? 
+
+                const aggText = match.agg !== null && match.agg !== undefined && !isNaN(match.agg) ?
                     (match.agg > 0 ? `+${match.agg}` : match.agg) : '-';
                 const aggClass = match.agg > 0 ? 'positive' : (match.agg < 0 ? 'negative' : 'neutral');
 
-                let mwColor = '#9b4dca'; 
-                if (match.league === 'UCL') mwColor = '#0066cc'; 
-                if (match.league === 'EFL') mwColor = '#00aa00'; 
-                if (match.league === 'FA') mwColor = '#ff0000';
-
-                const correlatedInfo = match.correlated ? 
+                const correlatedInfo = match.correlated ?
                     `<div class="correlated-info">${match.correlated}</div>` : '';
 
                 row.innerHTML = `
+                    <td style="font-size: 0.9em; color: #666;">${match.no || '-'}</td>
                     <td class="mw" style="color: ${mwColor}; font-size: ${match.round && match.round.includes('🏆') ? '22px' : 'inherit'};">
                         ${match.round || match.mw}
                     </td>
@@ -818,7 +828,7 @@
                     <td class="${matchDiffClass}">${matchDiffText}</td>
                     <td class="${aggClass}">${aggText}</td>
                 `;
-                
+
                 tbody.appendChild(row);
             });
         }
@@ -826,7 +836,6 @@
         function renderPositionChart(data) {
             const ctx = document.getElementById('positionChart').getContext('2d');
             
-            // Créer un mapping des MW PL vers les matchs
             const plMatches = {};
             fixtures.forEach(match => {
                 if (match.league === 'PL' && match.result2526) {
@@ -969,11 +978,11 @@
                             const chart = context.chart;
                             const {ctx, chartArea} = chart;
                             if (!chartArea) return 'rgba(219, 0, 7, 0.1)';
-                            
+
                             const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                            gradient.addColorStop(0.1, 'rgba(219, 0, 7, 0.15)');    
+                            gradient.addColorStop(0.1, 'rgba(219, 0, 7, 0.15)');                              
                             gradient.addColorStop(0.12, 'rgba(255, 255, 255, 0)'); 
-                            gradient.addColorStop(0.14, 'rgba(0, 170, 0, 0.15)');     
+                            gradient.addColorStop(0.14, 'rgba(0, 170, 0, 0.15)');  
                             return gradient;
                         },
                         segment: {
@@ -1082,11 +1091,11 @@
 
             const nextFixtures = remainingFixtures.slice(0, 5);
 
-            let html = '<div style="max-height: none; overflow-y: auto;">';
-            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">';  // Était 0.85em
+            let html = '<div style="max-height: 280px; overflow-y: auto;">';
+            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">';
             html += '<thead style="background: #DB0007; color: white; position: sticky; top: 0; z-index: 1;">';
             html += '<tr>';
-            html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">MW</th>';  // Était 6px
+            html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">MW</th>';
             html += '<th style="padding: 8px; text-align: left; font-size: 0.85em;">Opponent</th>';
             html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">Venue</th>';
             html += '<th style="padding: 8px; text-align: center; font-size: 0.85em;">Difficulty</th>';
@@ -1236,7 +1245,7 @@
                 return 0;
             };
 
-            let html = '<div style="max-height: 280px; overflow-y: auto;">';
+            let html = '<div style="max-height: none;">';
             html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">';
             html += '<thead style="background: #DB0007; color: white; position: sticky; top: 0; z-index: 1;">';
             html += '<tr>';
@@ -1247,7 +1256,10 @@
             html += '</tr>';
             html += '</thead><tbody>';
 
-            playedMatches.forEach(match => {
+            // Prendre seulement les 20 premiers matchs
+            const displayMatches = playedMatches.slice(0, 20);
+
+            displayMatches.forEach(match => {
                 const value2425 = getResultValue(match.result2425);
                 const value2526 = getResultValue(match.result2526);
                 const diff = value2526 - value2425;
@@ -1284,9 +1296,10 @@
             html += '</tbody></table>';
             html += '</div>';
 
-            const improvements = playedMatches.filter(m => getResultValue(m.result2526) > getResultValue(m.result2425)).length;
-            const same = playedMatches.filter(m => getResultValue(m.result2526) === getResultValue(m.result2425)).length;
-            const worse = playedMatches.filter(m => getResultValue(m.result2526) < getResultValue(m.result2425)).length;
+            // Add summary stats
+            const improvements = displayMatches.filter(m => getResultValue(m.result2526) > getResultValue(m.result2425)).length;
+            const same = displayMatches.filter(m => getResultValue(m.result2526) === getResultValue(m.result2425)).length;
+            const worse = displayMatches.filter(m => getResultValue(m.result2526) < getResultValue(m.result2425)).length;
 
             html += '<div style="display: flex; justify-content: space-around; margin-top: 10px; padding: 8px; background: #f9f9f9; border-radius: 4px; font-size: 0.8em;">';
             html += `<div style="text-align: center;"><div style="color: #00aa00; font-weight: bold; font-size: 1.2em;">${improvements}</div><div style="color: #666;">Better</div></div>`;
@@ -1396,6 +1409,77 @@
             bracketDiv.innerHTML = html;
         }
 
+        function renderUCLBracket() {
+            const bracketDiv = document.getElementById('bracketDisplay');
+
+            // Compter les points UCL
+            const uclMatches = fixtures.filter(m => m.league === 'UCL' && m.result2526);
+            let uclPoints = 0;
+            uclMatches.forEach(m => {
+                uclPoints += getPoints(m.result2526);
+            });
+
+            const matchesPlayed = uclMatches.length;
+            const matchesRemaining = 8 - matchesPlayed;
+
+            // Estimation de position (basique)
+            let estimatedPosition = "TBD";
+            let status = "⏳ En cours";
+            let advantage = "❓ À déterminer";
+
+            if (matchesPlayed >= 3) {
+                if (uclPoints >= 7) {
+                    estimatedPosition = "Top 8";
+                    advantage = "✅ Avantage domicile (retour)";
+                    status = "🟢 Qualifié probable";
+                } else if (uclPoints >= 4) {
+                    estimatedPosition = "9-24";
+                    advantage = "⚠️ Pas d'avantage domicile";
+                    status = "🟠 Qualification en jeu";
+                } else {
+                    estimatedPosition = "25-36";
+                    status = "🔴 Élimination possible";
+                }
+            }
+
+            let html = `
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">MATCHS JOUÉS</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #0066cc;">${matchesPlayed}/8</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">POINTS</div>
+                            <div style="font-size: 2em; font-weight: bold; color: #0066cc;">${uclPoints}</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 5px; border: 2px solid #0066cc;">
+                            <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">POSITION EST.</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #0066cc;">${estimatedPosition}</div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 10px;">📊 Status: ${status}</div>
+                        <div style="margin-bottom: 5px;">${advantage}</div>
+                        <div style="font-size: 0.85em; color: #666;">Matchs restants: ${matchesRemaining}</div>
+                    </div>
+
+                    <div style="background: white; padding: 15px; border-radius: 5px;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #0066cc;">🏆 KNOCKOUT BRACKET</div>
+                        <div style="font-size: 0.9em; color: #666; line-height: 1.8;">
+                            <div>Round of 16: <strong>TBD</strong> (Feb 2026)</div>
+                            <div>Quarter-Finals: <strong>TBD</strong> (Apr 2026)</div>
+                            <div>Semi-Finals: <strong>TBD</strong> (May 2026)</div>
+                            <div>Final: <strong>TBD</strong> (31 May 2026 - Munich)</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            bracketDiv.innerHTML = html;
+        }
+
         const { cumulativeData, labels, form, positionsData } = calculateStats();
         renderForm(form);
         renderForm(form);
@@ -1403,9 +1487,8 @@
         renderPositionChart(positionsData);
         renderFixtureDifficulty();
         renderCumulativeChart(cumulativeData, labels);
-        renderResultsHeatmap();
-        renderSeasonPhaseChart();
         renderUCLBracket();
+        fetchPremierLeagueStandings();
     </script>
 </body>
 </html>

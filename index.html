@@ -719,6 +719,198 @@
 				height: 18px;
 			}
 		}
+		@media (max-width: 393px) {
+			body {
+				padding: 3px;
+			}
+			
+			.container {
+				padding: 6px;
+				border: 2px solid #DB0007;
+				overflow: hidden; /* Critique ! */
+			}
+			
+			.header {
+				flex-direction: column;
+				text-align: center;
+				gap: 8px;
+				padding-bottom: 8px;
+			}
+			
+			.logo {
+				width: 55px;
+				height: 55px;
+			}
+			
+			.header-text h1 {
+				font-size: 1.15em;
+				letter-spacing: 0.5px;
+			}
+			
+			.header-text .subtitle {
+				font-size: 0.8em;
+			}
+			
+			/* Stats en 2x2 compact */
+			.stats-row {
+				grid-template-columns: 1fr;
+				gap: 8px;
+				margin-bottom: 12px;
+			}
+			
+			.stats-group {
+				grid-template-columns: 1fr 1fr;
+				gap: 6px;
+			}
+			
+			.stat-card {
+				padding: 8px;
+				border: 1.5px solid #DB0007;
+			}
+			
+			.stat-card h3 {
+				font-size: 0.75em;
+				margin-bottom: 6px;
+			}
+			
+			.stat-card .value {
+				font-size: 1.05em;
+			}
+			
+			.filter-btn {
+				padding: 5px 8px;
+				font-size: 0.7em;
+				margin: 2px;
+				border: 1.5px solid;
+			}
+			
+			#formDisplay {
+				gap: 5px !important;
+				justify-content: center;
+			}
+			
+			.form-dot {
+				width: 32px;
+				height: 32px;
+				font-size: 0.8em;
+				line-height: 32px;
+			}
+			
+			thead th[colspan="14"] {
+				padding: 10px 8px !important;
+			}
+			
+			thead th[colspan="14"] h3 {
+				font-size: 0.8em !important;
+				margin-bottom: 8px !important;
+			}
+			
+			.table-container {
+				overflow-x: auto;
+				-webkit-overflow-scrolling: touch;
+				border-radius: 6px;
+				border: 2px solid #DB0007;
+				margin: 0 -6px; /* Compense padding container */
+				width: calc(100% + 12px);
+			}
+			
+			table {
+				min-width: 880px;  /* Optimisé pour ton écran */
+				width: 880px;
+				font-size: 0.68em;
+				table-layout: fixed;
+				border-collapse: collapse;
+			}
+			
+			thead {
+				position: sticky;
+				top: 0;
+				z-index: 10;
+				background: #DB0007;
+			}
+			
+			th {
+				font-size: 0.62em;
+				padding: 5px 2px;
+				white-space: nowrap;
+				letter-spacing: 0.2px;
+			}
+			
+			td {
+				padding: 5px 2px;
+				font-size: 0.72em;
+			}
+			
+			table th:nth-child(1), table td:nth-child(1) { width: 5%; }   /* # */
+			table th:nth-child(2), table td:nth-child(2) { width: 7%; }   /* MW */
+			table th:nth-child(3), table td:nth-child(3) { width: 9%; }   /* Date */
+			table th:nth-child(4), table td:nth-child(4) { width: 5%; }   /* League */
+			table th:nth-child(5), table td:nth-child(5) { width: 22%; }  /* Opponent */
+			table th:nth-child(6), table td:nth-child(6) { width: 8%; }   /* Venue */
+			table th:nth-child(7), table td:nth-child(7) { width: 6%; }   /* Result 25/26 */
+			table th:nth-child(8), table td:nth-child(8) { width: 8%; }   /* Score 25/26 */
+			table th:nth-child(9), table td:nth-child(9) { width: 4%; }   /* Pts 25/26 */
+			table th:nth-child(10), table td:nth-child(10) { width: 6%; } /* Result 24/25 */
+			table th:nth-child(11), table td:nth-child(11) { width: 8%; } /* Score 24/25 */
+			table th:nth-child(12), table td:nth-child(12) { width: 4%; } /* Pts 24/25 */
+			table th:nth-child(13), table td:nth-child(13) { width: 4%; } /* +/- */
+			table th:nth-child(14), table td:nth-child(14) { width: 4%; } /* Agg */
+			
+			.opponent-cell {
+				font-size: 0.72em;
+				gap: 3px;
+				padding-left: 2px;
+			}
+			
+			.club-logo, .league-logo {
+				width: 18px;
+				height: 18px;
+				flex-shrink: 0;
+			}
+			
+			.result-dot {
+				width: 20px;
+				height: 20px;
+				font-size: 0.85em;
+				line-height: 20px;
+			}
+			
+			.score-cell {
+				padding: 3px 5px;
+				font-size: 0.72em;
+			}
+			
+			.main-layout {
+				grid-template-columns: 1fr;
+				gap: 12px;
+			}
+			
+			.chart-container {
+				padding: 8px;
+				border: 2px solid #DB0007;
+			}
+			
+			.chart-container h2 {
+				font-size: 0.8em;
+				margin-bottom: 8px;
+			}
+			
+			.table-container::before {
+				content: '← Swipe →';
+				position: sticky;
+				left: 50%;
+				transform: translateX(-50%);
+				display: block;
+				text-align: center;
+				background: rgba(219, 0, 7, 0.9);
+				color: white;
+				padding: 3px 10px;
+				border-radius: 3px;
+				font-size: 0.65em;
+				margin: 5px 0;
+				z-index: 5;
+			}
+		}
     </style>
 </head>
 <body>

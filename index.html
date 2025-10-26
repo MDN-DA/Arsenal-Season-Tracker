@@ -16,7 +16,7 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box; /* AJOUTE CETTE LIGNE */
+            box-sizing: border-box;
         }
         
         html {
@@ -29,9 +29,9 @@
             background: #f5f5f5;
             padding: 15px;
             color: #333;
-            overflow-x: hidden; /* CRITIQUE */
-            width: 100vw; /* CRITIQUE */
-            box-sizing: border-box; /* CRITIQUE */
+            overflow-x: hidden; 
+            width: 100vw;
+            box-sizing: border-box; 
         }
         
         .container {
@@ -43,8 +43,8 @@
             padding: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             border: 3px solid #DB0007;
-            overflow-x: hidden; /* CRITIQUE */
-            box-sizing: border-box; /* CRITIQUE */
+            overflow-x: hidden; 
+            box-sizing: border-box; 
         }
         
         .header {
@@ -265,7 +265,7 @@
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            table td:nth-child(2) { font-size: 0.5em; }  /* MW/Round */
+            table td:nth-child(2) { font-size: 0.5em; }  
             table td:nth-child(3) { font-size: 0.5em; }
             table td:nth-child(6) { font-size: 0.5em; }
             table td:nth-child(13) { font-size: 0.5em; }
@@ -700,10 +700,6 @@
     {mw: 38, round: "38", date: "24/05/26", opponent: "Crystal Palace", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-5", score2526: null, mw2425: 34, pos2425: 2, pos2526: null, pts2425: 81, pts2526: null},
     {mw: "F", round: "🏆", date: "30/05/26", opponent: "N/A", venue: "Puskás Aréna", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null}
 ];
-
-
-
-    
         function getPoints(result) {
             if (result === 'W') return 3;
             if (result === 'D') return 1;

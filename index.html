@@ -496,6 +496,7 @@
 				flex-direction: column;
 				text-align: center;
 				gap: 10px;
+				padding-bottom: 10px;
 			}
 			
 			.logo {
@@ -530,16 +531,24 @@
 			}
 			
 			.stat-card .value {
-				font-size: 1em;
+				font-size: 1.1em;
+			}
+			
+			/* Boutons de filtre */
+			.filter-btn {
+				padding: 6px 10px;
+				font-size: 0.75em;
+				margin: 3px;
 			}
 			
 			.table-container {
 				overflow-x: auto;
 				-webkit-overflow-scrolling: touch;
+				border-radius: 8px;
 			}
 			
 			table {
-				min-width: 800px; 
+				min-width: 900px; 
 				font-size: 0.7em;
 			}
 			
@@ -557,7 +566,6 @@
 			.opponent-cell {
 				font-size: 0.75em;
 				gap: 4px;
-				padding-left: 3px;
 			}
 			
 			.club-logo, .league-logo {
@@ -578,15 +586,15 @@
 			}
 			
 			.form-dot {
-				width: 25px;
-				height: 25px;
+				width: 28px;
+				height: 28px;
 				font-size: 0.75em;
 			}
 			
-			.filter-btn {
-				padding: 6px 10px;
-				font-size: 0.75em;
-				margin: 3px;
+			/* Layout en colonne */
+			.main-layout {
+				grid-template-columns: 1fr;
+				gap: 15px;
 			}
 			
 			.chart-container {
@@ -596,10 +604,119 @@
 			.chart-container h2 {
 				font-size: 0.85em;
 			}
+		}
+
+		@media (max-width: 900px) and (orientation: landscape) {
+			body {
+				padding: 5px;
+			}
+			
+			.container {
+				padding: 8px;
+				max-width: 100%;
+				overflow-x: hidden; 
+			}
+			
+			.header {
+				flex-direction: row;
+				gap: 15px;
+				padding-bottom: 8px;
+			}
+			
+			.logo {
+				width: 50px;
+				height: 50px;
+			}
+			
+			.header-text h1 {
+				font-size: 1em;
+			}
+			
+			.header-text .subtitle {
+				font-size: 0.75em;
+			}
+			
+			.stats-row {
+				grid-template-columns: 1fr 1fr; 
+				gap: 8px;
+			}
+			
+			.stats-group {
+				grid-template-columns: 1fr 1fr;
+				gap: 6px;
+			}
+			
+			.stat-card {
+				padding: 8px;
+			}
+			
+			.stat-card h3 {
+				font-size: 0.7em;
+			}
+			
+			.stat-card .value {
+				font-size: 1em;
+			}
+			
+			/* Tableau */
+			table {
+				min-width: 850px;
+				font-size: 0.68em;
+			}
+			
+			th {
+				font-size: 0.62em;
+				padding: 5px 2px;
+			}
+			
+			td {
+				padding: 5px 2px;
+				font-size: 0.72em;
+			}
+			
+			.filter-btn {
+				padding: 5px 8px;
+				font-size: 0.7em;
+				margin: 2px;
+			}
 			
 			.main-layout {
-				grid-template-columns: 1fr;
-				gap: 15px;
+				grid-template-columns: 1fr 1fr;
+				gap: 10px;
+			}
+			
+			.chart-container {
+				padding: 8px;
+			}
+			
+			.chart-container h2 {
+				font-size: 0.75em;
+			}
+		}
+
+		@media (max-width: 480px) {
+			table {
+				min-width: 950px;
+				font-size: 0.65em;
+			}
+			
+			th {
+				font-size: 0.6em;
+				padding: 4px 2px;
+			}
+			
+			td {
+				padding: 4px 2px;
+				font-size: 0.7em;
+			}
+			
+			.opponent-cell {
+				font-size: 0.7em;
+			}
+			
+			.club-logo, .league-logo {
+				width: 18px;
+				height: 18px;
 			}
 		}
     </style>

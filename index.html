@@ -155,24 +155,23 @@
         }
         
         .filter-btn:hover {
-            opacity: 0.8;
+            opacity: 0.25;
         }
         
         .filter-btn.active {
             color: white;
         }
         
-        /* Couleurs par compÃ©tition */
         .filter-btn[data-filter="all"] {
             border-color: #000000;
             color: #;
         }
         .filter-btn[data-filter="all"].active {
-            background: #000000;
+            background: #ffd966;
         }
         
         .filter-btn[data-filter="PL"] {
-            border-color: #9b4dca;
+            border-color: #000000;
             color: #;
         }
         .filter-btn[data-filter="PL"].active {
@@ -180,7 +179,7 @@
         }
         
         .filter-btn[data-filter="UCL"] {
-            border-color: #0066cc;
+            border-color: #000000;
             color: #;
         }
         .filter-btn[data-filter="UCL"].active {
@@ -188,7 +187,7 @@
         }
         
         .filter-btn[data-filter="EFL"] {
-            border-color: #22BA6C;
+            border-color: #000000;
             color: #;
         }
         .filter-btn[data-filter="EFL"].active {
@@ -196,7 +195,7 @@
         }
         
         .filter-btn[data-filter="FA"] {
-            border-color: #ff0000;
+            border-color: #000000;
             color: #;
         }
         .filter-btn[data-filter="FA"].active {
@@ -486,8 +485,10 @@
             </div>
         </div>
         
-        <div style="text-align: center; margin: 25px 0;">
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 10px; margin: 10px;">
 			<button class="filter-btn" data-filter="PL">PL</button>
+			</button>
+			
             <button class="filter-btn active" data-filter="all">4️⃣</button>
             <button class="filter-btn" data-filter="UCL">UCL</button>
             <button class="filter-btn" data-filter="FA">FA Cup</button>

@@ -19,6 +19,28 @@
             box-sizing: border-box;
         }
         
+        .dark-mode {
+            --bg: #1a1a1a;
+            --container-bg: #2d2d2d;
+            --text: #e0e0e0;
+            --border: #DB0007;
+        }
+        
+        .dark-mode body { background: #000000; color: #CCCCCC; }
+        .dark-mode .container { background: #000000; border: 3px solid #CCCCCC; }
+        .dark-mode .stat-card { background: #CCCCCC; color: #333; }
+        .dark-mode .chart-container { background: #CCCCCC; }
+        .dark-mode .form-container { background: #CCCCCC; }
+        .dark-mode .table-container { background: #CCCCCC; }
+        .dark-mode tbody tr:hover { background: #CCCCCC; }
+        .dark-mode #resultsHeatmap table { background: #CCCCCC; }
+        .dark-mode #bracketDisplay { background: #CCCCCC; }
+        .dark-mode #bracketDisplay > div { background: #CCCCCC !important; }
+        .dark-mode #bracketDisplay .bg-white { background: #f0f0f0 !important; }
+        .dark-mode thead th[colspan="14"] { background: #CCCCCC !important; }
+        .dark-mode #formDisplay { background: #CCCCCC; }    
+        
+        
         html {
             overflow-x: hidden;
             width: 100%;
@@ -510,6 +532,7 @@
             <button class="filter-btn" data-filter="UCL">UCL</button>
             <button class="filter-btn" data-filter="FA">FA Cup</button>
 		    <button class="filter-btn" data-filter="EFL">EFL Cup</button>
+		    <button id="themeToggle" style="position: fixed; top: 20px; right: 20px; z-index: 1000; padding: 10px; border: 2px solid #DB0007; background: white; border-radius: 50%; cursor: pointer; font-size: 1.2em;">🌙</button>
         </div>
         
         <div class="main-layout">
@@ -1487,13 +1510,27 @@
     </script>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(reg => console.log('Service Worker enregistré'))
-      .catch(err => console.log('Erreur Service Worker:', err));
-  });
-}
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./service-worker.js')
+              .then(reg => console.log('Service Worker enregistré'))
+              .catch(err => console.log('Erreur Service Worker:', err));
+          });
+        }
+        const toggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+        
+        toggle.addEventListener('click', () => {
+            root.classList.toggle('dark-mode');
+            toggle.textContent = root.classList.contains('dark-mode') ? '☀️' : '🌙';
+            localStorage.setItem('theme', root.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+        
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            root.classList.add('dark-mode');
+            toggle.textContent = '☀️';
+        }
 </script>
 		
 </body>

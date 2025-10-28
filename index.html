@@ -462,6 +462,12 @@
                 width: 14px;
                 height: 14px;
             }
+            #resultsHeatmap .result-dot {
+                width: 25px;
+                height: 25px;
+                font-size: 1em;
+                line-height: 25px;
+            }
         }
     </style>
 </head>
@@ -1331,7 +1337,7 @@
 
                 html += `<tr style="background: ${rowBg}; border-bottom: 1px solid #eee;">`;
                 html += `<td style="padding: 6px 8px; font-weight: 600; font-size: 0.75em;">${match.opponent}</td>`;
-                html += `<td style="padding: 6px 8px; text-align: center;">${getResultDot(match.result2425)}</td>`;
+                html += `<td style="padding: 4px 5px; text-align: center;">${getResultDot(match.result2425)}</td>`;
                 html += `<td style="padding: 6px 8px; text-align: center;">${getResultDot(match.result2526)}</td>`;
                 html += `<td style="padding: 6px 8px; text-align: center; color: ${trendColor}; font-size: 0.75em; font-weight: bold;">`;
                 html += `${trendIcon} ${diff > 0 ? '+' : ''}${diff}`;

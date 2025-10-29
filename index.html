@@ -1555,28 +1555,42 @@
     </script>
 
 <script>
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./service-worker.js')
-              .then(reg => console.log('Service Worker enregistré'))
-              .catch(err => console.log('Erreur Service Worker:', err));
-          });
-        }
-        const toggle = document.getElementById('themeToggle');
-        const root = document.documentElement;
-        
-        toggle.addEventListener('click', () => {
-            root.classList.toggle('dark-mode');
-            toggle.textContent = root.classList.contains('dark-mode') ? '☀️' : '🌙';
-            localStorage.setItem('theme', root.classList.contains('dark-mode') ? 'dark' : 'light');
-        });
-        
-        // Load saved theme
-        if (localStorage.getItem('theme') === 'dark') {
-            root.classList.add('dark-mode');
-            toggle.textContent = '☀️';
-        }
+  // --- Version de l'application ---
+  const APP_VERSION = '26.88.10';
+
+  // --- Enregistrement du Service Worker ---
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(() => console.log(`✅ Service Worker enregistré - v${APP_VERSION}`))
+        .catch(err => console.log('❌ Erreur Service Worker:', err));
+    });
+  }
+
+  const toggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      root.classList.toggle('dark-mode');
+      const isDark = root.classList.contains('dark-mode');
+      toggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  }
+
+  if (localStorage.getItem('theme') === 'dark') {
+    root.classList.add('dark-mode');
+    if (toggle) toggle.textContent = '☀️';
+  }
+
+  // --- Afficher la version dans le footer ---
+  document.addEventListener('DOMContentLoaded', () => {
+    const versionEl = document.getElementById('app-version');
+    if (versionEl) versionEl.textContent = `Version ${APP_VERSION}`;
+  });
 </script>
-		
+
+<footer id="app-version" style="text-align:center; font-size:0.8em; color:#888; margin-top:15px;"></footer>
 </body>
 </html>

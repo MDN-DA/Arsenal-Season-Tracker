@@ -1,4 +1,5 @@
-const CACHE_NAME = 'arsenal-tracker-v1';
+const APP_VERSION = '26.88.10';
+const CACHE_NAME = `arsenal-tracker-v${APP_VERSION}`;
 const urlsToCache = [
   '/Arsenal-Season-Tracker/',
   '/Arsenal-Season-Tracker/index.html',

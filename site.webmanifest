@@ -1,6 +1,7 @@
 {
   "name": "Arsenal FC 2025/26 Season Tracker",
   "short_name": "Gunners Stats",
+  "version": "26.88.10",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

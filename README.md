@@ -15,7 +15,7 @@ Compare Arsenal's 2025/26 season performance against 2024/25 in real-time.
 
 ## 🚀 Live Demo
 
-**[View Tracker](https://dbe463d6.gunners-stats.pages.dev/)**
+**[View Tracker](https://gunners-stats.pages.dev/)**
 
 ## 📱 Install as App
 

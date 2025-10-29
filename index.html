@@ -38,7 +38,13 @@
         .dark-mode #bracketDisplay > div { background: #CCCCCC !important; }
         .dark-mode #bracketDisplay .bg-white { background: #f0f0f0 !important; }
         .dark-mode thead th[colspan="14"] { background: #CCCCCC !important; }
-        .dark-mode #formDisplay { background: #CCCCCC; }    
+        .dark-mode #formDisplay { background: #CCCCCC; }
+        .dark-mode #resultsHeatmap table tbody tr { background: #f0f0f0 !important; color: #333 !important; }
+        .dark-mode #resultsHeatmap table tbody tr:hover { background: #e0e0e0 !important; }
+        .dark-mode #resultsHeatmap .positive { color: #00aa00 !important; }
+        .dark-mode #resultsHeatmap .negative { color: #ff0000 !important; }
+        .dark-mode #fixtureDifficulty table tbody tr { background: white !important; color: #333 !important; }
+        .dark-mode #fixtureDifficulty table tbody tr:hover { background: #f5f5f5 !important; }
         
         
         html {
@@ -882,6 +888,12 @@
             row.className = `${match.venue.toLowerCase()} ${match.postponed ? 'postponed-match' : ''}`;
             row.setAttribute('data-league', match.league);
                 
+                // Handle special rows
+                if (match.isFifaBreak) {
+                    row.innerHTML = `<td colspan="14" style="text-align: center; background: #0066cc; color: white; font-weight: bold; padding: 10px;">━━━ FIFA International Break ━━━</td>`;
+                    tbody.appendChild(row);
+                    return;
+                }
                 const leagueLogo = match.league === 'PL' ? plLogo :
                    match.league === 'UCL' ? uclLogo :
                    match.league === 'EFL' ? eflLogo :
@@ -1172,7 +1184,7 @@
         function renderFixtureDifficulty() {
             const difficultyDiv = document.getElementById('fixtureDifficulty');
 
-            const remainingFixtures = fixtures.filter(m => !m.result2526);
+            const remainingFixtures = fixtures.filter(m => !m.result2526 && !m.isFifaBreak && !m.isCanBreak);
 
             if (remainingFixtures.length === 0) {
                 difficultyDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">All fixtures completed!</p>';

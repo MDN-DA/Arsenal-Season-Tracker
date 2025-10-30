@@ -706,8 +706,9 @@
     {mw: 6, round: "6", date: "10/12/25", opponent: "Club Brugge", venue: "Away", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
     {mw: null, round: null, date: null, opponent: null, venue: null, league: "CAN_START", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null, isCanBreak: true, canType: "start"},
     {mw: 16, round: "16", date: "13/12/25", opponent: "Wolverhampton Wanderers", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "2-0", score2526: null, mw2425: 1, pos2425: 2, pos2526: null, pts2425: 30, pts2526: null},
-    {mw: 5, round: "R5", date: "16-17/12/25", opponent: "Crystal Palace", venue: "Home", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null, note: "⚠️ plays Conference League (Dec 18)<br>may move to week after"},
+    {mw: 5, round: "R5", date: "⚠️ 16/12/25", opponent: "Crystal Palace", venue: "Home", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null, note: "⚠️ plays Conference League<br>vs KuPS, 18/12"},
     {mw: 17, round: "17", date: "21/12/25", opponent: "Everton", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 31, pos2425: 2, pos2526: null, pts2425: 33, pts2526: null},
+    {mw: 5, round: "R5", date: "⚠️ 24/12/25", opponent: "Crystal Palace", venue: "Home", league: "EFL", postponed: true, isDuplicate: true, result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null, note: "⚠️ Option 1: 16 Dec <br> Option 2: 24 Dec"},
     {mw: 18, round: "18", date: "27/12/25", opponent: "Brighton & Hove Albion", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 3, pos2425: 3, pos2526: null, pts2425: 36, pts2526: null},
     {mw: 19, round: "19", date: "30/12/25", opponent: "Aston Villa", venue: "Home", league: "PL", result2425: "D", result2526: null, score2425: "2-2", score2526: null, mw2425: 22, pos2425: 2, pos2526: null, pts2425: 39, pts2526: null},
     {mw: 20, round: "20", date: "03/01/26", opponent: "Bournemouth", venue: "Away", league: "PL", result2425: "L", result2526: null, score2425: "2-0", score2526: null, mw2425: 8, pos2425: 3, pos2526: null, pts2425: 40, pts2526: null}, 
@@ -802,10 +803,12 @@
             const positionsData = { labels: [], pos2425: [], pos2526: [] };
         
             fixtures.forEach(match => {
-                if (match.result2526) {
-                    form.push(match.result2526);
+                 if (match.isFifaBreak || match.isCanBreak || match.isDuplicate) return;
                     
-                    if (match.league === 'PL') {
+                    if (match.result2526) {
+                        form.push(match.result2526);
+                        
+                        if (match.league === 'PL') {
                         const pts2425 = getPoints(match.result2425);
                         const pts2526 = getPoints(match.result2526);
                         
@@ -889,7 +892,6 @@
 
             let matchCounter = 0;
             fixtures.forEach(match => {
-                matchCounter++;
                 const row = document.createElement('tr');
 
             if (match.isFifaBreak) {
@@ -907,10 +909,15 @@
                 tbody.appendChild(row);
                 return;
             }
-            if (match.league === 'UCL' && match.round && match.round.includes('KO')) {
+            if (match.isDuplicate) {
+                row.style.opacity = '0.5';
                 row.style.fontStyle = 'italic';
             }
             
+            if (match.league === 'UCL' && match.round && match.round.includes('KO')) {
+                row.style.fontStyle = 'italic';
+            }
+            matchCounter++;
             row.className = `${match.venue.toLowerCase()} ${match.postponed && !match.skipPostponed ? 'postponed-match' : ''}`;            
             row.setAttribute('data-league', match.league);
                 
@@ -989,7 +996,6 @@
                 tbody.appendChild(row);
             });
         }
-
         function renderPositionChart(data) {
             const ctx = document.getElementById('positionChart').getContext('2d');
             

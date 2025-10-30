@@ -433,6 +433,9 @@
             background: #CFCFCF !important;
         }
         
+        .score-win.clean-sheet { background: #b4191d !important; }
+        .score-draw.clean-sheet { background: #b4191d !important; }
+        
 		@media (max-width: 1400px) {
             .main-layout {
                 grid-template-columns: 1fr;
@@ -504,6 +507,7 @@
             .opponent-cell { font-size: 0.7em; gap: 3px; }
             .club-logo, .league-logo { width: 14px; height: 14px; }
         }
+        
     </style>
 </head>
 <body>
@@ -756,9 +760,17 @@
             return 0;
         }
 
-        function getResultDot(result) {
-            if (result === 'W') return '<span class="result-dot win">W</span>';
-            if (result === 'D') return '<span class="result-dot draw">D</span>';
+        function getResultDot(result, score) {
+            const isCleanSheet = score && (score.endsWith('-0') || score.startsWith('0-'));
+            
+            if (result === 'W') {
+                const color = isCleanSheet ? '#b4191d' : '#000';
+                return `<span class="result-dot win" style="color: ${color};">W</span>`;
+            }
+            if (result === 'D') {
+                const color = isCleanSheet ? '#b4191d' : '#fff';
+                return `<span class="result-dot draw" style="color: ${color};">D</span>`;
+            }
             if (result === 'L') return '<span class="result-dot loss">L</span>';
             return '<span class="result-dot pending">-</span>';
         }
@@ -770,8 +782,14 @@
             else if (result === 'D') cssClass = 'score-draw';
             else if (result === 'L') cssClass = 'score-loss';
             
-            return `<span class="score-cell ${cssClass}">${score}</span>`;
-        }
+            // Clean sheet detection (0 conceded)
+            let displayScore = score;
+            if (score && (score.endsWith('-0') || score.startsWith('0-')) && (result === 'W' || result === 'D')) {
+                displayScore = score.replace(/0/g, '<span style="color: #b4191d; font-weight: bold; font-size: 1.1em;">0</span>');
+            }
+    
+    return `<span class="score-cell ${cssClass}">${displayScore}</span>`;
+}
 
         function calculateStats() {
             let points2526 = 0;
@@ -958,7 +976,7 @@
                         </div>
                     </td>
                     <td>${match.venue}</td>
-                    <td style="border-left: 2px solid #b4191d;">${getResultDot(match.result2526)}</td>
+                    <td style="border-left: 2px solid #DB0007;">${getResultDot(match.result2526, match.score2526)}</td>
                     <td>${getScoreDisplay(match.score2526, match.result2526)}</td>
                     <td style="border-right: 2px solid #b4191d;">${match.pts2526 !== null ? match.pts2526 : '-'}</td>
                     <td style="border-left: 2px solid #b4191d;">${getResultDot(match.result2425)}</td>

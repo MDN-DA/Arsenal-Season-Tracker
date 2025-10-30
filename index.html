@@ -716,10 +716,10 @@
     {mw: 25, round: "25", date: "07/02/26", opponent: "Sunderland", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "3-1", score2526: null, correlated: "vs Southampton 24/25", mw2425: 38, pos2425: 2, pos2526: null, pts2425: 53, pts2526: null},
     {mw: 26, round: "26", date: "11/02/26", opponent: "Brentford", venue: "Away", league: "PL", result2425: "W", result2526: null, score2425: "1-3", score2526: null, mw2425: 19, pos2425: 2, pos2526: null, pts2425: 56, pts2526: null},
     {mw: 4, round: "R4", date: "14-15/02/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-    {mw: "KO", round: "KO (1)", date: "17-18/02/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+    {mw: "KO", round: "KO (1)", date: "17-18/02/26", opponent: "N/A", venue: "N/A", league: "UCL", postponed: true, skipPostponed: false, result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
     {mw: 27, round: "27", date: "21/02/26", opponent: "Tottenham Hotspur", venue: "Away", league: "PL", postponed: true, skipPostponed: false, result2425: "W", result2526: null, score2425: "0-1", score2526: null, mw2425: 4, pos2425: 4, pos2526: null, pts2425: 57, pts2526: null},
     {mw: "F", round: "🏆", date: "22/02/26", opponent: "N/A", venue: "Wembley", league: "EFL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
-    {mw: "KO", round: "KO (2)", date: "24-25/02/26", opponent: "N/A", venue: "N/A", league: "UCL", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
+    {mw: "KO", round: "KO (2)", date: "24-25/02/26", opponent: "N/A", venue: "N/A", league: "UCL", postponed: true, skipPostponed: false, result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
     {mw: 28, round: "28", date: "28/02/26", opponent: "Chelsea", venue: "Home", league: "PL", result2425: "W", result2526: null, score2425: "1-0", score2526: null, mw2425: 29, pos2425: 2, pos2526: null, pts2425: 60, pts2526: null},
     {mw: 29, round: "29", date: "04/03/26", opponent: "Brighton & Hove Albion", venue: "Away", league: "PL", result2425: "D", result2526: null, score2425: "1-1", score2526: null, mw2425: 20, pos2425: 2, pos2526: null, pts2425: 61, pts2526: null},
     {mw: 5, round: "R5", date: "07-08/03/26", opponent: "N/A", venue: "N/A", league: "FA", result2425: null, result2526: null, score2425: null, score2526: null, mw2425: null, pos2425: null, pos2526: null, pts2425: null, pts2526: null},
@@ -923,7 +923,7 @@
                 const noteInfo = match.note ? 
                     `<div class="correlated-info" style="color: #ff9800;">${match.note}</div>` : '';
                 const koNote = (match.league === 'UCL' && match.round && match.round.includes('KO')) ? 
-                   `<div class="correlated-info" style="color: #999;">95-98% likely exempt (Top 8 finish)</div>` : '';
+                   `<div class="correlated-info" style="color: #b4191d;">95-98% likely exempt (Top 8 finish)</div>` : '';
 
                 const premiumMatches = ['Liverpool', 'Manchester City', 'Chelsea', 'Tottenham Hotspur', 'Manchester United', 'Newcastle United', 'Bayern Munich', 'Inter Milan', ' Atlético Madrid'];
                 const isPremium = premiumMatches.includes(match.opponent);

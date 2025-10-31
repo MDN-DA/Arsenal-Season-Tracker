@@ -1,10 +1,4 @@
 const CACHE_NAME = 'arsenal-tracker-v26.88.10';
-const urlsToCache = [
-  '/Arsenal-Season-Tracker/',
-  '/Arsenal-Season-Tracker/index.html',
-  '/Arsenal-Season-Tracker/manifest.json',
-  'https://cdn.jsdelivr.net/npm/chart.js'
-];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -29,13 +23,13 @@ self.addEventListener('activate', (event) => {
       )
     )
   );
+  console.log(`✅ Service Worker activé - ${CACHE_NAME}`);
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
   );
 });
-
-console.log(`✅ Service Worker activé - v26.88.10`);

@@ -1603,19 +1603,24 @@
           fixtures.forEach(m => {
             if (m.isDuplicate || m.isFifaBreak || m.isCanBreak) return;
             if (!m.league || !m.score2526) return;
-        
-            const parts = m.score2526.split("-").map(s => parseInt(s.trim(), 10));
+            
+            let score = m.score2526;
+            if (m.venue === "Away") {
+                const parts = score.split("-");
+                score = `${parts[1]}-${parts[0]}`; // Inverse
+            }
+            
+            const parts = score.split("-").map(s => parseInt(s.trim(), 10));
             if (parts.length !== 2) return;
-        
             const [scored, against] = parts;
             if (isNaN(scored) || isNaN(against)) return;
-        
+            
             if ((m.result2526 === "W" || m.result2526 === "D") && against === 0) {
-              stats2526.cleanSheets[m.league]++;
+                stats2526.cleanSheets[m.league]++;
             }
             stats2526.goals[m.league] += scored;
             stats2526.conceded[m.league] += against;
-          });
+        });
         
           const total2425 = { cs: 20, goals: 112, conceded: 52 };
           const total2526 = {

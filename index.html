@@ -629,6 +629,10 @@
                 <div id="bracketDisplay"></div>
             </div>
 
+			<div class="chart-container medium" data-graph="all">
+				<h2>🎯 Season Stats Comparison</h2>
+				<canvas id="seasonStatsChart"></canvas>
+			</div>
                 
             </div>
         </div>
@@ -1582,6 +1586,88 @@
             bracketDiv.innerHTML = html;
         }
 
+        function renderSeasonStats() {
+          const stats2425 = {
+            cleanSheets: { PL: 13, UCL: 6, FA: 0, EFL: 1 },
+            goals: { PL: 69, UCL: 31, FA: 1, EFL: 11 },
+            conceded: { PL: 34, UCL: 10, FA: 1, EFL: 7 }
+          };
+        
+          const leagues = ["PL", "UCL", "FA", "EFL"];
+          const stats2526 = {
+            cleanSheets: Object.fromEntries(leagues.map(l => [l, 0])),
+            goals: Object.fromEntries(leagues.map(l => [l, 0])),
+            conceded: Object.fromEntries(leagues.map(l => [l, 0]))
+          };
+        
+          fixtures.forEach(m => {
+            if (m.isDuplicate || m.isFifaBreak || m.isCanBreak) return;
+            if (!m.league || !m.score2526) return;
+        
+            const parts = m.score2526.split("-").map(s => parseInt(s.trim(), 10));
+            if (parts.length !== 2) return;
+        
+            const [scored, against] = parts;
+            if (isNaN(scored) || isNaN(against)) return;
+        
+            if ((m.result2526 === "W" || m.result2526 === "D") && against === 0) {
+              stats2526.cleanSheets[m.league]++;
+            }
+            stats2526.goals[m.league] += scored;
+            stats2526.conceded[m.league] += against;
+          });
+        
+          const total2425 = { cs: 20, goals: 112, conceded: 52 };
+          const total2526 = {
+            cs: leagues.reduce((t, l) => t + stats2526.cleanSheets[l], 0),
+            goals: leagues.reduce((t, l) => t + stats2526.goals[l], 0),
+            conceded: leagues.reduce((t, l) => t + stats2526.conceded[l], 0)
+          };
+        
+          const ctx = document.getElementById("seasonStatsChart").getContext("2d");
+          new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: ["Goals Scored", "Goals Conceded", "Clean Sheets"],
+              datasets: leagues.flatMap(l => [
+                {
+                  label: `${l} 24/25`,
+                  data: [stats2425.goals[l], stats2425.conceded[l], stats2425.cleanSheets[l]],
+                  backgroundColor: `rgba(${l === "PL" ? "155,77,202" : l === "UCL" ? "0,102,204" : l === "FA" ? "255,0,0" : "34,186,108"},0.4)`,
+                  borderColor: "#999",
+                  borderWidth: 2
+                },
+                {
+                  label: `${l} 25/26`,
+                  data: [stats2526.goals[l], stats2526.conceded[l], stats2526.cleanSheets[l]],
+                  backgroundColor: `rgba(${l === "PL" ? "133,71,166" : l === "UCL" ? "6,82,158" : l === "FA" ? "174,0,0" : "0,148,69"},0.6)`,
+                  borderColor: "#000",
+                  borderWidth: 2
+                }
+              ])
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                legend: { display: true, position: "top", labels: { boxWidth: 15, font: { size: 10 } } },
+                tooltip: {
+                  backgroundColor: "rgba(0,0,0,0.8)",
+                  callbacks: {
+                    title: ctx => {
+                      const l = ctx[0].label;
+                      if (l === "Goals Scored") return `Goals Scored - 24/25: ${total2425.goals} | 25/26: ${total2526.goals}`;
+                      if (l === "Goals Conceded") return `Goals Conceded - 24/25: ${total2425.conceded} | 25/26: ${total2526.conceded}`;
+                      if (l === "Clean Sheets") return `Clean Sheets - 24/25: ${total2425.cs} | 25/26: ${total2526.cs}`;
+                    }
+                  }
+                }
+              },
+              scales: { y: { beginAtZero: true } }
+            }
+          });
+        }
+
         const { cumulativeData, labels, form, positionsData } = calculateStats();
         renderForm(form);
         renderForm(form);
@@ -1592,6 +1678,7 @@
         renderResultsHeatmap();
         renderSeasonPhaseChart();
         renderUCLBracket();
+        renderSeasonStats();
     </script>
 
   <footer style="text-align:center; font-size:0.8em; color:#888; margin-top:15px;">

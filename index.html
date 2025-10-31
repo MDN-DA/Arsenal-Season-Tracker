@@ -458,6 +458,19 @@
             }
         }
         
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            .header { flex-direction: column; text-align: center; }
+            .logo { width: 70px; height: 70px; }
+            .header-text h1 { font-size: 1.3em; }
+            .stats-group { grid-template-columns: 1fr; }
+            .form-dot { width: 25px; height: 25px; font-size: 1.2em; }
+            th, td { padding: 4px 2px; font-size: 0.65em; }
+            .opponent-cell { font-size: 0.7em; gap: 3px; }
+            .club-logo, .league-logo { width: 14px; height: 14px; }
+        }
+        
         @media (max-width: 360px) {
             body { padding: 3px; }
             .container { padding: 5px; border: 2px solid #DB0007; }
@@ -473,8 +486,8 @@
             th { font-size: 0.58em; padding: 4px 1px; }
             td { padding: 4px 1px; font-size: 0.68em; }
             .club-logo, .league-logo { width: 16px; height: 16px; }
-            .result-dot { width: 20px; height: 20px; font-size: 0.8em; line-height: 20px; }
-            .score-cell { padding: 3px 4px; font-size: 0.68em; }
+            .result-dot { width: 16px; height: 16px; font-size: 0.65em; line-height: 16px; }
+            .score-cell { padding: 2px 3px; font-size: 0.6em; }
         }
     
         @media (min-width: 361px) and (max-width: 414px) {
@@ -491,21 +504,8 @@
             table { min-width: 880px; font-size: 0.68em; }
             th { font-size: 0.62em; padding: 5px 2px; }
             td { padding: 5px 2px; font-size: 0.72em; }
-            .club-logo, .league-logo { width: 18px; height: 18px; }
-            .result-dot { width: 22px; height: 22px; font-size: 0.9em; line-height: 22px; }
-        }
-    
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            .container { padding: 15px; }
-            .header { flex-direction: column; text-align: center; }
-            .logo { width: 70px; height: 70px; }
-            .header-text h1 { font-size: 1.3em; }
-            .stats-group { grid-template-columns: 1fr; }
-            .form-dot { width: 25px; height: 25px; font-size: 1.2em; }
-            th, td { padding: 4px 2px; font-size: 0.65em; }
-            .opponent-cell { font-size: 0.7em; gap: 3px; }
-            .club-logo, .league-logo { width: 14px; height: 14px; }
+            .result-dot { width: 18px; height: 18px; font-size: 0.75em; line-height: 18px; }
+            .score-cell { padding: 3px 4px; font-size: 0.65em; }
         }
         
     </style>
@@ -1631,8 +1631,5 @@
       if (toggle) toggle.textContent = '☀️';
     }
   </script>
-</body>
-</html>
-
 </body>
 </html>

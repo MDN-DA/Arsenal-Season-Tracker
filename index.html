@@ -435,7 +435,7 @@
         
         .score-win.clean-sheet { background: #b4191d !important; }
         .score-draw.clean-sheet { background: #b4191d !important; }
-        
+
 		@media (max-width: 1400px) {
             .main-layout {
                 grid-template-columns: 1fr;
@@ -597,6 +597,7 @@
                     }
                 </style>
             </div>
+            
             <div class="right-panel">
 
             <div class="chart-container medium" data-graph="all">
@@ -630,9 +631,19 @@
             </div>
 
 			<div class="chart-container medium" data-graph="all">
-				<h2>🎯 Season Stats Comparison</h2>
-				<canvas id="seasonStatsChart"></canvas>
-			</div>
+                <h2>🎯 Season Stats Comparison</h2>
+                <div style="text-align: center; font-size: 0.85em; margin-bottom: 10px; line-height: 1.8;">
+                    <span style="margin: 0 8px;">🟣 PL 24/25</span>
+                    <span style="margin: 0 8px;">🟪 PL 25/26</span>
+                    <span style="margin: 0 8px;">🔵 UCL 24/25</span>
+                    <span style="margin: 0 8px;">🟦 UCL 25/26</span><br>
+                    <span style="margin: 0 8px;">🔴 FA 24/25</span>
+                    <span style="margin: 0 8px;">🟥 FA 25/26</span>
+                    <span style="margin: 0 8px;">🟢 EFL 24/25</span>
+                    <span style="margin: 0 8px;">🟩 EFL 25/26</span>
+                </div>
+                <canvas id="seasonStatsChart"></canvas>
+            </div>
                 
             </div>
         </div>
@@ -1655,7 +1666,7 @@
               responsive: true,
               maintainAspectRatio: true,
               plugins: {
-                legend: { display: true, position: "top", labels: { boxWidth: 15, font: { size: 10 } } },
+                legend: { display: false, position: "top", labels: { boxWidth: 15, font: { size: 10 } } },
                 tooltip: {
                   backgroundColor: "rgba(0,0,0,0.8)",
                   callbacks: {

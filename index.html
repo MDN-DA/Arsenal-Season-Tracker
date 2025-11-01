@@ -435,6 +435,69 @@
         
         .score-win.clean-sheet { background: #b4191d !important; }
         .score-draw.clean-sheet { background: #b4191d !important; }
+        
+        .chart-row {
+          display: flex;
+          justify-content: space-between;
+          gap: 20px; /* espace entre les deux */
+          align-items: flex-start;
+        }
+        
+        .chart-container.medium {
+          flex: 1;
+          min-width: 0;
+        }
+        
+        #plStandings {
+          flex: 0.9;
+        }
+        
+        .league-table {
+          width: 100%;
+          border-collapse: collapse;
+          table-layout: fixed;
+        }
+        
+        .league-table th:nth-child(1),
+        .league-table td:nth-child(1) {
+          width: 30px; 
+          text-align: center;
+        }
+        
+          .league-table th:nth-child(2),
+          .league-table td:nth-child(2) {
+            width: 28%; 
+            text-align: left;
+            padding-left: 6px;
+          }
+        
+        .league-table th,
+        .league-table td {
+          padding: 8px;
+          vertical-align: middle;
+        }
+        
+        .league-table td:nth-child(2) {
+          display: flex;          
+          align-items: center;     
+          gap: 8px;               
+          text-align: left;        
+        }
+        
+        .team-crest {
+          height: 20px;      
+          width: 20px;          
+          object-fit: contain;   
+          vertical-align: center;
+          margin-right: 8px;
+        }
+        
+          .charts-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap; 
+          }
 
 		@media (max-width: 1400px) {
             .main-layout {
@@ -456,6 +519,12 @@
             table {
                 font-size: 0.75em;
             }
+        }
+        
+        @media (max-width: 900px) {
+          .chart-row {
+            flex-direction: column;
+          }
         }
         
         @media (max-width: 768px) {
@@ -604,10 +673,31 @@
                 <h2>📈 PL League Position</h2>
                 <canvas id="positionChart"></canvas>
             </div>
+            
+            <div class="charts-wrapper">
+            <div class="chart-container medium" id="plStandings" data-graph="pl">
+              <h2>🏆 Premier League – Table</h2>
+              <table id="plTable" class="league-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Team</th>
+                    <th>W</th>      
+                    <th>D</th>     
+                    <th>L</th>      
+                    <th>Pts</th>    
+                  </tr>
+                </thead>
+                <tbody>
 
-            <div class="chart-container medium" data-graph="all">
+                </tbody>
+              </table>
+            </div>
+              
+              <div class="chart-container medium" data-graph="all">
                 <h2>🔮 Remaining Fixtures Difficulty</h2>
                 <div id="fixtureDifficulty"></div>
+              </div>
             </div>
             
             <div class="chart-container medium" data-graph="pl">
@@ -788,7 +878,6 @@
             else if (result === 'D') cssClass = 'score-draw';
             else if (result === 'L') cssClass = 'score-loss';
             
-            // Clean sheet detection (0 conceded)
             let displayScore = score;
             if (score && (score.endsWith('-0') || score.startsWith('0-')) && (result === 'W' || result === 'D')) {
                 displayScore = score.replace(/0/g, '<span style="color: #b4191d; font-weight: bold; font-size: 1.1em;">0</span>');
@@ -1232,7 +1321,7 @@
             const remainingFixtures = fixtures.filter(m => !m.result2526 && !m.isFifaBreak && !m.isCanBreak);
 
             if (remainingFixtures.length === 0) {
-                difficultyDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">All fixtures completed!</p>';
+                difficultyDiv.innerHTML = '<p style="text-align: center; color: #999; padding: 10px;">All fixtures completed!</p>';
                 return;
             }
 
@@ -1257,10 +1346,10 @@
             return { level: 'Very Easy', color: '#024F15', score: 1 }; 
         };
 
-            const nextFixtures = remainingFixtures.slice(0, 5);
+            const nextFixtures = remainingFixtures.slice(0, 6);
 
             let html = '<div style="max-height: none; overflow-y: auto;">';
-            html += '<table style="width: 100%; border-collapse: collapse; font-size: 1em;">'; 
+            html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">'; 
             html += '<thead style="background: #b4191d; color: white; position: sticky; top: 0; z-index: 1;">';
             html += '<tr>';
             html += '<th style="padding: 5px; text-align: center; font-size: 0.85em;">MW</th>';
@@ -1302,7 +1391,7 @@
             }
 
             html += '<div style="margin-top: 10px; padding: 8px; background: #f9f9f9; border-radius: 4px; text-align: center;">';
-            html += `<div style="font-size: 0.8em; color: #666; margin-bottom: 4px;">Next 5 Fixtures:</div>`;
+            html += `<div style="font-size: 0.8em; color: #666; margin-bottom: 4px;">Next 6 Fixtures:</div>`;
             html += `<div style="font-size: 1.1em; font-weight: bold; color: ${summaryColor};">${summaryText}</div>`;
             html += '</div>';
 
@@ -1674,6 +1763,48 @@
           });
         }
 
+        async function renderPLStandings(limit = 10) {
+          const API_URL = "https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1/standings";
+        
+          try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+        
+            const teams = data.children[0].standings.entries.slice(0, limit);
+        
+            const tbody = document.querySelector("#plTable tbody");
+            tbody.innerHTML = "";
+        
+            teams.forEach((entry, index) => {
+              const team = entry.team;
+              const stats = entry.stats.reduce((acc, s) => {
+                acc[s.name] = s.value;
+                return acc;
+              }, {});
+        
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>
+                  <img src="${team.logos[0].href}" alt="${team.displayName}" class="team-crest"/>
+                  ${team.displayName}
+                </td>
+                <td>${stats.wins}</td>
+                <td>${stats.ties}</td>
+                <td>${stats.losses}</td>
+                <td>${stats.points}</td>
+
+              `;
+              tbody.appendChild(row);
+            });
+        
+          } catch (err) {
+            console.error("Erreur:", err);
+            document.querySelector("#plTable tbody").innerHTML =
+              `<tr><td colspan="6">⚠️ Impossible de charger le classement.</td></tr>`;
+          }
+        }
+
         const { cumulativeData, labels, form, positionsData } = calculateStats();
         renderForm(form);
         renderForm(form);
@@ -1685,6 +1816,7 @@
         renderSeasonPhaseChart();
         renderUCLBracket();
         renderSeasonStats();
+        renderPLStandings();
     </script>
 
   <footer style="text-align:center; font-size:0.8em; color:#888; margin-top:15px;">

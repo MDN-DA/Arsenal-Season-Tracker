@@ -632,16 +632,6 @@
 
 			<div class="chart-container medium" data-graph="all">
                 <h2>🎯 Season Stats Comparison</h2>
-                <div style="text-align: center; font-size: 0.85em; margin-bottom: 10px; line-height: 1.8;">
-                    <span style="margin: 0 8px;">🟣 PL 24/25</span>
-                    <span style="margin: 0 8px;">🟪 PL 25/26</span>
-                    <span style="margin: 0 8px;">🔵 UCL 24/25</span>
-                    <span style="margin: 0 8px;">🟦 UCL 25/26</span><br>
-                    <span style="margin: 0 8px;">🔴 FA 24/25</span>
-                    <span style="margin: 0 8px;">🟥 FA 25/26</span>
-                    <span style="margin: 0 8px;">🟢 EFL 24/25</span>
-                    <span style="margin: 0 8px;">🟩 EFL 25/26</span>
-                </div>
                 <canvas id="seasonStatsChart"></canvas>
             </div>
                 
@@ -1651,14 +1641,14 @@
                   data: [stats2425.goals[l], stats2425.conceded[l], stats2425.cleanSheets[l]],
                   backgroundColor: `rgba(${l === "PL" ? "155,77,202" : l === "UCL" ? "0,102,204" : l === "FA" ? "255,0,0" : "34,186,108"},0.4)`,
                   borderColor: "#999",
-                  borderWidth: 2
+                  borderWidth: 1
                 },
                 {
                   label: `${l} 25/26`,
                   data: [stats2526.goals[l], stats2526.conceded[l], stats2526.cleanSheets[l]],
                   backgroundColor: `rgba(${l === "PL" ? "133,71,166" : l === "UCL" ? "6,82,158" : l === "FA" ? "174,0,0" : "0,148,69"},0.6)`,
                   borderColor: "#000",
-                  borderWidth: 2
+                  borderWidth: 1
                 }
               ])
             },
@@ -1666,7 +1656,7 @@
               responsive: true,
               maintainAspectRatio: true,
               plugins: {
-                legend: { display: false, position: "top", labels: { boxWidth: 15, font: { size: 10 } } },
+                legend: { display: true, position: "top", labels: { boxWidth: 8, font: { size: 8 } } },
                 tooltip: {
                   backgroundColor: "rgba(0,0,0,0.8)",
                   callbacks: {
